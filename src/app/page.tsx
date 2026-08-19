@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import AgentChat from "@/components/AgentChat";
 import AddToCartButton from "@/components/AddToCartButton";
 import ProductGrid from "@/components/ProductGrid";
+import SettingsView from "@/components/SettingsView";
 
 const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
   ssr: false,
@@ -44,6 +45,8 @@ const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("home");
+
+  const isSettings = activeTab === "settings" || activeTab === "profile";
 
   return (
     <div
@@ -96,14 +99,16 @@ export default function Home() {
               flexDirection: "column",
               minHeight: 0,
               height: "100%",
-              overflowY: activeTab === "map" ? "hidden" : "auto",
-              paddingTop: activeTab === "map" ? "14px" : "40px",
-              paddingRight: activeTab === "map" ? "0px" : "6px",
-              paddingBottom: activeTab === "map" ? "0px" : "24px",
+              overflowY: activeTab === "home" || activeTab === "shop" ? "auto" : "hidden",
+              paddingTop: activeTab === "home" || activeTab === "shop" ? "40px" : "14px",
+              paddingRight: activeTab === "home" || activeTab === "shop" ? "6px" : "0px",
+              paddingBottom: activeTab === "home" || activeTab === "shop" ? "24px" : "0px",
             }}
           >
             {activeTab === "map" ? (
               <NearbyMap />
+            ) : isSettings ? (
+              <SettingsView />
             ) : (
               <>
                 <div
@@ -134,20 +139,23 @@ export default function Home() {
             )}
           </section>
 
-          <aside
-            style={{
-              width: "420px",
-              minWidth: "340px",
-              maxWidth: "460px",
-              flexShrink: 0,
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              paddingTop: "20px",
-            }}
-          >
-            <AgentChat />
-          </aside>
+          {/* AI Assistant Right Pane - Hidden during Settings & Profile views */}
+          {!isSettings && (
+            <aside
+              style={{
+                width: "420px",
+                minWidth: "340px",
+                maxWidth: "460px",
+                flexShrink: 0,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                paddingTop: "20px",
+              }}
+            >
+              <AgentChat />
+            </aside>
+          )}
         </div>
       </main>
     </div>

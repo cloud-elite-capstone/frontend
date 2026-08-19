@@ -197,10 +197,10 @@ export default function ChatPreferenceDropdown({
       <div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
           <label style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700, color: "#374151" }}>
-            <Star size={12} color="#f97316" />
+            <Star size={12} color="#f9b584" />
             <span>Minimum Rating</span>
           </label>
-          <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#f97316", display: "flex", alignItems: "center", gap: "2px" }}>
+          <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#ea580c", display: "flex", alignItems: "center", gap: "2px" }}>
             ★ {draftPrefs.minRating.toFixed(1)}+
           </span>
         </div>
@@ -210,12 +210,12 @@ export default function ChatPreferenceDropdown({
             type="range"
             min="1.0"
             max="5.0"
-            step="0.1"
+            step="0.2"
             value={draftPrefs.minRating}
             onChange={(e) => setDraftPrefs({ ...draftPrefs, minRating: parseFloat(e.target.value) })}
             style={{
               width: "100%",
-              accentColor: "#f97316",
+              accentColor: "#f9b584",
               cursor: "pointer",
             }}
           />

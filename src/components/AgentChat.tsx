@@ -281,13 +281,13 @@ export default function AgentChat() {
                     fontSize: "10.5px",
                     fontWeight: 600,
                     backgroundColor: "#fff7ed",
-                    color: "#f97316",
+                    color: "#ea580c",
                     padding: "2px 8px",
                     borderRadius: "12px",
-                    border: "1px solid #fed7aa",
+                    border: "1px solid #f9b584",
                   }}
                 >
-                  <Star size={10} />
+                  <Star size={10} color="#f9b584" />
                   <span>★ {preferences.minRating.toFixed(1)}+</span>
                   <X size={11} style={{ cursor: "pointer" }} onClick={handleRemoveRating} />
                 </span>

@@ -3,32 +3,15 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {
-  HistoryClockIcon,
   PlusIcon,
   FilterSlidersIcon,
   ChevronDownIcon,
   SendIcon,
 } from "./Icons";
 
-interface ConversationHistory {
-  id: string;
-  title: string;
-  time: string;
-}
-
-const mockHistory: ConversationHistory[] = [
-  { id: "1", title: "Wireless Earbuds with ANC under ₱2,000", time: "10m ago" },
-  { id: "2", title: "Casual linen shirts for outdoor wedding", time: "2h ago" },
-  { id: "3", title: "Bose vs Sony over-ear headphones", time: "Yesterday" },
-  { id: "4", title: "Mechanical keyboards with brown switches", time: "Aug 16" },
-  { id: "5", title: "Ergonomic desk accessories bundle", time: "Aug 12" },
-];
-
 export default function AgentChat() {
   const [inputValue, setInputValue] = useState("");
-  const [showHistory, setShowHistory] = useState(false);
   const [showPreferenceModal, setShowPreferenceModal] = useState(false);
-  const [selectedHistory, setSelectedHistory] = useState<string | null>(null);
 
   return (
     <div
@@ -94,114 +77,8 @@ export default function AgentChat() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <div style={{ position: "relative" }}>
-            <button
-              onClick={() => setShowHistory(!showHistory)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "28px",
-                height: "28px",
-                borderRadius: "50%",
-                backgroundColor: showHistory ? "rgba(255, 255, 255, 0.25)" : "transparent",
-                transition: "background-color 0.15s ease",
-              }}
-              title="See Conversation History"
-            >
-              <HistoryClockIcon size={16} color="#ffffff" />
-            </button>
-
-            {showHistory && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "34px",
-                  right: "-10px",
-                  width: "270px",
-                  backgroundColor: "#ffffff",
-                  borderRadius: "12px",
-                  boxShadow: "0 10px 28px rgba(122, 62, 157, 0.25), 0 2px 6px rgba(0, 0, 0, 0.08)",
-                  border: "1px solid #f0e4fc",
-                  padding: "10px 6px",
-                  zIndex: 100,
-                }}
-              >
-                <div
-                  style={{
-                    padding: "4px 8px 6px 8px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.6px",
-                    color: "#7a3e9d",
-                    borderBottom: "1px solid #f4ebfc",
-                    marginBottom: "4px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <span>Chat History</span>
-                  <span style={{ fontSize: "10px", fontWeight: 500, color: "#9ca3af" }}>
-                    {mockHistory.length} saved
-                  </span>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                  {mockHistory.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        setSelectedHistory(item.title);
-                        setShowHistory(false);
-                      }}
-                      style={{
-                        padding: "7px 8px",
-                        borderRadius: "8px",
-                        textAlign: "left",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                        backgroundColor: selectedHistory === item.title ? "#f4ebfc" : "transparent",
-                        transition: "background-color 0.15s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (selectedHistory !== item.title) {
-                          e.currentTarget.style.backgroundColor = "#faf5ff";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (selectedHistory !== item.title) {
-                          e.currentTarget.style.backgroundColor = "transparent";
-                        }
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: 600,
-                          color: "#2d2d2d",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {item.title}
-                      </span>
-                      <span style={{ fontSize: "10px", color: "#9ca3af" }}>{item.time}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
           <button
-            onClick={() => {
-              setInputValue("");
-              setSelectedHistory(null);
-            }}
+            onClick={() => setInputValue("")}
             style={{
               display: "flex",
               alignItems: "center",
@@ -209,10 +86,16 @@ export default function AgentChat() {
               width: "28px",
               height: "28px",
               borderRadius: "50%",
+              backgroundColor: "rgba(255, 255, 255, 0.15)",
+              border: "none",
+              cursor: "pointer",
+              transition: "background-color 0.15s ease",
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.28)")}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.15)")}
             title="Start New Chat"
           >
-            <PlusIcon size={18} color="#ffffff" />
+            <PlusIcon size={16} color="#ffffff" />
           </button>
         </div>
       </div>

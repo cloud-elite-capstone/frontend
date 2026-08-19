@@ -1,25 +1,42 @@
 "use client";
 
 import React, { useState } from "react";
-import { HeartIcon, MapPinIcon, StarIcon } from "./Icons";
+import Image from "next/image";
+import { MapPinIcon, StarIcon } from "./Icons";
 
 export interface ProductItem {
   id: string;
   title: string;
   subtitle: string;
   price: string;
+  priceNum: number;
+  imageUrl?: string;
+  rating?: number;
+  ratingCount?: number;
   isNearby?: boolean;
   isTopPick?: boolean;
-  initialFavorited?: boolean;
+}
+
+interface ProductCardProps {
+  product: ProductItem;
+  onAddToCart?: (product: ProductItem) => void;
 }
 
 export default function ProductCard({
   product,
-}: {
-  product: ProductItem;
-}) {
-  const [isFavorited, setIsFavorited] = useState(product.initialFavorited || false);
+  onAddToCart,
+}: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onAddToCart) {
+      onAddToCart(product);
+    }
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 900);
+  };
 
   return (
     <div
@@ -38,103 +55,37 @@ export default function ProductCard({
         style={{
           position: "relative",
           width: "100%",
-          height: "230px",
+          height: "200px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: "10px",
+          marginBottom: "12px",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            inset: "-8px",
-            zIndex: 0,
-            opacity: isHovered ? 1 : 0,
-            transition:
-              "opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-            transform: isHovered ? "scale(1.04)" : "scale(0.96)",
-            filter: "blur(22px)",
-            pointerEvents: "none",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              bottom: "4px",
-              left: "8px",
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              backgroundColor: "#ffb4ef",
-              opacity: 0.9,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "2px",
-              left: "40%",
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              backgroundColor: "#e87661",
-              opacity: 0.8,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "12px",
-              right: "6px",
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              backgroundColor: "#ffd7ad",
-              opacity: 0.9,
-            }}
-          />
-        </div>
-
         <div
           style={{
             position: "relative",
             width: "100%",
             height: "100%",
-            zIndex: 1,
             backgroundColor: "#f4f4f6",
-            borderRadius: "8px",
+            borderRadius: "14px",
             overflow: "hidden",
-            transition: "filter 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-            filter: isHovered ? "drop-shadow(0 10px 24px rgba(194, 143, 239, 0.45))" : "none",
+            border: "1px solid #f0f0f4",
           }}
         >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsFavorited(!isFavorited);
-            }}
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-              zIndex: 10,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "28px",
-              height: "28px",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              transition: "transform 0.15s ease",
-            }}
-            title={isFavorited ? "Remove from Favorites" : "Add to Favorites"}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          >
-            <HeartIcon size={20} isFilled={isFavorited} color="#e87661" />
-          </button>
+          {product.imageUrl && (
+            <Image
+              src={product.imageUrl}
+              alt={product.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              style={{
+                objectFit: "cover",
+                transition: "transform 0.35s ease",
+                transform: isHovered ? "scale(1.04)" : "scale(1)",
+              }}
+            />
+          )}
 
           <div
             style={{
@@ -153,18 +104,18 @@ export default function ProductCard({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "5px",
+                  gap: "4px",
                   backgroundColor: "#ffffff",
                   border: "1.2px solid #fed7aa",
                   borderRadius: "9999px",
-                  padding: "3.5px 9px 3.5px 7px",
+                  padding: "3px 8px 3px 6px",
                   boxShadow: "0 2px 6px rgba(234, 88, 12, 0.08)",
                 }}
               >
-                <MapPinIcon size={12} color="#ea580c" />
+                <MapPinIcon size={11} color="#ea580c" />
                 <span
                   style={{
-                    fontSize: "11px",
+                    fontSize: "10.5px",
                     fontWeight: 700,
                     color: "#ea580c",
                     lineHeight: 1,
@@ -180,18 +131,18 @@ export default function ProductCard({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "5px",
+                  gap: "4px",
                   backgroundColor: "#ffffff",
                   border: "1.2px solid #fed7aa",
                   borderRadius: "9999px",
-                  padding: "3.5px 9px 3.5px 7px",
+                  padding: "3px 8px 3px 6px",
                   boxShadow: "0 2px 6px rgba(234, 88, 12, 0.08)",
                 }}
               >
-                <StarIcon size={12} color="#ea580c" />
+                <StarIcon size={11} color="#ea580c" />
                 <span
                   style={{
-                    fontSize: "11px",
+                    fontSize: "10.5px",
                     fontWeight: 700,
                     color: "#ea580c",
                     lineHeight: 1,
@@ -202,37 +153,6 @@ export default function ProductCard({
               </div>
             )}
           </div>
-
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 2,
-              padding: "24px 16px 14px 16px",
-            }}
-          >
-            <div
-              style={{
-                width: "80px",
-                height: "80px",
-                borderRadius: "14px",
-                backgroundColor: "rgba(225, 225, 230, 0.5)",
-                border: "1.5px dashed #dcdce0",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "transform 0.3s ease",
-                transform: isHovered ? "scale(1.04)" : "scale(1)",
-              }}
-            >
-              <span style={{ fontSize: "11px", color: "#a1a1aa", fontWeight: 500 }}>
-                Image
-              </span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -240,24 +160,21 @@ export default function ProductCard({
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "2px",
+          gap: "3px",
           padding: "0 2px",
-          position: "relative",
-          zIndex: 10,
           userSelect: "text",
         }}
       >
         <h3
           style={{
-            fontSize: "14.5px",
+            fontSize: "15px",
             fontWeight: 700,
-            color: "#18181b",
+            color: "#1e1e1e",
             letterSpacing: "-0.2px",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
             lineHeight: 1.3,
-            userSelect: "text",
           }}
         >
           {product.title}
@@ -265,30 +182,62 @@ export default function ProductCard({
 
         <p
           style={{
-            fontSize: "11.5px",
+            fontSize: "12px",
             fontWeight: 400,
-            color: "#71717a",
+            color: "#6b7280",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
-            lineHeight: 1.2,
-            userSelect: "text",
+            lineHeight: 1.25,
+            marginBottom: "4px",
           }}
         >
           {product.subtitle}
         </p>
 
-        <span
+        <div
           style={{
-            fontSize: "15px",
-            fontWeight: 700,
-            color: "#f97316",
-            marginTop: "3px",
-            userSelect: "text",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "4px",
+            paddingTop: "2px",
           }}
         >
-          {product.price}
-        </span>
+          <span
+            style={{
+              fontSize: "18px",
+              fontWeight: 800,
+              color: "#1e1e1e",
+              letterSpacing: "-0.3px",
+            }}
+          >
+            {product.price}
+          </span>
+
+          <button
+            onClick={handleAddToCart}
+            style={{
+              background: isAdded
+                ? "#10b981"
+                : "linear-gradient(135deg, #ffb86f 0%, #c28fef 100%)",
+              color: "#ffffff",
+              fontSize: "12px",
+              fontWeight: 700,
+              padding: "7px 16px",
+              borderRadius: "9999px",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 3px 10px rgba(194, 143, 239, 0.35)",
+              transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.15s ease",
+              fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            {isAdded ? "Added ✓" : "Add to Cart"}
+          </button>
+        </div>
       </div>
     </div>
   );

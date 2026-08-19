@@ -1,9 +1,19 @@
 "use client";
 
 import React from "react";
-import { SunIcon, MoonIcon } from "./Icons";
+import { CartesianCartIcon, UserIcon } from "./Icons";
 
-export default function Navbar({ isScrolled = false }: { isScrolled?: boolean }) {
+interface NavbarProps {
+  isScrolled?: boolean;
+  cartCount?: number;
+  onToggleCart?: () => void;
+}
+
+export default function Navbar({
+  isScrolled = false,
+  cartCount = 0,
+  onToggleCart,
+}: NavbarProps) {
   return (
     <header
       style={{
@@ -26,13 +36,13 @@ export default function Navbar({ isScrolled = false }: { isScrolled?: boolean })
           alignItems: "center",
           justifyContent: "space-between",
           height: "38px",
-          paddingBottom: "14px",
+          padding: "16px 24px 14px 24px",
           boxSizing: "content-box",
         }}
       >
         <h1
           style={{
-            fontSize: "26px",
+            fontSize: "24px",
             fontWeight: 700,
             color: "#7a3e9d",
             letterSpacing: "-0.4px",
@@ -47,73 +57,105 @@ export default function Navbar({ isScrolled = false }: { isScrolled?: boolean })
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "14px",
+            gap: "12px",
           }}
         >
           <button
             style={{
               background: "linear-gradient(135deg, #ffb86f 0%, #c28fef 100%)",
               color: "#ffffff",
-              fontSize: "13px",
+              fontSize: "12.5px",
               fontWeight: 600,
-              padding: "15px 28px",
-              borderRadius: "14px",
-              boxShadow: "0 6px 18px rgba(194, 143, 239, 0.45)",
+              padding: "9px 20px",
+              borderRadius: "12px",
+              boxShadow: "0 4px 14px rgba(194, 143, 239, 0.35)",
               border: "none",
               letterSpacing: "0.2px",
+              cursor: "pointer",
               transition: "transform 0.15s ease, box-shadow 0.15s ease",
               fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-1px)";
-              e.currentTarget.style.boxShadow = "0 8px 22px rgba(194, 143, 239, 0.55)";
+              e.currentTarget.style.boxShadow = "0 6px 18px rgba(194, 143, 239, 0.45)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 6px 18px rgba(194, 143, 239, 0.45)";
+              e.currentTarget.style.boxShadow = "0 4px 14px rgba(194, 143, 239, 0.35)";
             }}
           >
             Become a Seller
           </button>
 
+          {onToggleCart && (
+            <button
+              onClick={onToggleCart}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "6px 12px",
+                borderRadius: "10px",
+                border: "1px solid #f0e4fc",
+                backgroundColor: "#faf5ff",
+                cursor: "pointer",
+                position: "relative",
+              }}
+              title="Toggle Cart"
+            >
+              <CartesianCartIcon size={17} color="#7a3e9d" />
+              {cartCount > 0 && (
+                <span
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    backgroundColor: "#7a3e9d",
+                    color: "#ffffff",
+                    borderRadius: "9999px",
+                    padding: "1px 6px",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          )}
+
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "4px",
-              padding: "3px 6px",
-              borderRadius: "12px",
-              border: "1.5px solid #eaeaea",
-              backgroundColor: "#ffffff",
-              cursor: "default",
-              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.02)",
+              gap: "7px",
+              padding: "4px 10px 4px 6px",
+              borderRadius: "9999px",
+              backgroundColor: "#f8f8fa",
+              border: "1px solid #eaeaea",
+              cursor: "pointer",
             }}
-            title="Theme Toggle"
           >
             <div
               style={{
+                width: "24px",
+                height: "24px",
+                borderRadius: "50%",
+                backgroundColor: "#f5ebfc",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "22px",
-                height: "22px",
-                borderRadius: "8px",
-                backgroundColor: "#fff6eb",
               }}
             >
-              <SunIcon size={13} color="#ffb86f" />
+              <UserIcon size={14} color="#7a3e9d" />
             </div>
-            <div
+            <span
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "18px",
-                height: "18px",
+                fontSize: "12px",
+                fontWeight: 600,
+                color: "#1e1e1e",
               }}
             >
-              <MoonIcon size={13} color="#9ca3af" />
-            </div>
+              John
+            </span>
           </div>
         </div>
       </div>

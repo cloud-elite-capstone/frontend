@@ -1,29 +1,27 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import {
-  CartesianCartIcon,
-  HomeIcon,
-  ShoppingBagIcon,
-  UserIcon,
-  AgentSparkleIcon,
+  ChatBubbleIcon,
+  HistoryClockIcon,
   SettingsIcon,
   HelpIcon,
+  LogOutIcon,
 } from "./Icons";
 
 export default function Sidebar() {
-  const [activeTab, setActiveTab] = useState<string>("home");
+  const [activeTab, setActiveTab] = useState<string>("chat");
 
-  const primaryNav = [
-    { id: "home", label: "Home", icon: HomeIcon },
-    { id: "shop", label: "Shop", icon: ShoppingBagIcon },
-    { id: "agent", label: "AI Agent", icon: AgentSparkleIcon },
+  const topNav = [
+    { id: "chat", label: "Chat", icon: ChatBubbleIcon },
+    { id: "history", label: "History", icon: HistoryClockIcon },
+    { id: "settings", label: "Settings", icon: SettingsIcon },
   ];
 
-  const secondaryNav = [
-    { id: "profile", label: "Profile", icon: UserIcon },
-    { id: "settings", label: "Settings", icon: SettingsIcon },
+  const bottomNav = [
     { id: "help", label: "Help", icon: HelpIcon },
+    { id: "logout", label: "Log out", icon: LogOutIcon },
   ];
 
   return (
@@ -60,7 +58,13 @@ export default function Sidebar() {
           }}
           title="Cartesian"
         >
-          <CartesianCartIcon size={22} color="#7a3e9d" />
+          <Image
+            src="/cartesian_symbol.png"
+            alt="Cartesian Logo"
+            width={24}
+            height={24}
+            style={{ objectFit: "contain" }}
+          />
         </div>
 
         <div
@@ -78,12 +82,12 @@ export default function Sidebar() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "12px",
+            gap: "14px",
             alignItems: "center",
             width: "100%",
           }}
         >
-          {primaryNav.map((item) => {
+          {topNav.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (
@@ -91,82 +95,82 @@ export default function Sidebar() {
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 style={{
+                  width: "36px",
+                  height: "36px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "8px",
-                  backgroundColor: isActive ? "#f4ebfc" : "transparent",
-                  color: isActive ? "#7a3e9d" : "#555555",
-                  transition: "all 0.15s ease",
+                  borderRadius: "10px",
+                  backgroundColor: isActive ? "#e5e7eb" : "transparent",
+                  color: isActive ? "#1e1e1e" : "#6b7280",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "background-color 0.15s ease, color 0.15s ease",
                 }}
                 title={item.label}
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.backgroundColor = "#f3f4f6";
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
+                }}
               >
-                <Icon size={18} color={isActive ? "#7a3e9d" : "#555555"} />
+                <Icon
+                  size={19}
+                  color={isActive ? "#1e1e1e" : "#6b7280"}
+                />
               </button>
             );
           })}
         </nav>
-
-        <div
-          style={{
-            width: "24px",
-            height: "1.5px",
-            backgroundColor: "#d1d5db",
-            borderRadius: "1px",
-            margin: "14px 0",
-          }}
-        />
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          {secondaryNav.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "8px",
-                  backgroundColor: isActive ? "#f4ebfc" : "transparent",
-                  color: isActive ? "#7a3e9d" : "#555555",
-                  transition: "all 0.15s ease",
-                }}
-                title={item.label}
-              >
-                <Icon size={18} color={isActive ? "#7a3e9d" : "#555555"} />
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       <div
         style={{
           marginTop: "auto",
-          width: "26px",
-          height: "26px",
-          borderRadius: "6px",
-          backgroundColor: "#c28fef",
-          boxShadow: "0 2px 8px rgba(194, 143, 239, 0.4)",
-          cursor: "pointer",
+          display: "flex",
+          flexDirection: "column",
+          gap: "14px",
+          alignItems: "center",
+          width: "100%",
         }}
-        title="Active Session"
-      />
+      >
+        {bottomNav.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              style={{
+                width: "36px",
+                height: "36px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "10px",
+                backgroundColor: isActive ? "#e5e7eb" : "transparent",
+                color: isActive ? "#1e1e1e" : "#6b7280",
+                border: "none",
+                cursor: "pointer",
+                transition: "background-color 0.15s ease, color 0.15s ease",
+              }}
+              title={item.label}
+              onMouseEnter={(e) => {
+                if (!isActive) e.currentTarget.style.backgroundColor = "#f3f4f6";
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
+              }}
+            >
+              <Icon
+                size={19}
+                color={isActive ? "#1e1e1e" : "#6b7280"}
+              />
+            </button>
+          );
+        })}
+      </div>
     </aside>
   );
 }

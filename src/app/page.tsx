@@ -9,6 +9,7 @@ import { initialProducts } from "@/data/products";
 import CartSidebar, { CartItem } from "@/components/CartSidebar";
 import { ProductItem } from "@/components/ProductCard";
 import { SearchIcon } from "@/components/Icons";
+import SettingsView from "@/components/SettingsView";
 
 const initialCartItems: CartItem[] = [
   {
@@ -45,6 +46,9 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [showCart, setShowCart] = useState(true);
+  const [activeTab, setActiveTab] = useState<string>("chat");
+
+  const isSettings = activeTab === "settings";
 
   const handleAddToCart = (product: ProductItem) => {
     if (!product) return;
@@ -119,7 +123,7 @@ export default function Home() {
         fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
       }}
     >
-      <Sidebar />
+      <Sidebar activeTab={activeTab} onSelectTab={setActiveTab} />
 
       <main
         style={{
@@ -154,113 +158,121 @@ export default function Home() {
             padding: "14px 18px 16px 18px",
           }}
         >
-          <aside
-            style={{
-              width: "350px",
-              minWidth: "320px",
-              maxWidth: "380px",
-              flexShrink: 0,
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <AgentChat />
-          </aside>
-
-          <section
-            onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 4)}
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              minHeight: 0,
-              height: "100%",
-              overflowY: "auto",
-              paddingRight: "8px",
-              paddingBottom: "24px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "24px",
-                paddingTop: "6px",
-                flexShrink: 0,
-                gap: "16px",
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: "22px",
-                  fontWeight: 700,
-                  color: "#1e1e1e",
-                  letterSpacing: "-0.3px",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Shop Collaborative
-              </h2>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  backgroundColor: "#f8f8fa",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "10px",
-                  padding: "7px 14px",
-                  width: "100%",
-                  maxWidth: "240px",
-                }}
-              >
-                <SearchIcon size={15} color="#9ca3af" />
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    outline: "none",
-                    fontSize: "12.5px",
-                    color: "#1e1e1e",
-                    width: "100%",
-                    fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                  }}
-                />
-              </div>
+          {isSettings ? (
+            <div style={{ flex: 1, height: "100%", overflowY: "auto" }}>
+              <SettingsView />
             </div>
+          ) : (
+            <>
+              <aside
+                style={{
+                  width: "350px",
+                  minWidth: "320px",
+                  maxWidth: "380px",
+                  flexShrink: 0,
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <AgentChat />
+              </aside>
 
-            <ProductGrid
-              products={filteredProducts}
-              onAddToCart={handleAddToCart}
-            />
-          </section>
+              <section
+                onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 4)}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  minHeight: 0,
+                  height: "100%",
+                  overflowY: "auto",
+                  paddingRight: "8px",
+                  paddingBottom: "24px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "24px",
+                    paddingTop: "6px",
+                    flexShrink: 0,
+                    gap: "16px",
+                  }}
+                >
+                  <h2
+                    style={{
+                      fontSize: "22px",
+                      fontWeight: 700,
+                      color: "#1e1e1e",
+                      letterSpacing: "-0.3px",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Shop Collaborative
+                  </h2>
 
-          {showCart && (
-            <aside
-              style={{
-                width: "310px",
-                minWidth: "280px",
-                maxWidth: "340px",
-                flexShrink: 0,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <CartSidebar
-                items={cartItems}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemoveItem={handleRemoveItem}
-                onClose={() => setShowCart(false)}
-              />
-            </aside>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      backgroundColor: "#f8f8fa",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "10px",
+                      padding: "7px 14px",
+                      width: "100%",
+                      maxWidth: "240px",
+                    }}
+                  >
+                    <SearchIcon size={15} color="#9ca3af" />
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        outline: "none",
+                        fontSize: "12.5px",
+                        color: "#1e1e1e",
+                        width: "100%",
+                        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <ProductGrid
+                  products={filteredProducts}
+                  onAddToCart={handleAddToCart}
+                />
+              </section>
+
+              {showCart && (
+                <aside
+                  style={{
+                    width: "310px",
+                    minWidth: "280px",
+                    maxWidth: "340px",
+                    flexShrink: 0,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <CartSidebar
+                    items={cartItems}
+                    onUpdateQuantity={handleUpdateQuantity}
+                    onRemoveItem={handleRemoveItem}
+                    onClose={() => setShowCart(false)}
+                  />
+                </aside>
+              )}
+            </>
           )}
         </div>
       </main>

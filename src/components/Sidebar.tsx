@@ -10,8 +10,25 @@ import {
   LogOutIcon,
 } from "./Icons";
 
-export default function Sidebar() {
-  const [activeTab, setActiveTab] = useState<string>("chat");
+interface SidebarProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function Sidebar({
+  activeTab: externalTab,
+  onSelectTab,
+}: SidebarProps) {
+  const [internalTab, setInternalTab] = useState<string>("chat");
+  const currentTab = externalTab !== undefined ? externalTab : internalTab;
+
+  const handleTabClick = (id: string) => {
+    if (onSelectTab) {
+      onSelectTab(id);
+    } else {
+      setInternalTab(id);
+    }
+  };
 
   const topNav = [
     { id: "chat", label: "Chat", icon: ChatBubbleIcon },
@@ -89,11 +106,11 @@ export default function Sidebar() {
         >
           {topNav.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = currentTab === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabClick(item.id)}
                 style={{
                   width: "36px",
                   height: "36px",
@@ -137,11 +154,11 @@ export default function Sidebar() {
       >
         {bottomNav.map((item) => {
           const Icon = item.icon;
-          const isActive = activeTab === item.id;
+          const isActive = currentTab === item.id;
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => handleTabClick(item.id)}
               style={{
                 width: "36px",
                 height: "36px",

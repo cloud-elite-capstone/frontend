@@ -116,7 +116,7 @@ export function LoginForm() {
         )}
       </AnimatePresence>
 
-      <GlassCard className="w-full shadow-xl p-5 sm:p-7">
+      <GlassCard className="w-full max-w-sm sm:max-w-md mx-auto shadow-xl p-5 sm:p-7">
         {/* Top Card Header */}
         <div className="text-center mb-4">
           <div className="inline-flex p-1 rounded-xl bg-slate-100/90 border border-slate-200/80 mb-3">

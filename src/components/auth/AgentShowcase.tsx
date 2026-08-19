@@ -91,11 +91,11 @@ export function AgentShowcase() {
     <div className="flex flex-col justify-center h-full max-w-xl text-slate-800">
       {/* Brand Header with Larger 3D Cartesian Logo */}
       <div className="mb-3">
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-pill border border-[#7a3e9d]/15 mb-3 shadow-xs">
+        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-pill border border-[#7a3e9d]/15 mb-3 shadow-xs">
           <img 
             src="/cartesian_symbol.png" 
             alt="Cartesian Logo" 
-            className="w-7 h-7 object-contain drop-shadow-xs"
+            className="w-8 h-8 object-contain drop-shadow-sm"
           />
           <span className="font-bold text-base tracking-tight text-[#7a3e9d]">
             Cartesian

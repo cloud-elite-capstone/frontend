@@ -29,10 +29,15 @@ export function LoginForm() {
   
   // Themed Toast Notification State for Forgot Password
   const [showForgotToast, setShowForgotToast] = useState(false);
+  // Snapshot/freeze the email when "Forgot?" was clicked so editing input doesn't mutate active toast
+  const [sentEmail, setSentEmail] = useState("");
+
+  // Email format validation (standard RFC 5322 regex check)
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password || (isSignUp && !name)) {
+    if (!isEmailValid || !password || (isSignUp && !name)) {
       return;
     }
 
@@ -44,14 +49,19 @@ export function LoginForm() {
       setSubmittedMessage(
         isSignUp
           ? `Account created! Welcome, ${name.split(" ")[0] || "Explorer"}.`
-          : `Signed in successfully as ${email}.`
+          : `Signed in successfully as ${email.trim()}.`
       );
     }, 1000);
   };
 
   const handleForgotPassword = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (!isEmailValid) return;
+
+    // Snapshot the current valid email so modifying the input box won't change the notification
+    setSentEmail(email.trim());
     setShowForgotToast(true);
+
     // Auto-dismiss after 6 seconds
     setTimeout(() => {
       setShowForgotToast(false);
@@ -85,14 +95,8 @@ export function LoginForm() {
                 </span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                {email.trim() ? (
-                  <>
-                    A secure password reset link has been dispatched to{" "}
-                    <strong className="text-slate-900 font-semibold">{email}</strong>.
-                  </>
-                ) : (
-                  "A secure password reset link has been sent to your registered email address."
-                )}
+                A secure password reset link has been dispatched to{" "}
+                <strong className="text-slate-900 font-semibold">{sentEmail}</strong>.
               </p>
               <div className="mt-1.5 flex items-center gap-1 text-[10px] text-slate-400">
                 <Sparkles className="w-3 h-3 text-[#7a3e9d]" />
@@ -273,8 +277,18 @@ export function LoginForm() {
               {!isSignUp && (
                 <button
                   type="button"
+                  disabled={!isEmailValid}
                   onClick={handleForgotPassword}
-                  className="text-xs font-semibold text-[#7a3e9d] hover:text-[#692e8a] transition-colors cursor-pointer underline-offset-2 hover:underline"
+                  title={
+                    !isEmailValid
+                      ? "Please enter a valid email address first"
+                      : `Send password recovery link to ${email.trim()}`
+                  }
+                  className={`text-xs font-semibold transition-all duration-150 ${
+                    isEmailValid
+                      ? "text-[#7a3e9d] hover:text-[#692e8a] cursor-pointer underline-offset-2 hover:underline"
+                      : "text-slate-300 cursor-not-allowed select-none no-underline"
+                  }`}
                 >
                   Forgot?
                 </button>

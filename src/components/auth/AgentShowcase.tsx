@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Sparkles, 
-  ShoppingCart, 
   Heart, 
   MapPin, 
   Star, 
@@ -90,13 +89,15 @@ export function AgentShowcase() {
 
   return (
     <div className="flex flex-col justify-center h-full max-w-xl text-slate-800">
-      {/* Brand Header */}
+      {/* Brand Header with Larger 3D Cartesian Logo */}
       <div className="mb-3">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill border border-[#7a3e9d]/15 mb-3 shadow-xs">
-          <div className="w-6 h-6 rounded-full bg-[#7a3e9d] flex items-center justify-center text-white shadow-xs">
-            <ShoppingCart className="w-3.5 h-3.5" />
-          </div>
-          <span className="font-bold text-sm tracking-tight text-[#7a3e9d]">
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-pill border border-[#7a3e9d]/15 mb-3 shadow-xs">
+          <img 
+            src="/cartesian_symbol.png" 
+            alt="Cartesian Logo" 
+            className="w-7 h-7 object-contain drop-shadow-xs"
+          />
+          <span className="font-bold text-base tracking-tight text-[#7a3e9d]">
             Cartesian
           </span>
         </div>

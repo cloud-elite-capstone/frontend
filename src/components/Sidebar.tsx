@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import {
-  CartesianCartIcon,
   HomeIcon,
   ShoppingBagIcon,
   MapIcon,
@@ -62,22 +61,29 @@ export default function Sidebar({ activeTab: externalTab, onSelectTab }: Sidebar
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          paddingTop: "18px",
+          paddingTop: "16px",
         }}
       >
         <div
           style={{
-            height: "38px",
+            height: "40px",
+            width: "40px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
-            transition: "transform 0.15s ease",
+            transition: "transform 0.18s ease",
           }}
           onClick={() => handleTabClick("home")}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           title="Cartesian"
         >
-          <CartesianCartIcon size={22} color="#7a3e9d" />
+          <img 
+            src="/cartesian_symbol.png" 
+            alt="Cartesian Logo" 
+            style={{ width: "30px", height: "30px", objectFit: "contain" }} 
+          />
         </div>
 
         <div
@@ -86,7 +92,7 @@ export default function Sidebar({ activeTab: externalTab, onSelectTab }: Sidebar
             height: "1.5px",
             backgroundColor: "#d1d5db",
             borderRadius: "1px",
-            marginTop: "14px",
+            marginTop: "12px",
             marginBottom: "16px",
           }}
         />

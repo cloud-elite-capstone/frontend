@@ -5,18 +5,34 @@ import {
   CartesianCartIcon,
   HomeIcon,
   ShoppingBagIcon,
+  MapIcon,
   UserIcon,
   AgentSparkleIcon,
   SettingsIcon,
   HelpIcon,
 } from "./Icons";
 
-export default function Sidebar() {
-  const [activeTab, setActiveTab] = useState<string>("home");
+interface SidebarProps {
+  activeTab?: string;
+  onSelectTab?: (tabId: string) => void;
+}
+
+export default function Sidebar({ activeTab: externalTab, onSelectTab }: SidebarProps) {
+  const [internalTab, setInternalTab] = useState<string>("home");
+  const currentTab = externalTab !== undefined ? externalTab : internalTab;
+
+  const handleTabClick = (id: string) => {
+    if (onSelectTab) {
+      onSelectTab(id);
+    } else {
+      setInternalTab(id);
+    }
+  };
 
   const primaryNav = [
     { id: "home", label: "Home", icon: HomeIcon },
     { id: "shop", label: "Shop", icon: ShoppingBagIcon },
+    { id: "map", label: "Map & Nearby", icon: MapIcon },
     { id: "agent", label: "AI Agent", icon: AgentSparkleIcon },
   ];
 
@@ -58,6 +74,7 @@ export default function Sidebar() {
             cursor: "pointer",
             transition: "transform 0.15s ease",
           }}
+          onClick={() => handleTabClick("home")}
           title="Cartesian"
         >
           <CartesianCartIcon size={22} color="#7a3e9d" />
@@ -85,11 +102,11 @@ export default function Sidebar() {
         >
           {primaryNav.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = currentTab === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabClick(item.id)}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -130,11 +147,11 @@ export default function Sidebar() {
         >
           {secondaryNav.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = currentTab === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabClick(item.id)}
                 style={{
                   display: "flex",
                   alignItems: "center",

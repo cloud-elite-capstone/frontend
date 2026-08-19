@@ -1,14 +1,49 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import AgentChat from "@/components/AgentChat";
 import AddToCartButton from "@/components/AddToCartButton";
 import ProductGrid from "@/components/ProductGrid";
 
+const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100%",
+        color: "#7a3e9d",
+        fontSize: "13px",
+        fontWeight: 600,
+        backgroundColor: "#ffffff",
+        borderRadius: "14px",
+      }}
+    >
+      <div
+        style={{
+          width: "28px",
+          height: "28px",
+          borderRadius: "50%",
+          border: "2.5px solid #ca98f1",
+          borderTopColor: "#7a3e9d",
+          animation: "spin 0.8s linear infinite",
+          marginBottom: "8px",
+        }}
+      />
+      Loading OpenStreetMap Hubs...
+    </div>
+  ),
+});
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("home");
 
   return (
     <div
@@ -23,7 +58,7 @@ export default function Home() {
         fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
       }}
     >
-      <Sidebar />
+      <Sidebar activeTab={activeTab} onSelectTab={setActiveTab} />
 
       <main
         style={{
@@ -61,36 +96,42 @@ export default function Home() {
               flexDirection: "column",
               minHeight: 0,
               height: "100%",
-              overflowY: "auto",
-              paddingTop: "40px",
-              paddingRight: "6px",
-              paddingBottom: "24px",
+              overflowY: activeTab === "map" ? "hidden" : "auto",
+              paddingTop: activeTab === "map" ? "14px" : "40px",
+              paddingRight: activeTab === "map" ? "0px" : "6px",
+              paddingBottom: activeTab === "map" ? "0px" : "24px",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "30px",
-                flexShrink: 0,
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: "22px",
-                  fontWeight: 500,
-                  color: "#1e1e1e",
-                  letterSpacing: "-0.2px",
-                }}
-              >
-                Curated Recommendations
-              </h2>
+            {activeTab === "map" ? (
+              <NearbyMap />
+            ) : (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "30px",
+                    flexShrink: 0,
+                  }}
+                >
+                  <h2
+                    style={{
+                      fontSize: "22px",
+                      fontWeight: 500,
+                      color: "#1e1e1e",
+                      letterSpacing: "-0.2px",
+                    }}
+                  >
+                    Curated Recommendations
+                  </h2>
 
-              <AddToCartButton count={2} />
-            </div>
+                  <AddToCartButton count={2} />
+                </div>
 
-            <ProductGrid />
+                <ProductGrid />
+              </>
+            )}
           </section>
 
           <aside

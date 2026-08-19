@@ -8,10 +8,39 @@ import {
   ChevronDownIcon,
   SendIcon,
 } from "./Icons";
+import ChatPreferenceDropdown, {
+  ChatSearchPreferences,
+  DEFAULT_PREFERENCES,
+} from "./ChatPreferenceDropdown";
+import { X, MapPin, Tag, Star } from "lucide-react";
 
 export default function AgentChat() {
   const [inputValue, setInputValue] = useState("");
   const [showPreferenceModal, setShowPreferenceModal] = useState(false);
+  const [preferences, setPreferences] = useState<ChatSearchPreferences>(DEFAULT_PREFERENCES);
+
+  // Calculate number of custom active filters
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (preferences.minPrice || preferences.maxPrice) count++;
+    if (preferences.location.trim()) count++;
+    if (preferences.minRating > 1.0) count++;
+    return count;
+  };
+
+  const activeCount = getActiveFilterCount();
+
+  const handleRemoveBudget = () => {
+    setPreferences((prev) => ({ ...prev, minPrice: "", maxPrice: "" }));
+  };
+
+  const handleRemoveLocation = () => {
+    setPreferences((prev) => ({ ...prev, location: "" }));
+  };
+
+  const handleRemoveRating = () => {
+    setPreferences((prev) => ({ ...prev, minRating: 1.0 }));
+  };
 
   return (
     <div
@@ -31,6 +60,7 @@ export default function AgentChat() {
         position: "relative",
       }}
     >
+      {/* Header */}
       <div
         style={{
           padding: "24px 14px 14px 14px",
@@ -100,6 +130,7 @@ export default function AgentChat() {
         </div>
       </div>
 
+      {/* Main Chat Canvas Area */}
       <div
         style={{
           flex: 1,
@@ -110,8 +141,18 @@ export default function AgentChat() {
           justifyContent: "space-between",
           padding: "24px 16px 14px 16px",
           overflow: "hidden",
+          position: "relative",
         }}
       >
+        {/* Preference Dropdown Popover */}
+        <ChatPreferenceDropdown
+          isOpen={showPreferenceModal}
+          onClose={() => setShowPreferenceModal(false)}
+          preferences={preferences}
+          onApply={(updated) => setPreferences(updated)}
+        />
+
+        {/* Center Greeting & Assistant Presence */}
         <div
           style={{
             display: "flex",
@@ -166,6 +207,7 @@ export default function AgentChat() {
           </p>
         </div>
 
+        {/* Prompt Input Box & Filter Controls */}
         <div
           style={{
             display: "flex",
@@ -175,6 +217,85 @@ export default function AgentChat() {
             width: "100%",
           }}
         >
+          {/* Active Filter Chips Summary */}
+          {activeCount > 0 && (
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "6px",
+                width: "100%",
+                paddingBottom: "4px",
+              }}
+            >
+              {(preferences.minPrice || preferences.maxPrice) && (
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    fontSize: "10.5px",
+                    fontWeight: 600,
+                    backgroundColor: "#f5eefa",
+                    color: "#7a3e9d",
+                    padding: "2px 8px",
+                    borderRadius: "12px",
+                    border: "1px solid #ca98f1",
+                  }}
+                >
+                  <Tag size={10} />
+                  <span>
+                    ₱{preferences.minPrice || "0"} - {preferences.maxPrice ? `₱${preferences.maxPrice}` : "Any"}
+                  </span>
+                  <X size={11} style={{ cursor: "pointer" }} onClick={handleRemoveBudget} />
+                </span>
+              )}
+
+              {preferences.location.trim() && (
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    fontSize: "10.5px",
+                    fontWeight: 600,
+                    backgroundColor: "#fff7ed",
+                    color: "#f97316",
+                    padding: "2px 8px",
+                    borderRadius: "12px",
+                    border: "1px solid #fed7aa",
+                  }}
+                >
+                  <MapPin size={10} />
+                  <span>📍 {preferences.location}</span>
+                  <X size={11} style={{ cursor: "pointer" }} onClick={handleRemoveLocation} />
+                </span>
+              )}
+
+              {preferences.minRating > 1.0 && (
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    fontSize: "10.5px",
+                    fontWeight: 600,
+                    backgroundColor: "#fff7ed",
+                    color: "#f97316",
+                    padding: "2px 8px",
+                    borderRadius: "12px",
+                    border: "1px solid #fed7aa",
+                  }}
+                >
+                  <Star size={10} />
+                  <span>★ {preferences.minRating.toFixed(1)}+</span>
+                  <X size={11} style={{ cursor: "pointer" }} onClick={handleRemoveRating} />
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Prompt Card */}
           <div
             style={{
               width: "100%",
@@ -230,14 +351,15 @@ export default function AgentChat() {
                   <PlusIcon size={16} color="#9ca3af" />
                 </button>
 
+                {/* Set Preference Action with Active Filter Counter */}
                 <button
                   onClick={() => setShowPreferenceModal(!showPreferenceModal)}
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "5px",
-                    backgroundColor: "#f5ebfc",
-                    color: "#7a3e9d",
+                    backgroundColor: activeCount > 0 ? "#7a3e9d" : "#f5ebfc",
+                    color: activeCount > 0 ? "#ffffff" : "#7a3e9d",
                     padding: "4px 10px",
                     borderRadius: "8px",
                     fontSize: "11px",
@@ -245,11 +367,12 @@ export default function AgentChat() {
                     fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
                     border: "none",
                     cursor: "pointer",
+                    transition: "all 0.15s ease",
                   }}
                 >
-                  <FilterSlidersIcon size={12} color="#7a3e9d" />
-                  <span>Set Preference</span>
-                  <ChevronDownIcon size={10} color="#7a3e9d" />
+                  <FilterSlidersIcon size={12} color={activeCount > 0 ? "#ffffff" : "#7a3e9d"} />
+                  <span>Set Preference{activeCount > 0 ? ` (${activeCount})` : ""}</span>
+                  <ChevronDownIcon size={10} color={activeCount > 0 ? "#ffffff" : "#7a3e9d"} />
                 </button>
               </div>
 

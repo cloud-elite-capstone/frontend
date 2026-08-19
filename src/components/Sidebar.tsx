@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
-  ChatBubbleIcon,
+  MessageSquareIcon,
+  MapIcon,
   HistoryClockIcon,
   SettingsIcon,
   HelpIcon,
@@ -19,10 +21,15 @@ export default function Sidebar({
   activeTab: externalTab,
   onSelectTab,
 }: SidebarProps) {
+  const router = useRouter();
   const [internalTab, setInternalTab] = useState<string>("chat");
   const currentTab = externalTab !== undefined ? externalTab : internalTab;
 
   const handleTabClick = (id: string) => {
+    if (id === "logout") {
+      router.push("/login");
+      return;
+    }
     if (onSelectTab) {
       onSelectTab(id);
     } else {
@@ -31,8 +38,9 @@ export default function Sidebar({
   };
 
   const topNav = [
-    { id: "chat", label: "Chat", icon: ChatBubbleIcon },
+    { id: "chat", label: "Chat & Shop", icon: MessageSquareIcon },
     { id: "history", label: "History", icon: HistoryClockIcon },
+    { id: "map", label: "Map & Nearby", icon: MapIcon },
     { id: "settings", label: "Settings", icon: SettingsIcon },
   ];
 
@@ -44,8 +52,8 @@ export default function Sidebar({
   return (
     <aside
       style={{
-        width: "50px",
-        minWidth: "50px",
+        width: "52px",
+        minWidth: "52px",
         height: "calc(100vh - 28px)",
         display: "flex",
         flexDirection: "column",
@@ -61,26 +69,32 @@ export default function Sidebar({
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          paddingTop: "18px",
+          paddingTop: "14px",
         }}
       >
+        {/* Enlarged 3D Cartesian Logo */}
         <div
           style={{
-            height: "38px",
+            height: "44px",
+            width: "44px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
-            transition: "transform 0.15s ease",
+            transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
+          onClick={() => handleTabClick("chat")}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.12)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           title="Cartesian"
         >
           <Image
             src="/cartesian_symbol.png"
             alt="Cartesian Logo"
-            width={24}
-            height={24}
-            style={{ objectFit: "contain" }}
+            width={34}
+            height={34}
+            priority
+            style={{ objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(122, 62, 157, 0.25))" }}
           />
         </div>
 
@@ -90,7 +104,7 @@ export default function Sidebar({
             height: "1.5px",
             backgroundColor: "#d1d5db",
             borderRadius: "1px",
-            marginTop: "14px",
+            marginTop: "12px",
             marginBottom: "16px",
           }}
         />
@@ -167,14 +181,18 @@ export default function Sidebar({
                 justifyContent: "center",
                 borderRadius: "10px",
                 backgroundColor: isActive ? "#e5e7eb" : "transparent",
-                color: isActive ? "#1e1e1e" : "#6b7280",
+                color: item.id === "logout" ? "#ef4444" : isActive ? "#1e1e1e" : "#6b7280",
                 border: "none",
                 cursor: "pointer",
                 transition: "background-color 0.15s ease, color 0.15s ease",
               }}
               title={item.label}
               onMouseEnter={(e) => {
-                if (!isActive) e.currentTarget.style.backgroundColor = "#f3f4f6";
+                if (item.id === "logout") {
+                  e.currentTarget.style.backgroundColor = "#fee2e2";
+                } else if (!isActive) {
+                  e.currentTarget.style.backgroundColor = "#f3f4f6";
+                }
               }}
               onMouseLeave={(e) => {
                 if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
@@ -182,7 +200,7 @@ export default function Sidebar({
             >
               <Icon
                 size={19}
-                color={isActive ? "#1e1e1e" : "#6b7280"}
+                color={item.id === "logout" ? "#ef4444" : isActive ? "#1e1e1e" : "#6b7280"}
               />
             </button>
           );

@@ -10,6 +10,14 @@ export function CartesianCartIcon({ className = "", size = 20, color = "#7a3e9d"
   );
 }
 
+export function MessageSquareIcon({ className = "", size = 19, color = "#1e1e1e" }: { className?: string; size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  );
+}
+
 export function ChatBubbleIcon({ className = "", size = 18, color = "#1e1e1e" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="none" className={className}>

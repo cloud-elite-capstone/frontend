@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import AgentChat from "@/components/AgentChat";
@@ -10,6 +11,40 @@ import CartSidebar, { CartItem } from "@/components/CartSidebar";
 import { ProductItem } from "@/components/ProductCard";
 import { SearchIcon } from "@/components/Icons";
 import SettingsView from "@/components/SettingsView";
+import HelpView from "@/components/HelpView";
+
+const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100%",
+        color: "#7a3e9d",
+        fontSize: "13px",
+        fontWeight: 600,
+        backgroundColor: "#ffffff",
+        borderRadius: "14px",
+      }}
+    >
+      <div
+        style={{
+          width: "28px",
+          height: "28px",
+          borderRadius: "50%",
+          border: "2.5px solid #ca98f1",
+          borderTopColor: "#7a3e9d",
+          animation: "spin 0.8s linear infinite",
+          marginBottom: "8px",
+        }}
+      />
+      Loading OpenStreetMap Hubs...
+    </div>
+  ),
+});
 
 const initialCartItems: CartItem[] = [
   {
@@ -49,6 +84,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<string>("chat");
 
   const isSettings = activeTab === "settings";
+  const isMap = activeTab === "map";
+  const isHelp = activeTab === "help";
 
   const handleAddToCart = (product: ProductItem) => {
     if (!product) return;
@@ -161,6 +198,14 @@ export default function Home() {
           {isSettings ? (
             <div style={{ flex: 1, height: "100%", overflowY: "auto" }}>
               <SettingsView />
+            </div>
+          ) : isMap ? (
+            <div style={{ flex: 1, height: "100%", overflow: "hidden" }}>
+              <NearbyMap />
+            </div>
+          ) : isHelp ? (
+            <div style={{ flex: 1, height: "100%", overflowY: "auto" }}>
+              <HelpView />
             </div>
           ) : (
             <>

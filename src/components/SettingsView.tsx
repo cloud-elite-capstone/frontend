@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { 
   User, 
   Bot, 
@@ -15,7 +16,8 @@ import {
   ChevronRight,
   Terminal,
   RotateCcw,
-  Plus
+  Plus,
+  LogOut
 } from "lucide-react";
 
 type SettingsTab = "account" | "ai" | "notifications" | "security" | "billing";
@@ -24,6 +26,7 @@ const DEFAULT_SYSTEM_INSTRUCTIONS =
   "Always prioritize minimalist aesthetic tech accessories, prefer sustainable organic fabrics, and warn me if an item has less than 4.8 stars or ships internationally. Keep recommendations direct, structured, and bulleted.";
 
 export default function SettingsView() {
+  const router = useRouter();
   const [activeSubTab, setActiveSubTab] = useState<SettingsTab>("account");
   const [savedSuccess, setSavedSuccess] = useState(false);
 
@@ -658,12 +661,35 @@ export default function SettingsView() {
                 <div style={{ fontSize: "15px", fontWeight: 700, color: "#1e1e1e", marginBottom: "6px" }}>
                   Active Devices & Sessions
                 </div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "13px", color: "#4b5563", marginTop: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "13px", color: "#4b5563", marginTop: "12px", marginBottom: "16px" }}>
                   <div>
                     <div style={{ fontWeight: 700 }}>Windows PC — Chrome 124</div>
                     <div style={{ fontSize: "11px", color: "#9ca3af" }}>Current Active Session • Manila, PH</div>
                   </div>
                   <span style={{ fontSize: "11px", fontWeight: 700, color: "#10b981" }}>Active Now</span>
+                </div>
+
+                <div style={{ paddingTop: "12px", borderTop: "1px solid #f0f0f2", display: "flex", justifyContent: "flex-end" }}>
+                  <button
+                    onClick={() => router.push("/login")}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: "#ef4444",
+                      backgroundColor: "#fef2f2",
+                      padding: "7px 14px",
+                      borderRadius: "8px",
+                      border: "1px solid #fecaca",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                    }}
+                  >
+                    <LogOut size={13} />
+                    Sign Out of Cartesian
+                  </button>
                 </div>
               </div>
             </div>

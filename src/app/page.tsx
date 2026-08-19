@@ -1,67 +1,112 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import React, { useState } from "react";
+import Sidebar from "@/components/Sidebar";
+import Navbar from "@/components/Navbar";
+import AgentChat from "@/components/AgentChat";
+import AddToCartButton from "@/components/AddToCartButton";
+import ProductGrid from "@/components/ProductGrid";
 
 export default function Home() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        maxHeight: "100vh",
+        overflow: "hidden",
+        backgroundColor: "#f5f5f7",
+        padding: "14px 16px 14px 8px",
+        gap: "10px",
+        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+      }}
+    >
+      <Sidebar />
+
+      <main
+        style={{
+          flex: 1,
+          height: "calc(100vh - 28px)",
+          maxHeight: "calc(100vh - 28px)",
+          overflow: "hidden",
+          backgroundColor: "#ffffff",
+          borderRadius: "16px",
+          border: "1px solid #f0f0f2",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.03)",
+          padding: "18px 24px 20px 24px",
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+        }}
+      >
+        <Navbar isScrolled={isScrolled} />
+
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            gap: "24px",
+            alignItems: "stretch",
+            minHeight: 0,
+            overflow: "hidden",
+          }}
+        >
+          <section
+            onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 4)}
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+              height: "100%",
+              overflowY: "auto",
+              paddingTop: "40px",
+              paddingRight: "6px",
+              paddingBottom: "24px",
+            }}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "30px",
+                flexShrink: 0,
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: "22px",
+                  fontWeight: 500,
+                  color: "#1e1e1e",
+                  letterSpacing: "-0.2px",
+                }}
+              >
+                Curated Recommendations
+              </h2>
+
+              {/* <AddToCartButton count={2} /> */}
+            </div>
+
+            <ProductGrid />
+          </section>
+
+          <aside
+            style={{
+              width: "420px",
+              minWidth: "340px",
+              maxWidth: "460px",
+              flexShrink: 0,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              paddingTop: "20px",
+            }}
           >
-            Documentation
-          </a>
+            <AgentChat />
+          </aside>
         </div>
       </main>
     </div>

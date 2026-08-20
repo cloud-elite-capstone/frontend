@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
@@ -13,7 +13,9 @@ import { SearchIcon, XIcon } from "@/components/Icons";
 import SettingsView from "@/components/SettingsView";
 import HelpView from "@/components/HelpView";
 import HistoryView from "@/components/HistoryView";
+import ProductDetailView from "@/components/ProductDetailView";
 import { initialConversations, ConversationThread } from "@/data/conversations";
+import { UserProfile, defaultUserProfile } from "@/data/userProfile";
 
 const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
   ssr: false,
@@ -87,6 +89,17 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<string>("chat");
   const [conversations, setConversations] = useState<ConversationThread[]>(initialConversations);
   const [activeConvoId, setActiveConvoId] = useState<string>("convo-1");
+  const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("cartesian_user_profile");
+      if (saved) {
+        setUserProfile(JSON.parse(saved));
+      }
+    } catch {}
+  }, []);
 
   const isSettings = activeTab === "settings";
   const isHistory = activeTab === "history";
@@ -98,6 +111,16 @@ export default function Home() {
   const handleContinueConversation = (convo: ConversationThread) => {
     setActiveConvoId(convo.id);
     setActiveTab("chat");
+  };
+
+  const mainSectionRef = useRef<HTMLElement>(null);
+
+  const handleSelectProduct = (product: ProductItem) => {
+    setSelectedProduct(product);
+    setShowCart(false);
+    if (mainSectionRef.current) {
+      mainSectionRef.current.scrollTop = 0;
+    }
   };
 
   const handleNewChat = () => {
@@ -143,7 +166,7 @@ export default function Home() {
       const agentMsg = {
         id: `msg-${Date.now() + 1}`,
         sender: "agent" as const,
-        text: `I've analyzed verified regional inventory for "${text.trim()}". Scanning optimal price points and nearby fulfillment hubs...`,
+        text: `I have curated the top recommendations for "${text.trim()}" and loaded them into the Curated Recommendations section on the right.\n\nTop Recommended Pick:\nThe top matching product stands out with high verified ratings (4.8★+), reliable build quality, and immediate availability from local fulfillment hubs.\n\nAlternative Options to Consider:\n• Budget Alternative: A cost-efficient pick providing the essential feature set at a lower price point.\n• Premium Alternative: Offers upgraded specifications, reinforced materials, and extended durability.`,
         timestamp: "Just now",
       };
 
@@ -235,7 +258,13 @@ export default function Home() {
         fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
       }}
     >
-      <Sidebar activeTab={activeTab} onSelectTab={setActiveTab} />
+      <Sidebar
+        activeTab={activeTab}
+        onSelectTab={(tab) => {
+          setActiveTab(tab);
+          setSelectedProduct(null);
+        }}
+      />
 
       <main
         style={{
@@ -257,6 +286,7 @@ export default function Home() {
           isScrolled={isScrolled}
           cartCount={totalCartCount}
           onToggleCart={() => setShowCart(!showCart)}
+          userProfile={userProfile}
         />
 
         <div
@@ -272,7 +302,10 @@ export default function Home() {
         >
           {isSettings ? (
             <div style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}>
-              <SettingsView />
+              <SettingsView
+                userProfile={userProfile}
+                onUpdateProfile={setUserProfile}
+              />
             </div>
           ) : isHistory ? (
             <div style={{ flex: 1, height: "100%", overflow: "hidden" }}>
@@ -314,7 +347,8 @@ export default function Home() {
               </aside>
 
               <section
-                className="curated-scrollbar"
+                ref={mainSectionRef}
+                className={selectedProduct ? "no-scrollbar" : "curated-scrollbar"}
                 onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 4)}
                 style={{
                   flex: 1,
@@ -323,104 +357,119 @@ export default function Home() {
                   minHeight: 0,
                   height: "100%",
                   overflowY: "auto",
-                  padding: "14px 10px 80px 4px",
+                  scrollbarWidth: selectedProduct ? "none" : undefined,
+                  msOverflowStyle: selectedProduct ? "none" : undefined,
+                  padding: selectedProduct ? "14px 10px 40px 4px" : "14px 10px 80px 4px",
                   boxSizing: "border-box",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: "28px",
-                    marginTop: "12px",
-                    paddingTop: 0,
-                    flexShrink: 0,
-                    gap: "16px",
-                  }}
-                >
-                  <h2
-                    style={{
-                      fontSize: "22px",
-                      fontWeight: 700,
-                      color: "#1e293b",
-                      letterSpacing: "-0.3px",
-                      whiteSpace: "nowrap",
-                      margin: 0,
-                    }}
-                  >
-                    Curated Recommendations
-                  </h2>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      backgroundColor: "#ffffff",
-                      border: isSearchFocused
-                        ? "1.5px solid #ea4c38"
-                        : "1.5px solid #cbd5e1",
-                      borderRadius: "10px",
-                      padding: "7px 12px",
-                      width: isSearchFocused ? "320px" : "210px",
-                      maxWidth: "100%",
-                      boxShadow: isSearchFocused
-                        ? "0 4px 14px rgba(234, 76, 56, 0.12), 0 0 0 2px rgba(234, 76, 56, 0.1)"
-                        : "0 1px 3px rgba(0, 0, 0, 0.04)",
-                      transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-                    }}
-                  >
-                    <SearchIcon
-                      size={15}
-                      color={isSearchFocused ? "#ea4c38" : "#94a3b8"}
-                    />
-                    <input
-                      type="text"
-                      placeholder={isSearchFocused ? "Search products..." : "Search products..."}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onFocus={() => setIsSearchFocused(true)}
-                      onBlur={() => setIsSearchFocused(false)}
+                {selectedProduct ? (
+                  <ProductDetailView
+                    product={selectedProduct}
+                    onBack={() => setSelectedProduct(null)}
+                    onSelectProduct={handleSelectProduct}
+                    onAddToCart={handleAddToCart}
+                    allProducts={initialProducts}
+                  />
+                ) : (
+                  <>
+                    <div
                       style={{
-                        background: "none",
-                        border: "none",
-                        outline: "none",
-                        fontSize: "12.5px",
-                        color: "#1e293b",
-                        width: "100%",
-                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginBottom: "28px",
+                        marginTop: "12px",
+                        paddingTop: 0,
+                        flexShrink: 0,
+                        gap: "16px",
                       }}
-                    />
-                    {searchQuery && (
-                      <button
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setSearchQuery("");
+                    >
+                      <h2
+                        style={{
+                          fontSize: "22px",
+                          fontWeight: 700,
+                          color: "#1e293b",
+                          letterSpacing: "-0.3px",
+                          whiteSpace: "nowrap",
+                          margin: 0,
                         }}
+                      >
+                        Curated Recommendations
+                      </h2>
+
+                      <div
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "center",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          padding: "2px",
-                          color: "#94a3b8",
-                          borderRadius: "50%",
+                          gap: "8px",
+                          backgroundColor: "#ffffff",
+                          border: isSearchFocused
+                            ? "1.5px solid #ea4c38"
+                            : "1.5px solid #cbd5e1",
+                          borderRadius: "10px",
+                          padding: "7px 12px",
+                          width: isSearchFocused ? "320px" : "210px",
+                          maxWidth: "100%",
+                          boxShadow: isSearchFocused
+                            ? "0 4px 14px rgba(234, 76, 56, 0.12), 0 0 0 2px rgba(234, 76, 56, 0.1)"
+                            : "0 1px 3px rgba(0, 0, 0, 0.04)",
+                          transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                         }}
-                        title="Clear search"
                       >
-                        <XIcon size={13} color="#94a3b8" />
-                      </button>
-                    )}
-                  </div>
-                </div>
+                        <SearchIcon
+                          size={15}
+                          color={isSearchFocused ? "#ea4c38" : "#94a3b8"}
+                        />
+                        <input
+                          type="text"
+                          placeholder={isSearchFocused ? "Search products..." : "Search products..."}
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onFocus={() => setIsSearchFocused(true)}
+                          onBlur={() => setIsSearchFocused(false)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            outline: "none",
+                            fontSize: "12.5px",
+                            color: "#1e293b",
+                            width: "100%",
+                            fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                          }}
+                        />
+                        {searchQuery && (
+                          <button
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setSearchQuery("");
+                            }}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              padding: "2px",
+                              color: "#94a3b8",
+                              borderRadius: "50%",
+                            }}
+                            title="Clear search"
+                          >
+                            <XIcon size={13} color="#94a3b8" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
 
-                <ProductGrid
-                  products={filteredProducts}
-                  onAddToCart={handleAddToCart}
-                />
+                    <ProductGrid
+                      products={filteredProducts}
+                      onAddToCart={handleAddToCart}
+                      onSelectProduct={handleSelectProduct}
+                    />
+                  </>
+                )}
               </section>
 
               {showCart && (

@@ -7,11 +7,13 @@ import { initialProducts } from "@/data/products";
 interface ProductGridProps {
   products?: ProductItem[];
   onAddToCart?: (product: ProductItem) => void;
+  onSelectProduct?: (product: ProductItem) => void;
 }
 
 export default function ProductGrid({
   products = initialProducts,
   onAddToCart,
+  onSelectProduct,
 }: ProductGridProps) {
   const list = products || [];
 
@@ -31,6 +33,7 @@ export default function ProductGrid({
           key={product.id}
           product={product}
           onAddToCart={onAddToCart}
+          onSelectProduct={onSelectProduct}
         />
       ))}
     </div>

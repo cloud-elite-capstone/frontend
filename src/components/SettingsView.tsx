@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { 
   User, 
@@ -13,28 +14,54 @@ import {
   MapPin, 
   Leaf, 
   Zap, 
-  ChevronRight,
-  Terminal,
-  RotateCcw,
-  Plus,
-  LogOut
+  ChevronRight, 
+  Terminal, 
+  RotateCcw, 
+  Plus, 
+  LogOut,
+  Camera
 } from "lucide-react";
+import { UserProfile, defaultUserProfile } from "@/data/userProfile";
 
 type SettingsTab = "account" | "ai" | "notifications" | "security" | "billing";
 
 const DEFAULT_SYSTEM_INSTRUCTIONS = 
   "Always prioritize minimalist aesthetic tech accessories, prefer sustainable organic fabrics, and warn me if an item has less than 4.8 stars or ships internationally. Keep recommendations direct, structured, and bulleted.";
 
-export default function SettingsView() {
+interface SettingsViewProps {
+  userProfile?: UserProfile;
+  onUpdateProfile?: (profile: UserProfile) => void;
+}
+
+export default function SettingsView({
+  userProfile = defaultUserProfile,
+  onUpdateProfile,
+}: SettingsViewProps) {
   const router = useRouter();
   const [activeSubTab, setActiveSubTab] = useState<SettingsTab>("account");
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  const [fullName, setFullName] = useState("John Reniel");
-  const [email, setEmail] = useState("john.reniel@example.com");
-  const [phone, setPhone] = useState("+63 917 849 2011");
-  const [currency, setCurrency] = useState("PHP (₱)");
-  const [defaultHub, setDefaultHub] = useState("BGC Taguig Metro Hub");
+  const avatarInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [fullName, setFullName] = useState(userProfile.fullName);
+  const [username, setUsername] = useState(userProfile.username);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(userProfile.avatarUrl);
+  const [email, setEmail] = useState(userProfile.email);
+  const [phone, setPhone] = useState(userProfile.phone);
+  const [currency, setCurrency] = useState(userProfile.currency);
+  const [defaultHub, setDefaultHub] = useState(userProfile.defaultHub);
+
+  useEffect(() => {
+    if (userProfile) {
+      setFullName(userProfile.fullName);
+      setUsername(userProfile.username);
+      setAvatarUrl(userProfile.avatarUrl);
+      setEmail(userProfile.email);
+      setPhone(userProfile.phone);
+      setCurrency(userProfile.currency);
+      setDefaultHub(userProfile.defaultHub);
+    }
+  }, [userProfile]);
 
   const [systemInstructions, setSystemInstructions] = useState(DEFAULT_SYSTEM_INSTRUCTIONS);
   const [ecoPriority, setEcoPriority] = useState(true);
@@ -45,8 +72,38 @@ export default function SettingsView() {
   const [pushAlerts, setPushAlerts] = useState(true);
   const [dealRadar, setDealRadar] = useState(true);
 
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setAvatarUrl(url);
+    }
+  };
+
   const handleSave = () => {
     setSavedSuccess(true);
+
+    const cleanUsername = username.trim().toLowerCase().replace(/^@+/, "");
+    const updated: UserProfile = {
+      fullName: fullName.trim() || "John Reniel",
+      username: cleanUsername || "johnreniel",
+      email: email.trim(),
+      phone: phone.trim(),
+      currency,
+      defaultHub: defaultHub.trim(),
+      avatarUrl,
+    };
+
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("cartesian_user_profile", JSON.stringify(updated));
+      } catch {}
+    }
+
+    if (onUpdateProfile) {
+      onUpdateProfile(updated);
+    }
+
     setTimeout(() => {
       setSavedSuccess(false);
     }, 2500);
@@ -67,6 +124,16 @@ export default function SettingsView() {
     { id: "billing", label: "Payment & Wallets", icon: CreditCard },
   ];
 
+  const initials = fullName
+    ? fullName
+        .split(" ")
+        .filter(Boolean)
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "JR";
+
   return (
     <div
       style={{
@@ -79,6 +146,14 @@ export default function SettingsView() {
         overflow: "hidden",
       }}
     >
+      <input
+        type="file"
+        ref={avatarInputRef}
+        onChange={handleAvatarChange}
+        accept="image/*"
+        style={{ display: "none" }}
+      />
+
       <div
         style={{
           display: "flex",
@@ -92,7 +167,7 @@ export default function SettingsView() {
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "2px" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.3px" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.3px", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>
               <span style={{ color: "#ea4c38" }}>Cart</span><span style={{ color: "#2c3e50" }}>esian</span> Settings
             </h2>
             <span
@@ -104,12 +179,13 @@ export default function SettingsView() {
                 padding: "2px 8px",
                 borderRadius: "12px",
                 border: "1.5px solid #fca59b",
+                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
               }}
             >
               AI Copilot v2.4
             </span>
           </div>
-          <p style={{ fontSize: "12px", color: "#64748b" }}>
+          <p style={{ fontSize: "12px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif", margin: 0 }}>
             Manage profile preferences, custom agent system instructions, and regional delivery routing.
           </p>
         </div>
@@ -129,6 +205,8 @@ export default function SettingsView() {
             transition: "all 0.2s ease",
             cursor: "pointer",
             border: "none",
+            fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+            boxShadow: savedSuccess ? "0 2px 8px rgba(16, 185, 129, 0.25)" : "0 2px 8px rgba(234, 76, 56, 0.25)",
           }}
           onMouseEnter={(e) => {
             if (!savedSuccess) e.currentTarget.style.backgroundColor = "#d93b27";
@@ -188,6 +266,7 @@ export default function SettingsView() {
                   textAlign: "left",
                   width: "100%",
                   cursor: "pointer",
+                  fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -211,14 +290,14 @@ export default function SettingsView() {
                   padding: "18px 24px",
                   borderRadius: "16px",
                   backgroundColor: "#f8f9fa",
-                  border: "1px solid #e2e8f0",
+                  border: "1.5px solid #cbd5e1",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
                   <div
                     style={{
-                      width: "60px",
-                      height: "60px",
+                      width: "64px",
+                      height: "64px",
                       borderRadius: "50%",
                       backgroundColor: "#ea4c38",
                       color: "#ffffff",
@@ -228,43 +307,65 @@ export default function SettingsView() {
                       fontSize: "22px",
                       fontWeight: 700,
                       boxShadow: "0 4px 12px rgba(234, 76, 56, 0.25)",
+                      overflow: "hidden",
+                      position: "relative",
+                      border: "2px solid #ffffff",
+                      flexShrink: 0,
                     }}
                   >
-                    JR
+                    {avatarUrl ? (
+                      <Image
+                        src={avatarUrl}
+                        alt={fullName}
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    ) : (
+                      initials
+                    )}
                   </div>
                   <div>
-                    <div style={{ fontSize: "16px", fontWeight: 700, color: "#1e293b" }}>{fullName}</div>
-                    <div style={{ fontSize: "13px", color: "#64748b" }}>{email}</div>
-                    <div style={{ display: "flex", gap: "8px", marginTop: "6px" }}>
-                      <span style={{ fontSize: "10px", fontWeight: 600, color: "#10b981", backgroundColor: "#ecfdf5", padding: "2px 8px", borderRadius: "8px", border: "1px solid #a7f3d0" }}>
-                        ✓ Verified Member
-                      </span>
-                      <span style={{ fontSize: "10px", fontWeight: 600, color: "#b45309", backgroundColor: "#fefce8", padding: "2px 8px", borderRadius: "8px", border: "1px solid #fde68a" }}>
-                        ★ Pro Saver
-                      </span>
+                    <div style={{ fontSize: "16.5px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>
+                      {fullName}
+                    </div>
+                    <div style={{ fontSize: "12.5px", color: "#ea4c38", fontWeight: 600, marginTop: "1px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+                      @{username}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#64748b", marginTop: "2px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+                      {email}
                     </div>
                   </div>
                 </div>
 
                 <button
+                  type="button"
+                  onClick={() => avatarInputRef.current?.click()}
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
                     fontSize: "12px",
                     fontWeight: 600,
                     color: "#ea4c38",
                     backgroundColor: "#fef2f0",
                     padding: "8px 16px",
                     borderRadius: "10px",
-                    border: "1px solid #fed7d2",
+                    border: "1.5px solid #fed7d2",
                     cursor: "pointer",
+                    transition: "all 0.15s ease",
+                    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                   }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#fee2e2")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fef2f0")}
                 >
-                  Change Avatar
+                  <Camera size={14} />
+                  <span>Change Avatar</span>
                 </button>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
                 <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                     Full Name
                   </label>
                   <input
@@ -275,16 +376,53 @@ export default function SettingsView() {
                       width: "100%",
                       padding: "10px 14px",
                       borderRadius: "12px",
-                      border: "1.5px solid #e2e8f0",
+                      border: "1.5px solid #cbd5e1",
                       fontSize: "13px",
                       color: "#1e293b",
                       backgroundColor: "#ffffff",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      boxSizing: "border-box",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+                    Username
+                  </label>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#ffffff",
+                      border: "1.5px solid #cbd5e1",
+                      borderRadius: "12px",
+                      padding: "10px 14px",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <span style={{ color: "#94a3b8", fontWeight: 600, fontSize: "13px", marginRight: "4px" }}>
+                      @
+                    </span>
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      style={{
+                        border: "none",
+                        outline: "none",
+                        width: "100%",
+                        fontSize: "13px",
+                        color: "#1e293b",
+                        backgroundColor: "transparent",
+                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                     Email Address
                   </label>
                   <input
@@ -295,16 +433,18 @@ export default function SettingsView() {
                       width: "100%",
                       padding: "10px 14px",
                       borderRadius: "12px",
-                      border: "1.5px solid #e2e8f0",
+                      border: "1.5px solid #cbd5e1",
                       fontSize: "13px",
                       color: "#1e293b",
                       backgroundColor: "#ffffff",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      boxSizing: "border-box",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                     Phone Number
                   </label>
                   <input
@@ -315,16 +455,18 @@ export default function SettingsView() {
                       width: "100%",
                       padding: "10px 14px",
                       borderRadius: "12px",
-                      border: "1.5px solid #e2e8f0",
+                      border: "1.5px solid #cbd5e1",
                       fontSize: "13px",
                       color: "#1e293b",
                       backgroundColor: "#ffffff",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      boxSizing: "border-box",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                     Default Currency
                   </label>
                   <select
@@ -334,11 +476,13 @@ export default function SettingsView() {
                       width: "100%",
                       padding: "10px 14px",
                       borderRadius: "12px",
-                      border: "1.5px solid #e2e8f0",
+                      border: "1.5px solid #cbd5e1",
                       fontSize: "13px",
                       color: "#1e293b",
                       backgroundColor: "#ffffff",
                       cursor: "pointer",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      boxSizing: "border-box",
                     }}
                   >
                     <option value="PHP (₱)">PHP (₱) - Philippine Peso</option>
@@ -349,7 +493,7 @@ export default function SettingsView() {
               </div>
 
               <div>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px" }}>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#334155", marginBottom: "6px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                   Primary Delivery Hub & Region
                 </label>
                 <div style={{ display: "flex", gap: "10px" }}>
@@ -361,10 +505,11 @@ export default function SettingsView() {
                       flex: 1,
                       padding: "10px 14px",
                       borderRadius: "12px",
-                      border: "1.5px solid #e2e8f0",
+                      border: "1.5px solid #cbd5e1",
                       fontSize: "13px",
                       color: "#1e293b",
                       backgroundColor: "#ffffff",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                     }}
                   />
                   <button
@@ -378,8 +523,9 @@ export default function SettingsView() {
                       color: "#ea4c38",
                       fontSize: "12px",
                       fontWeight: 600,
-                      border: "1px solid #fed7d2",
+                      border: "1.5px solid #fed7d2",
                       cursor: "pointer",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                     }}
                   >
                     <MapPin size={14} />
@@ -397,7 +543,7 @@ export default function SettingsView() {
                   padding: "22px 26px",
                   borderRadius: "16px",
                   backgroundColor: "#ffffff",
-                  border: "1.5px solid #e2e8f0",
+                  border: "1.5px solid #cbd5e1",
                   boxShadow: "0 4px 18px rgba(44, 62, 80, 0.04)",
                   display: "flex",
                   flexDirection: "column",
@@ -421,10 +567,10 @@ export default function SettingsView() {
                       <Terminal size={17} />
                     </div>
                     <div>
-                      <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#1e293b", lineHeight: 1.2 }}>
+                      <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#1e293b", lineHeight: 1.2, fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif", margin: 0 }}>
                         Instruction for Agent Profile Settings
                       </h3>
-                      <p style={{ fontSize: "12px", color: "#64748b" }}>
+                      <p style={{ fontSize: "12px", color: "#64748b", margin: "3px 0 0 0", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                         System instructions and behavior directives given to the Cartesian AI Copilot.
                       </p>
                     </div>
@@ -438,12 +584,13 @@ export default function SettingsView() {
                       alignItems: "center",
                       gap: "5px",
                       fontSize: "11px",
-                      color: "#94a3b8",
+                      color: "#64748b",
                       cursor: "pointer",
                       padding: "6px 12px",
                       borderRadius: "8px",
-                      border: "1px solid #e2e8f0",
+                      border: "1.5px solid #cbd5e1",
                       backgroundColor: "#f8f9fa",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                     }}
                   >
                     <RotateCcw size={12} />
@@ -451,86 +598,77 @@ export default function SettingsView() {
                   </button>
                 </div>
 
-                <div style={{ position: "relative" }}>
-                  <textarea
-                    rows={6}
-                    value={systemInstructions}
-                    onChange={(e) => setSystemInstructions(e.target.value)}
-                    placeholder="What would you like Cartesian AI to know about you to provide better shopping recommendations and product evaluations? (e.g., Always prioritize minimalist tech accessories, prefer sustainable organic fabrics...)"
-                    style={{
-                      width: "100%",
-                      padding: "14px 16px",
-                      borderRadius: "14px",
-                      border: "1.5px solid #e2e8f0",
-                      fontSize: "13px",
-                      lineHeight: "1.6",
-                      color: "#1e293b",
-                      backgroundColor: "#f8f9fa",
-                      resize: "vertical",
-                      fontFamily: "inherit",
-                      outline: "none",
-                    }}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = "#ea4c38")}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
-                  />
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginTop: "8px",
-                      fontSize: "11px",
-                      color: "#94a3b8",
-                    }}
-                  >
-                    <span>System directives guide all chat and recommendation reasoning</span>
-                    <span style={{ fontWeight: 600 }}>{systemInstructions.length} / 2,000</span>
-                  </div>
-                </div>
+                <textarea
+                  value={systemInstructions}
+                  onChange={(e) => setSystemInstructions(e.target.value)}
+                  rows={4}
+                  style={{
+                    width: "100%",
+                    padding: "14px 16px",
+                    borderRadius: "12px",
+                    border: "1.5px solid #cbd5e1",
+                    fontSize: "13px",
+                    lineHeight: 1.6,
+                    color: "#1e293b",
+                    backgroundColor: "#f8f9fa",
+                    outline: "none",
+                    boxSizing: "border-box",
+                    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                    resize: "vertical",
+                  }}
+                />
 
-                <div>
-                  <div style={{ fontSize: "12px", fontWeight: 600, color: "#475569", marginBottom: "8px" }}>
-                    Quick Directive Templates:
-                  </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
+                    Quick Directive Presets
+                  </span>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                     {[
-                      { label: "Minimalist Tech Focus", text: "Prioritize sleek minimalist aesthetics in gadgets." },
-                      { label: "Fairtrade Only", text: "Filter only 100% fairtrade and organic items." },
-                      { label: "Strict Budget Mode", text: "Highlight only items with the steepest verified discounts." },
-                      { label: "Concise Bullets", text: "Format all product comparisons in short bullet points." },
-                      { label: "Local Hubs Priority", text: "Always check stock in nearest regional depot first." },
-                    ].map((chip, idx) => (
+                      "Prioritize BGC Metro Hub stock with same-day dropoff.",
+                      "Favor carbon-neutral certified vendors and eco packaging.",
+                      "Always compare at least 3 alternatives before finalizing picks.",
+                    ].map((preset) => (
                       <button
-                        key={idx}
-                        onClick={() => insertQuickPrompt(chip.text)}
+                        key={preset}
+                        onClick={() => insertQuickPrompt(preset)}
                         style={{
-                          fontSize: "11px",
-                          fontWeight: 600,
+                          fontSize: "11.5px",
                           padding: "6px 12px",
-                          borderRadius: "16px",
-                          backgroundColor: "#fef2f0",
-                          color: "#ea4c38",
-                          border: "1px solid #fed7d2",
+                          borderRadius: "8px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1.5px solid #cbd5e1",
+                          color: "#334155",
                           cursor: "pointer",
                           transition: "all 0.15s ease",
+                          fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#fef2f0";
+                          e.currentTarget.style.borderColor = "#fca59b";
+                          e.currentTarget.style.color = "#ea4c38";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#f8f9fa";
+                          e.currentTarget.style.borderColor = "#cbd5e1";
+                          e.currentTarget.style.color = "#334155";
                         }}
                       >
-                        + {chip.label}
+                        + {preset}
                       </button>
                     ))}
                   </div>
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "14px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", borderRadius: "14px", border: "1px solid #e2e8f0", backgroundColor: "#f8f9fa" }}>
-                  <div>
-                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", display: "flex", alignItems: "center", gap: "6px" }}>
-                      <span>Prioritize Fairtrade & Eco</span>
-                      <Leaf size={14} color="#10b981" />
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" }}>
+                <div style={{ padding: "18px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "8px", backgroundColor: "#ecfdf5", color: "#10b981", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Leaf size={18} />
                     </div>
-                    <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>
-                      Prioritize organic & verified sustainable items.
+                    <div>
+                      <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Eco-First Routing</div>
+                      <div style={{ fontSize: "11px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Prioritize sustainable merchants</div>
                     </div>
                   </div>
                   <input
@@ -541,14 +679,14 @@ export default function SettingsView() {
                   />
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", borderRadius: "14px", border: "1px solid #e2e8f0", backgroundColor: "#f8f9fa" }}>
-                  <div>
-                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", display: "flex", alignItems: "center", gap: "6px" }}>
-                      <span>Nearby Depot Priority</span>
-                      <Zap size={14} color="#f59e0b" />
+                <div style={{ padding: "18px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ width: "34px", height: "34px", borderRadius: "8px", backgroundColor: "#fef2f0", color: "#ea4c38", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Zap size={18} />
                     </div>
-                    <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>
-                      Filter sellers within 5 km for same-day delivery.
+                    <div>
+                      <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Fast-Track Hub Delivery</div>
+                      <div style={{ fontSize: "11px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Auto-filter items with &lt;2h dispatch</div>
                     </div>
                   </div>
                   <input
@@ -558,140 +696,110 @@ export default function SettingsView() {
                     style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer" }}
                   />
                 </div>
-
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", borderRadius: "14px", border: "1px solid #e2e8f0", backgroundColor: "#f8f9fa" }}>
-                  <div>
-                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b" }}>
-                      Conversational Memory
-                    </div>
-                    <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>
-                      Recall sizing and past preferences across chat.
-                    </div>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={aiMemory}
-                    onChange={(e) => setAiMemory(e.target.checked)}
-                    style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer" }}
-                  />
-                </div>
               </div>
             </div>
           )}
 
           {activeSubTab === "notifications" && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px", width: "100%", maxWidth: "1000px" }}>
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "18px", borderRadius: "14px", border: "1px solid #e2e8f0", backgroundColor: "#f8f9fa" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px", width: "100%", maxWidth: "1000px" }}>
+              <div style={{ padding: "18px 22px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div>
-                  <div style={{ fontSize: "14px", fontWeight: 700, color: "#1e293b" }}>Price Drop Radar Alerts</div>
-                  <div style={{ fontSize: "12px", color: "#64748b", marginTop: "4px" }}>Instant alert when items in your curated list drop by &gt; 10% in price.</div>
+                  <div style={{ fontSize: "13.5px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Deal Radar Push Notifications</div>
+                  <div style={{ fontSize: "11.5px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Get notified when wishlist items drop by more than 15%</div>
                 </div>
                 <input
                   type="checkbox"
                   checked={dealRadar}
                   onChange={(e) => setDealRadar(e.target.checked)}
-                  style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer", marginTop: "2px" }}
+                  style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer" }}
                 />
               </div>
 
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "18px", borderRadius: "14px", border: "1px solid #e2e8f0", backgroundColor: "#f8f9fa" }}>
+              <div style={{ padding: "18px 22px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div>
-                  <div style={{ fontSize: "14px", fontWeight: 700, color: "#1e293b" }}>Order & Courier Tracking</div>
-                  <div style={{ fontSize: "12px", color: "#64748b", marginTop: "4px" }}>Push notifications when nearby dispatch couriers are en route.</div>
+                  <div style={{ fontSize: "13.5px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Order & Delivery Dispatch Updates</div>
+                  <div style={{ fontSize: "11.5px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Real-time GPS status when rider leaves regional hub</div>
                 </div>
                 <input
                   type="checkbox"
                   checked={pushAlerts}
                   onChange={(e) => setPushAlerts(e.target.checked)}
-                  style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer", marginTop: "2px" }}
+                  style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer" }}
                 />
               </div>
 
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "18px", borderRadius: "14px", border: "1px solid #e2e8f0", backgroundColor: "#f8f9fa" }}>
+              <div style={{ padding: "18px 22px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div>
-                  <div style={{ fontSize: "14px", fontWeight: 700, color: "#1e293b" }}>Weekly Savings Summary</div>
-                  <div style={{ fontSize: "12px", color: "#64748b", marginTop: "4px" }}>Receive an email digest of total savings unlocked by Cartesian AI.</div>
+                  <div style={{ fontSize: "13.5px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Weekly AI Intelligence Digest</div>
+                  <div style={{ fontSize: "11.5px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Summary of price trends and smart inventory matches</div>
                 </div>
                 <input
                   type="checkbox"
                   checked={emailAlerts}
                   onChange={(e) => setEmailAlerts(e.target.checked)}
-                  style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer", marginTop: "2px" }}
+                  style={{ width: "18px", height: "18px", accentColor: "#ea4c38", cursor: "pointer" }}
                 />
               </div>
             </div>
           )}
 
           {activeSubTab === "security" && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px", width: "100%", maxWidth: "1000px" }}>
-              <div style={{ padding: "20px", borderRadius: "16px", backgroundColor: "#f8f9fa", border: "1px solid #e2e8f0" }}>
-                <div style={{ fontSize: "15px", fontWeight: 700, color: "#1e293b", marginBottom: "6px" }}>
-                  Two-Factor Authentication (2FA)
-                </div>
-                <div style={{ fontSize: "12px", color: "#64748b", marginBottom: "16px" }}>
-                  Protect your autonomous cart checkout authorizations with 2FA biometric verification.
-                </div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: "11px", fontWeight: 600, color: "#10b981", backgroundColor: "#ecfdf5", padding: "4px 10px", borderRadius: "8px", border: "1px solid #a7f3d0" }}>
-                    ✓ 2FA Enabled
-                  </span>
-                  <button style={{ fontSize: "12px", fontWeight: 600, color: "#ea4c38", cursor: "pointer", border: "none", background: "none" }}>
-                    Reconfigure
-                  </button>
-                </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px", width: "100%", maxWidth: "1000px" }}>
+              <div style={{ padding: "20px 24px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1" }}>
+                <h4 style={{ fontSize: "14px", fontWeight: 700, color: "#1e293b", margin: "0 0 4px 0", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Two-Factor Authentication (2FA)</h4>
+                <p style={{ fontSize: "12px", color: "#64748b", margin: "0 0 14px 0", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Secure your Cartesian account with biometric passkeys or authenticator app.</p>
+                <button
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    color: "#ffffff",
+                    backgroundColor: "#1e293b",
+                    padding: "8px 16px",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                  }}
+                >
+                  Enable Authenticator 2FA
+                </button>
               </div>
 
-              <div style={{ padding: "20px", borderRadius: "16px", border: "1px solid #e2e8f0", backgroundColor: "#f8f9fa" }}>
-                <div style={{ fontSize: "15px", fontWeight: 700, color: "#1e293b", marginBottom: "6px" }}>
-                  Active Devices & Sessions
-                </div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "13px", color: "#475569", marginTop: "12px", marginBottom: "16px" }}>
-                  <div>
-                    <div style={{ fontWeight: 700 }}>Windows PC — Chrome 124</div>
-                    <div style={{ fontSize: "11px", color: "#94a3b8" }}>Current Active Session • Manila, PH</div>
-                  </div>
-                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#10b981" }}>Active Now</span>
-                </div>
-
-                <div style={{ paddingTop: "12px", borderTop: "1px solid #e2e8f0", display: "flex", justifyContent: "flex-end" }}>
-                  <button
-                    onClick={() => router.push("/login")}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      fontSize: "12px",
-                      fontWeight: 600,
-                      color: "#ef4444",
-                      backgroundColor: "#fef2f2",
-                      padding: "7px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid #fecaca",
-                      cursor: "pointer",
-                      transition: "all 0.15s ease",
-                    }}
-                  >
-                    <LogOut size={13} />
-                    Sign Out of Cartesian
-                  </button>
-                </div>
+              <div style={{ padding: "20px 24px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1" }}>
+                <h4 style={{ fontSize: "14px", fontWeight: 700, color: "#1e293b", margin: "0 0 4px 0", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Active Sessions</h4>
+                <p style={{ fontSize: "12px", color: "#64748b", margin: "0 0 14px 0", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Signed in from Manila, Philippines (Chrome on Windows) • Active Now</p>
+                <button
+                  onClick={() => router.push("/login")}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    color: "#ea4c38",
+                    backgroundColor: "#fef2f0",
+                    padding: "8px 14px",
+                    borderRadius: "8px",
+                    border: "1.5px solid #fed7d2",
+                    cursor: "pointer",
+                    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                  }}
+                >
+                  <LogOut size={13} />
+                  Sign Out from this Device
+                </button>
               </div>
             </div>
           )}
 
           {activeSubTab === "billing" && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "1000px" }}>
-              <div style={{ padding: "20px", borderRadius: "16px", backgroundColor: "#f8f9fa", border: "1px solid #e2e8f0" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px", width: "100%", maxWidth: "1000px" }}>
+              <div style={{ padding: "20px 24px", borderRadius: "14px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                   <div>
-                    <div style={{ fontSize: "15px", fontWeight: 700, color: "#1e293b" }}>
-                      Saved Payment Methods
-                    </div>
-                    <div style={{ fontSize: "12px", color: "#64748b" }}>
-                      Manage linked e-wallets and credit cards for 1-click checkout.
-                    </div>
+                    <h4 style={{ fontSize: "14px", fontWeight: 700, color: "#1e293b", margin: 0, fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Saved Payment Methods</h4>
+                    <p style={{ fontSize: "12px", color: "#64748b", margin: "2px 0 0 0", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>1-Click checkout wallets and verified credit/debit cards</p>
                   </div>
-
                   <button
                     style={{
                       display: "flex",
@@ -703,8 +811,9 @@ export default function SettingsView() {
                       backgroundColor: "#fef2f0",
                       padding: "8px 14px",
                       borderRadius: "10px",
-                      border: "1px solid #fed7d2",
+                      border: "1.5px solid #fed7d2",
                       cursor: "pointer",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                     }}
                   >
                     <Plus size={14} />
@@ -713,32 +822,32 @@ export default function SettingsView() {
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px", borderRadius: "12px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px", borderRadius: "12px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                       <div style={{ width: "36px", height: "24px", borderRadius: "6px", backgroundColor: "#007dfe", color: "#ffffff", fontSize: "10px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         GCash
                       </div>
                       <div>
-                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b" }}>GCash Linked Wallet</div>
-                        <div style={{ fontSize: "11px", color: "#64748b" }}>+63 917 ••• •011 (Default)</div>
+                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>GCash Linked Wallet</div>
+                        <div style={{ fontSize: "11px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>+63 917 ••• •011 (Default)</div>
                       </div>
                     </div>
-                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#ea4c38", backgroundColor: "#fef2f0", padding: "2px 8px", borderRadius: "6px" }}>
+                    <span style={{ fontSize: "11px", fontWeight: 700, color: "#ea4c38", backgroundColor: "#fef2f0", padding: "2px 8px", borderRadius: "6px", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
                       Default
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px", borderRadius: "12px", backgroundColor: "#ffffff", border: "1px solid #e2e8f0" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px", borderRadius: "12px", backgroundColor: "#ffffff", border: "1.5px solid #cbd5e1" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                       <div style={{ width: "36px", height: "24px", borderRadius: "6px", backgroundColor: "#1a1f71", color: "#ffffff", fontSize: "10px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         VISA
                       </div>
                       <div>
-                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b" }}>Visa Debit Card</div>
-                        <div style={{ fontSize: "11px", color: "#64748b" }}>•••• 4819 • Exp 08/28</div>
+                        <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif" }}>Visa Debit Card</div>
+                        <div style={{ fontSize: "11px", color: "#64748b", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>•••• 4819 • Exp 08/28</div>
                       </div>
                     </div>
-                    <button style={{ fontSize: "12px", color: "#64748b", cursor: "pointer", border: "none", background: "none" }}>Edit</button>
+                    <button style={{ fontSize: "12px", color: "#64748b", cursor: "pointer", border: "none", background: "none", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>Edit</button>
                   </div>
                 </div>
               </div>

@@ -235,14 +235,15 @@ export default function AgentChat({
                 >
                   <div
                     style={{
-                      maxWidth: "88%",
-                      padding: isUser ? "8px 12px" : "10px 12px",
+                      maxWidth: "90%",
+                      padding: isUser ? "8px 12px" : "10px 14px",
                       borderRadius: isUser ? "14px 14px 2px 14px" : "14px 14px 14px 2px",
                       backgroundColor: isUser ? "#2c3e50" : "#f8f9fa",
                       color: isUser ? "#ffffff" : "#1e293b",
-                      border: isUser ? "none" : "1px solid #e2e8f0",
+                      border: isUser ? "none" : "1.5px solid #e2e8f0",
                       fontSize: "12.5px",
-                      lineHeight: 1.45,
+                      lineHeight: 1.55,
+                      whiteSpace: "pre-wrap",
                       boxShadow: isUser
                         ? "0 2px 8px rgba(44, 62, 80, 0.12)"
                         : "0 1px 4px rgba(0, 0, 0, 0.02)",
@@ -251,102 +252,6 @@ export default function AgentChat({
                   >
                     {msg.text}
                   </div>
-
-                  {msg.products && msg.products.length > 0 && (
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "6px",
-                        width: "100%",
-                        maxWidth: "92%",
-                        marginTop: "2px",
-                      }}
-                    >
-                      {msg.products.map((p) => (
-                        <div
-                          key={p.id}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            backgroundColor: "#ffffff",
-                            border: "1.5px solid #cbd5e1",
-                            borderRadius: "10px",
-                            padding: "6px 8px",
-                            boxShadow: "0 2px 6px rgba(44, 62, 80, 0.04)",
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: "42px",
-                              height: "42px",
-                              position: "relative",
-                              borderRadius: "6px",
-                              overflow: "hidden",
-                              backgroundColor: "#f1f5f9",
-                              flexShrink: 0,
-                            }}
-                          >
-                            <Image
-                              src={p.imageUrl}
-                              alt={p.title}
-                              fill
-                              style={{ objectFit: "cover" }}
-                            />
-                          </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <h5
-                              style={{
-                                fontSize: "11.5px",
-                                fontWeight: 700,
-                                margin: 0,
-                                color: "#1e293b",
-                                fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                              }}
-                            >
-                              {p.title}
-                            </h5>
-                            <span style={{ fontSize: "12px", fontWeight: 800, color: "#1e293b" }}>
-                              {p.price}
-                            </span>
-                          </div>
-                          {onAddToCart && (
-                            <button
-                              onClick={() =>
-                                onAddToCart({
-                                  id: p.id,
-                                  title: p.title,
-                                  subtitle: p.subtitle,
-                                  price: p.price,
-                                  priceNum: p.priceNum,
-                                  imageUrl: p.imageUrl,
-                                  rating: p.rating,
-                                })
-                              }
-                              style={{
-                                backgroundColor: "#ea4c38",
-                                color: "#ffffff",
-                                fontSize: "10px",
-                                fontWeight: 700,
-                                padding: "4px 8px",
-                                borderRadius: "6px",
-                                border: "none",
-                                cursor: "pointer",
-                                flexShrink: 0,
-                                fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                              }}
-                            >
-                              Add
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               );
             })}

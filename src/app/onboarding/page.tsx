@@ -74,6 +74,23 @@ export default function OnboardingPage() {
   };
 
   const handleFinishOnboarding = () => {
+    const cleanUsername = username.trim().toLowerCase().replace(/^@+/, "");
+    const profileToSave = {
+      fullName: cleanUsername || "John Reniel",
+      username: cleanUsername || "johnreniel",
+      email: "john.reniel@example.com",
+      phone: "+63 917 849 2011",
+      currency: "PHP (₱)",
+      defaultHub: "BGC Taguig Metro Hub",
+      avatarUrl: photoUrl || null,
+    };
+
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("cartesian_user_profile", JSON.stringify(profileToSave));
+      } catch {}
+    }
+
     router.push("/");
   };
 

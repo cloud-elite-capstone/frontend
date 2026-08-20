@@ -4,6 +4,18 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MapPinIcon, StarIcon } from "./Icons";
 
+export interface ProductSpecification {
+  label: string;
+  value: string;
+}
+
+export interface AISynthesis {
+  matchScore: number;
+  highlight: string;
+  pros: string[];
+  cons: string[];
+}
+
 export interface ProductItem {
   id: string;
   title: string;
@@ -15,16 +27,28 @@ export interface ProductItem {
   ratingCount?: number;
   isNearby?: boolean;
   isTopPick?: boolean;
+  vendorType?: "local" | "external";
+  vendorName?: string;
+  vendorLocation?: string;
+  vendorHours?: string;
+  vendorContact?: string;
+  externalUrl?: string;
+  description?: string;
+  features?: string[];
+  specifications?: ProductSpecification[];
+  aiSynthesis?: AISynthesis;
 }
 
 interface ProductCardProps {
   product: ProductItem;
   onAddToCart?: (product: ProductItem) => void;
+  onSelectProduct?: (product: ProductItem) => void;
 }
 
 export default function ProductCard({
   product,
   onAddToCart,
+  onSelectProduct,
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
@@ -40,6 +64,7 @@ export default function ProductCard({
 
   return (
     <div
+      onClick={() => onSelectProduct?.(product)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{

@@ -1,19 +1,29 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { CartesianCartIcon, UserIcon } from "./Icons";
+import { UserProfile } from "@/data/userProfile";
 
 interface NavbarProps {
   isScrolled?: boolean;
   cartCount?: number;
   onToggleCart?: () => void;
+  userProfile?: UserProfile;
 }
 
 export default function Navbar({
   isScrolled = false,
   cartCount = 0,
   onToggleCart,
+  userProfile,
 }: NavbarProps) {
+  const displayName = userProfile?.username
+    ? `@${userProfile.username}`
+    : userProfile?.fullName
+    ? userProfile.fullName.split(" ")[0]
+    : "John";
+
   return (
     <header
       style={{
@@ -125,7 +135,7 @@ export default function Navbar({
               display: "flex",
               alignItems: "center",
               gap: "7px",
-              padding: "4px 10px 4px 6px",
+              padding: "4px 10px 4px 5px",
               borderRadius: "9999px",
               backgroundColor: "#f8f9fa",
               border: "1.5px solid #cbd5e1",
@@ -134,25 +144,43 @@ export default function Navbar({
           >
             <div
               style={{
-                width: "24px",
-                height: "24px",
+                width: "26px",
+                height: "26px",
                 borderRadius: "50%",
                 backgroundColor: "#fef2f0",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                overflow: "hidden",
+                position: "relative",
+                flexShrink: 0,
+                border: userProfile?.avatarUrl ? "1px solid #fed7d2" : "none",
               }}
             >
-              <UserIcon size={14} color="#ea4c38" />
+              {userProfile?.avatarUrl ? (
+                <Image
+                  src={userProfile.avatarUrl}
+                  alt="Profile Avatar"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              ) : (
+                <UserIcon size={14} color="#ea4c38" />
+              )}
             </div>
             <span
               style={{
                 fontSize: "12px",
                 fontWeight: 600,
                 color: "#1e293b",
+                maxWidth: "110px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
               }}
             >
-              John
+              {displayName}
             </span>
           </div>
         </div>

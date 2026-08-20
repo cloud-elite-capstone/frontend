@@ -1,12 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import SettingsView from "@/components/SettingsView";
+import { UserProfile, defaultUserProfile } from "@/data/userProfile";
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<string>("settings");
+  const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("cartesian_user_profile");
+      if (saved) {
+        setUserProfile(JSON.parse(saved));
+      }
+    } catch {}
+  }, []);
 
   return (
     <div
@@ -31,15 +42,15 @@ export default function SettingsPage() {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "16px",
-          border: "1px solid #f0f0f2",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.03)",
+          border: "1.5px solid #cbd5e1",
+          boxShadow: "0 4px 20px rgba(44, 62, 80, 0.04)",
           padding: "18px 24px 20px 24px",
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
         }}
       >
-        <Navbar />
+        <Navbar userProfile={userProfile} />
 
         <div
           style={{
@@ -64,7 +75,10 @@ export default function SettingsPage() {
               paddingBottom: "0px",
             }}
           >
-            <SettingsView />
+            <SettingsView
+              userProfile={userProfile}
+              onUpdateProfile={setUserProfile}
+            />
           </section>
         </div>
       </main>

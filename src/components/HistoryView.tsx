@@ -844,14 +844,15 @@ export default function HistoryView({
 
                     <div
                       style={{
-                        maxWidth: "78%",
+                        maxWidth: "85%",
                         padding: "14px 18px",
                         borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
                         backgroundColor: isUser ? "#2c3e50" : "#f8fafc",
                         color: isUser ? "#ffffff" : "#0f172a",
                         border: isUser ? "none" : "1.5px solid #e2e8f0",
                         fontSize: "13.5px",
-                        lineHeight: 1.55,
+                        lineHeight: 1.6,
+                        whiteSpace: "pre-wrap",
                         boxShadow: isUser
                           ? "0 4px 14px rgba(44, 62, 80, 0.18)"
                           : "0 2px 8px rgba(0, 0, 0, 0.03)",
@@ -860,164 +861,6 @@ export default function HistoryView({
                     >
                       {msg.text}
                     </div>
-
-                    {msg.products && msg.products.length > 0 && (
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))",
-                          gap: "14px",
-                          width: "100%",
-                          maxWidth: "85%",
-                          marginTop: "8px",
-                        }}
-                      >
-                        {msg.products.map((p) => (
-                          <div
-                            key={p.id}
-                            style={{
-                              backgroundColor: "#ffffff",
-                              borderRadius: "14px",
-                              border: "1.5px solid #cbd5e1",
-                              padding: "12px",
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: "10px",
-                              boxShadow: "0 4px 14px rgba(15, 23, 42, 0.05)",
-                              transition: "all 0.18s ease",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.borderColor = "#ea4c38";
-                              e.currentTarget.style.transform = "translateY(-2px)";
-                              e.currentTarget.style.boxShadow = "0 8px 20px rgba(234, 76, 56, 0.12)";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.borderColor = "#cbd5e1";
-                              e.currentTarget.style.transform = "translateY(0)";
-                              e.currentTarget.style.boxShadow = "0 4px 14px rgba(15, 23, 42, 0.05)";
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: "100%",
-                                height: "120px",
-                                position: "relative",
-                                borderRadius: "10px",
-                                overflow: "hidden",
-                                backgroundColor: "#f1f5f9",
-                              }}
-                            >
-                              <Image
-                                src={p.imageUrl}
-                                alt={p.title}
-                                fill
-                                style={{ objectFit: "cover" }}
-                              />
-                              {p.isNearby && (
-                                <span
-                                  style={{
-                                    position: "absolute",
-                                    top: "6px",
-                                    right: "6px",
-                                    backgroundColor: "#ffffff",
-                                    border: "1.5px solid #fecaca",
-                                    borderRadius: "12px",
-                                    padding: "2px 7px",
-                                    fontSize: "10px",
-                                    fontWeight: 700,
-                                    color: "#ea4c38",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "3px",
-                                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.08)",
-                                  }}
-                                >
-                                  <MapPin size={10} /> Nearby Hub
-                                </span>
-                              )}
-                            </div>
-
-                            <div>
-                              <h4
-                                style={{
-                                  fontSize: "13px",
-                                  fontWeight: 700,
-                                  color: "#0f172a",
-                                  margin: "0 0 3px 0",
-                                  fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                {p.title}
-                              </h4>
-                              <p
-                                style={{
-                                  fontSize: "11.5px",
-                                  color: "#475569",
-                                  margin: "0 0 8px 0",
-                                  fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                {p.subtitle}
-                              </p>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "space-between",
-                                }}
-                              >
-                                <span
-                                  style={{
-                                    fontSize: "15px",
-                                    fontWeight: 800,
-                                    color: "#0f172a",
-                                  }}
-                                >
-                                  {p.price}
-                                </span>
-                                {onAddToCart && (
-                                  <button
-                                    onClick={() =>
-                                      onAddToCart({
-                                        id: p.id,
-                                        title: p.title,
-                                        subtitle: p.subtitle,
-                                        price: p.price,
-                                        priceNum: p.priceNum,
-                                        imageUrl: p.imageUrl,
-                                        rating: p.rating,
-                                      })
-                                    }
-                                    style={{
-                                      backgroundColor: "#ea4c38",
-                                      color: "#ffffff",
-                                      fontSize: "11px",
-                                      fontWeight: 700,
-                                      padding: "5px 11px",
-                                      borderRadius: "8px",
-                                      border: "none",
-                                      cursor: "pointer",
-                                      fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                                      transition: "background-color 0.15s ease",
-                                    }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#d93b27")}
-                                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#ea4c38")}
-                                  >
-                                    Add to Cart
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 );
               })}

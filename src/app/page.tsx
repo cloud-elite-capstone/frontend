@@ -12,6 +12,8 @@ import { ProductItem } from "@/components/ProductCard";
 import { SearchIcon, XIcon } from "@/components/Icons";
 import SettingsView from "@/components/SettingsView";
 import HelpView from "@/components/HelpView";
+import HistoryView from "@/components/HistoryView";
+import { initialConversations, ConversationThread } from "@/data/conversations";
 
 const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
   ssr: false,
@@ -83,10 +85,82 @@ export default function Home() {
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [showCart, setShowCart] = useState(true);
   const [activeTab, setActiveTab] = useState<string>("chat");
+  const [conversations, setConversations] = useState<ConversationThread[]>(initialConversations);
+  const [activeConvoId, setActiveConvoId] = useState<string>("convo-1");
 
   const isSettings = activeTab === "settings";
+  const isHistory = activeTab === "history";
   const isMap = activeTab === "map";
   const isHelp = activeTab === "help";
+
+  const activeConversation = conversations.find((c) => c.id === activeConvoId) || null;
+
+  const handleContinueConversation = (convo: ConversationThread) => {
+    setActiveConvoId(convo.id);
+    setActiveTab("chat");
+  };
+
+  const handleNewChat = () => {
+    const newId = `convo-${Date.now()}`;
+    const newThread: ConversationThread = {
+      id: newId,
+      title: "New Shopping Session",
+      lastMessage: "Hi, this is your Cartesian AI Agent. What are you looking for today?",
+      timestamp: "Just now",
+      group: "today",
+      productsExplored: 0,
+      messages: [],
+    };
+    setConversations((prev) => [newThread, ...prev]);
+    setActiveConvoId(newId);
+    setActiveTab("chat");
+  };
+
+  const handleSendMessage = (text: string) => {
+    if (!text.trim()) return;
+    const userMsg = {
+      id: `msg-${Date.now()}`,
+      sender: "user" as const,
+      text: text.trim(),
+      timestamp: "Just now",
+    };
+
+    setConversations((prev) =>
+      prev.map((c) => {
+        if (c.id === activeConvoId) {
+          return {
+            ...c,
+            lastMessage: text.trim(),
+            timestamp: "Just now",
+            messages: [...c.messages, userMsg],
+          };
+        }
+        return c;
+      })
+    );
+
+    setTimeout(() => {
+      const agentMsg = {
+        id: `msg-${Date.now() + 1}`,
+        sender: "agent" as const,
+        text: `I've analyzed verified regional inventory for "${text.trim()}". Scanning optimal price points and nearby fulfillment hubs...`,
+        timestamp: "Just now",
+      };
+
+      setConversations((prev) =>
+        prev.map((c) => {
+          if (c.id === activeConvoId) {
+            return {
+              ...c,
+              lastMessage: agentMsg.text,
+              messages: [...c.messages, agentMsg],
+            };
+          }
+          return c;
+        })
+      );
+    }, 600);
+  };
 
   const handleAddToCart = (product: ProductItem) => {
     if (!product) return;
@@ -200,6 +274,15 @@ export default function Home() {
             <div style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}>
               <SettingsView />
             </div>
+          ) : isHistory ? (
+            <div style={{ flex: 1, height: "100%", overflow: "hidden" }}>
+              <HistoryView
+                conversations={conversations}
+                onUpdateConversations={setConversations}
+                onContinueConversation={handleContinueConversation}
+                onAddToCart={handleAddToCart}
+              />
+            </div>
           ) : isMap ? (
             <div style={{ flex: 1, height: "100%", overflow: "hidden", padding: "14px 0" }}>
               <NearbyMap />
@@ -222,7 +305,12 @@ export default function Home() {
                   padding: "14px 0 14px 0",
                 }}
               >
-                <AgentChat />
+                <AgentChat
+                  activeConversation={activeConversation}
+                  onSendMessage={handleSendMessage}
+                  onNewChat={handleNewChat}
+                  onAddToCart={handleAddToCart}
+                />
               </aside>
 
               <section

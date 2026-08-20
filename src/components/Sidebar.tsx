@@ -39,7 +39,7 @@ export default function Sidebar({
 
   const topNav = [
     { id: "chat", label: "Home", icon: HomeIcon },
-    { id: "history", label: "History", icon: HistoryClockIcon },
+    { id: "history", label: "Conversation and Shopping History", icon: HistoryClockIcon },
     { id: "map", label: "Map & Nearby", icon: MapIcon },
     { id: "settings", label: "Settings", icon: SettingsIcon },
   ];

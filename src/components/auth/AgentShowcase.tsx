@@ -89,34 +89,26 @@ export function AgentShowcase() {
 
   return (
     <div className="flex flex-col justify-center h-full max-w-xl text-slate-800">
-      {/* Brand Header with Larger 3D Cartesian Logo */}
-      <div className="mb-3">
-        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-pill border border-[#7a3e9d]/15 mb-3 shadow-xs">
-          <img 
-            src="/cartesian_symbol.png" 
-            alt="Cartesian Logo" 
-            className="w-8 h-8 object-contain drop-shadow-sm"
-          />
-          <span className="font-bold text-base tracking-tight text-[#7a3e9d]">
-            Cartesian
-          </span>
-        </div>
+      <div className="mb-4">
+        <img 
+          src="/cartesian_logo.png?v=2" 
+          alt="Cartesian Logo" 
+          className="h-14 sm:h-16 w-auto object-contain mb-3"
+        />
 
-        {/* Hero Title */}
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-[1.12] text-slate-900 mb-2">
           Shop on a Higher Plane, {" "}
-          <span className="text-[#7a3e9d]">
+          <span className="text-[#ea4c38]">
             with the Only Logical Cart. 
           </span>
         </h1>
 
-        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 max-w-lg">
+        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg">
           Meet your autonomous shopping copilot. Discover curated recommendations, optimal pricing, and instant seller routing.
         </p>
       </div>
 
-      {/* Main Interactive Pair: Product Card (Left) + AI Output Breakdown (Right) */}
-      <div className="relative rounded-2xl bg-white/90 border border-slate-200/80 p-4 shadow-[0_12px_30px_-10px_rgba(122,62,157,0.06)] backdrop-blur-xl">
+      <div className="relative rounded-2xl bg-white/90 border border-slate-200/80 p-4 shadow-[0_12px_30px_-10px_rgba(44,62,80,0.06)] backdrop-blur-xl">
         <AnimatePresence mode="wait">
           <motion.div
             key={product.id}
@@ -126,10 +118,8 @@ export function AgentShowcase() {
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center"
           >
-            {/* Left: Product Card in Exact Mockup Format (5 cols) */}
             <div className="sm:col-span-5 flex flex-col">
               <div className="relative rounded-2xl bg-[#ebebee] p-3 aspect-square flex flex-col justify-between overflow-hidden border border-slate-200/60 shadow-xs">
-                {/* Top overlay buttons */}
                 <div className="flex items-start justify-between z-10">
                   <button
                     type="button"
@@ -139,24 +129,23 @@ export function AgentShowcase() {
                   >
                     <Heart 
                       className={`w-3.5 h-3.5 transition-colors ${
-                        isFavorited ? "fill-[#f97316] text-[#f97316]" : "text-[#f97316]"
+                        isFavorited ? "fill-[#ea4c38] text-[#ea4c38]" : "text-[#ea4c38]"
                       }`} 
                     />
                   </button>
 
                   <div className="flex flex-col gap-1 items-end">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 text-[10px] font-bold text-[#f97316] shadow-xs border border-orange-100/60">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#fef2f0] text-[10px] font-bold text-[#ea4c38] shadow-xs border border-[#fed7d2]">
                       <MapPin className="w-2.5 h-2.5" />
                       Nearby
                     </span>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 text-[10px] font-bold text-[#f97316] shadow-xs border border-orange-100/60">
-                      <Star className="w-2.5 h-2.5 fill-[#f97316]" />
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#fefce8] text-[10px] font-bold text-[#b45309] shadow-xs border border-[#fde68a]">
+                      <Star className="w-2.5 h-2.5 fill-[#f59e0b] text-[#f59e0b]" />
                       Top Picks
                     </span>
                   </div>
                 </div>
 
-                {/* Center Image Placeholder Area */}
                 <div className="my-auto flex flex-col items-center justify-center text-slate-400">
                   <div className="w-12 h-12 rounded-xl bg-white/70 flex items-center justify-center shadow-xs mb-1">
                     <IconComponent className="w-6 h-6 text-slate-500" />
@@ -165,7 +154,6 @@ export function AgentShowcase() {
                 </div>
               </div>
 
-              {/* Product Metadata Details */}
               <div className="mt-2.5">
                 <h2 className="text-xs sm:text-sm font-bold text-slate-900 leading-tight">
                   {product.name}
@@ -174,7 +162,7 @@ export function AgentShowcase() {
                   {product.description}
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-xs sm:text-sm font-extrabold text-[#f97316] font-mono">
+                  <span className="text-xs sm:text-sm font-extrabold text-[#ea4c38] font-mono">
                     {product.price}
                   </span>
                   <span className="text-[10px] text-slate-400 line-through font-mono">
@@ -184,12 +172,11 @@ export function AgentShowcase() {
               </div>
             </div>
 
-            {/* Right: AI Output Analysis on Product (7 cols) */}
             <div className="sm:col-span-7 flex flex-col justify-between sm:pl-2 sm:border-l sm:border-slate-100 h-full">
               <div>
                 <div className="flex items-center justify-between mb-2.5">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-md bg-[#7a3e9d]/10 text-[#7a3e9d] flex items-center justify-center">
+                    <div className="w-5 h-5 rounded-md bg-[#fef2f0] text-[#ea4c38] flex items-center justify-center border border-[#fed7d2]">
                       <Sparkles className="w-3 h-3" />
                     </div>
                     <span className="text-xs font-bold text-slate-900">
@@ -208,7 +195,7 @@ export function AgentShowcase() {
                       className="p-2 rounded-xl bg-slate-50 border border-slate-100 text-left"
                     >
                       <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-800">
-                        <Check className="w-3 h-3 text-[#7a3e9d] shrink-0" />
+                        <Check className="w-3 h-3 text-[#ea4c38] shrink-0" />
                         <span>{item.title}</span>
                       </div>
                       <p className="text-[10px] text-slate-500 pl-4.5 mt-0.5 leading-snug">
@@ -219,7 +206,6 @@ export function AgentShowcase() {
                 </div>
               </div>
 
-              {/* Progress switcher */}
               <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 mt-2.5 text-[10px] text-slate-400">
                 <span>Recommendations 1 of {PRODUCTS.length}</span>
                 <div className="flex items-center gap-1">
@@ -229,7 +215,7 @@ export function AgentShowcase() {
                       onClick={() => setCurrentIndex(idx)}
                       aria-label={`View product ${idx + 1}`}
                       className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                        idx === currentIndex ? "w-5 bg-[#7a3e9d]" : "w-1.5 bg-slate-200"
+                        idx === currentIndex ? "w-5 bg-[#ea4c38]" : "w-1.5 bg-slate-200"
                       }`}
                     />
                   ))}

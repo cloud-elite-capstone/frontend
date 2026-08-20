@@ -22,7 +22,6 @@ export function GlassCard({
       } p-6 sm:p-8 md:p-10 transition-shadow duration-300 ${className}`}
       {...props}
     >
-      {/* Inner refraction specular highlight */}
       <div 
         className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" 
         aria-hidden="true"

@@ -108,7 +108,6 @@ export default function NearbyMap() {
         mapInstanceRef.current.remove();
       }
 
-      // Initialize Leaflet Map
       const map = L.map(mapContainerRef.current, {
         center: [14.568, 121.042],
         zoom: 13,
@@ -117,19 +116,16 @@ export default function NearbyMap() {
 
       mapInstanceRef.current = map;
 
-      // Add Zoom control at bottom right
       L.control.zoom({ position: "bottomright" }).addTo(map);
 
-      // Add Clean CartoDB Voyager / OpenStreetMap tiles
       L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
         attribution: '&copy; <a href="https://carto.com/">CARTO</a>, <a href="https://www.openstreetmap.org/copyright">OSM</a>',
         maxZoom: 19,
       }).addTo(map);
 
-      // Create Custom SVG Markers for Cartesian Merchants
       MERCHANTS.forEach((merchant) => {
         const isSelected = selectedMerchant.id === merchant.id;
-        const color = merchant.isTopPick ? "#7a3e9d" : "#f97316";
+        const color = merchant.isTopPick ? "#ea4c38" : "#f59e0b";
 
         const customIcon = L.divIcon({
           className: "cartesian-custom-pin",
@@ -177,7 +173,6 @@ export default function NearbyMap() {
     };
   }, []);
 
-  // Filter merchants based on radius
   const filteredMerchants = MERCHANTS.filter((m) => {
     if (filterRadius === "2km") return parseFloat(m.distance) <= 2.0;
     if (filterRadius === "4km") return parseFloat(m.distance) <= 4.0;
@@ -202,16 +197,16 @@ export default function NearbyMap() {
         borderRadius: "14px",
         overflow: "hidden",
         backgroundColor: "#ffffff",
+        border: "1.5px solid #cbd5e1",
       }}
     >
-      {/* Top Filter Bar */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           padding: "12px 18px",
-          borderBottom: "1px solid #f0f0f2",
+          borderBottom: "1.5px solid #cbd5e1",
           backgroundColor: "#ffffff",
           zIndex: 10,
           flexShrink: 0,
@@ -223,26 +218,25 @@ export default function NearbyMap() {
               width: "28px",
               height: "28px",
               borderRadius: "8px",
-              backgroundColor: "#f5eefa",
+              backgroundColor: "#fef2f0",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#7a3e9d",
+              color: "#ea4c38",
             }}
           >
             <MapPin size={16} />
           </div>
           <div>
-            <h3 style={{ fontSize: "14px", fontWeight: 700, color: "#1e1e1e", lineHeight: 1.1 }}>
-              Nearby Cartesian Merchants
+            <h3 style={{ fontSize: "14px", fontWeight: 700, lineHeight: 1.1 }}>
+              Nearby <span style={{ color: "#ea4c38" }}>Cart</span><span style={{ color: "#2c3e50" }}>esian</span> Merchants
             </h3>
-            <p style={{ fontSize: "11px", color: "#6b7280" }}>
+            <p style={{ fontSize: "11px", color: "#64748b" }}>
               Live OpenStreetMap inventory routing
             </p>
           </div>
         </div>
 
-        {/* Radius Filter Chips */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
           {[
             { id: "all", label: "All Hubs" },
@@ -257,9 +251,9 @@ export default function NearbyMap() {
                 fontWeight: 600,
                 padding: "4px 10px",
                 borderRadius: "20px",
-                border: filterRadius === chip.id ? "1.5px solid #7a3e9d" : "1px solid #e5e7eb",
-                backgroundColor: filterRadius === chip.id ? "#f5eefa" : "#ffffff",
-                color: filterRadius === chip.id ? "#7a3e9d" : "#6b7280",
+                border: filterRadius === chip.id ? "1.5px solid #ea4c38" : "1px solid #e2e8f0",
+                backgroundColor: filterRadius === chip.id ? "#fef2f0" : "#ffffff",
+                color: filterRadius === chip.id ? "#ea4c38" : "#64748b",
                 transition: "all 0.15s ease",
               }}
             >
@@ -269,11 +263,9 @@ export default function NearbyMap() {
         </div>
       </div>
 
-      {/* Main Map Container */}
       <div style={{ flex: 1, position: "relative", minHeight: 0 }}>
         <div ref={mapContainerRef} style={{ width: "100%", height: "100%", zIndex: 1 }} />
 
-        {/* Selected Store Floating AI Card (Bottom Overlay) */}
         {selectedMerchant && (
           <div
             style={{
@@ -283,12 +275,10 @@ export default function NearbyMap() {
               right: "16px",
               maxWidth: "460px",
               zIndex: 20,
-              backgroundColor: "rgba(255, 255, 255, 0.94)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              borderRadius: "16px",
-              border: "1px solid rgba(255, 255, 255, 0.8)",
-              boxShadow: "0 12px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(122, 62, 157, 0.08)",
+              backgroundColor: "#ffffff",
+              borderRadius: "14px",
+              border: "1.5px solid #cbd5e1",
+              boxShadow: "0 12px 30px rgba(44, 62, 80, 0.12), 0 0 0 1px rgba(234, 76, 56, 0.08)",
               padding: "14px 16px",
               display: "flex",
               flexDirection: "column",
@@ -302,7 +292,7 @@ export default function NearbyMap() {
                     style={{
                       fontSize: "13px",
                       fontWeight: 700,
-                      color: "#1e1e1e",
+                      color: "#1e293b",
                     }}
                   >
                     {selectedMerchant.name}
@@ -312,25 +302,25 @@ export default function NearbyMap() {
                       style={{
                         fontSize: "9px",
                         fontWeight: 700,
-                        backgroundColor: "#fff7ed",
-                        color: "#f97316",
+                        backgroundColor: "#fefce8",
+                        color: "#b45309",
                         padding: "1px 6px",
                         borderRadius: "10px",
-                        border: "1px solid rgba(249, 115, 22, 0.3)",
+                        border: "1.5px solid #f59e0b",
                       }}
                     >
                       ★ Top Pick
                     </span>
                   )}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "11px", color: "#6b7280" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "11px", color: "#64748b" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-                    <Navigation size={10} color="#7a3e9d" />
+                    <Navigation size={10} color="#ea4c38" />
                     {selectedMerchant.distance}
                   </span>
                   <span>•</span>
                   <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-                    <Clock size={10} color="#f97316" />
+                    <Clock size={10} color="#f59e0b" />
                     ETA {selectedMerchant.eta}
                   </span>
                   <span>•</span>
@@ -345,7 +335,7 @@ export default function NearbyMap() {
                 style={{
                   fontSize: "13px",
                   fontWeight: 800,
-                  color: "#f97316",
+                  color: "#ea4c38",
                   fontFamily: "monospace",
                 }}
               >
@@ -353,7 +343,6 @@ export default function NearbyMap() {
               </span>
             </div>
 
-            {/* In-Stock Item Preview */}
             <div
               style={{
                 display: "flex",
@@ -361,15 +350,15 @@ export default function NearbyMap() {
                 justifyContent: "space-between",
                 padding: "8px 10px",
                 borderRadius: "10px",
-                backgroundColor: "#f8f8fa",
-                border: "1px solid #f0f0f2",
+                backgroundColor: "#f8f9fa",
+                border: "1.5px solid #cbd5e1",
               }}
             >
               <div>
-                <div style={{ fontSize: "11px", fontWeight: 600, color: "#1e1e1e" }}>
+                <div style={{ fontSize: "11px", fontWeight: 600, color: "#1e293b" }}>
                   {selectedMerchant.featuredProduct.name}
                 </div>
-                <div style={{ fontSize: "10px", color: "#6b7280" }}>
+                <div style={{ fontSize: "10px", color: "#64748b" }}>
                   {selectedMerchant.featuredProduct.description}
                 </div>
               </div>
@@ -382,11 +371,15 @@ export default function NearbyMap() {
                   fontSize: "11px",
                   fontWeight: 700,
                   color: "#ffffff",
-                  background: "linear-gradient(90deg, #ff8a00 0%, #ff756d 100%)",
+                  backgroundColor: "#ea4c38",
                   padding: "6px 12px",
                   borderRadius: "20px",
-                  boxShadow: "0 3px 8px rgba(255, 122, 0, 0.3)",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "all 0.15s ease",
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#d93b27")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#ea4c38")}
               >
                 <ShoppingCart size={11} />
                 Order
@@ -396,14 +389,13 @@ export default function NearbyMap() {
         )}
       </div>
 
-      {/* Horizontal Store Selector Rail */}
       <div
         style={{
           display: "flex",
           gap: "8px",
           padding: "10px 14px",
           backgroundColor: "#ffffff",
-          borderTop: "1px solid #f0f0f2",
+          borderTop: "1px solid #e2e8f0",
           overflowX: "auto",
           flexShrink: 0,
         }}
@@ -420,8 +412,8 @@ export default function NearbyMap() {
                 alignItems: "flex-start",
                 padding: "6px 12px",
                 borderRadius: "10px",
-                border: isSelected ? "1.5px solid #7a3e9d" : "1px solid #e5e7eb",
-                backgroundColor: isSelected ? "#f5eefa" : "#ffffff",
+                border: isSelected ? "1.5px solid #ea4c38" : "1px solid #e2e8f0",
+                backgroundColor: isSelected ? "#fef2f0" : "#ffffff",
                 minWidth: "160px",
                 flexShrink: 0,
                 textAlign: "left",
@@ -432,7 +424,7 @@ export default function NearbyMap() {
                 style={{
                   fontSize: "11px",
                   fontWeight: 700,
-                  color: isSelected ? "#7a3e9d" : "#1e1e1e",
+                  color: isSelected ? "#ea4c38" : "#1e293b",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -441,7 +433,7 @@ export default function NearbyMap() {
               >
                 {merchant.name}
               </div>
-              <div style={{ fontSize: "10px", color: "#6b7280" }}>
+              <div style={{ fontSize: "10px", color: "#64748b" }}>
                 {merchant.distance} • {merchant.featuredProduct.price}
               </div>
             </button>

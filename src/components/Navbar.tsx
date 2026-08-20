@@ -24,9 +24,10 @@ export default function Navbar({
         position: "relative",
         zIndex: 30,
         backgroundColor: "#ffffff",
+        borderBottom: "1.5px solid #cbd5e1",
         transition: "box-shadow 0.25s ease",
         boxShadow: isScrolled
-          ? "0 8px 20px -4px rgba(0, 0, 0, 0.06), 0 3px 8px -2px rgba(122, 62, 157, 0.06)"
+          ? "0 8px 20px -4px rgba(0, 0, 0, 0.06), 0 3px 8px -2px rgba(234, 76, 56, 0.06)"
           : "none",
       }}
     >
@@ -44,13 +45,13 @@ export default function Navbar({
           style={{
             fontSize: "24px",
             fontWeight: 700,
-            color: "#7a3e9d",
             letterSpacing: "-0.4px",
             lineHeight: 1,
             fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
           }}
         >
-          Cartesian
+          <span style={{ color: "#ea4c38" }}>Cart</span>
+          <span style={{ color: "#2c3e50" }}>esian</span>
         </h1>
 
         <div
@@ -62,26 +63,23 @@ export default function Navbar({
         >
           <button
             style={{
-              background: "linear-gradient(135deg, #ffb86f 0%, #c28fef 100%)",
+              backgroundColor: "#f59e0b",
               color: "#ffffff",
               fontSize: "12.5px",
-              fontWeight: 600,
+              fontWeight: 700,
               padding: "9px 20px",
               borderRadius: "12px",
-              boxShadow: "0 4px 14px rgba(194, 143, 239, 0.35)",
               border: "none",
               letterSpacing: "0.2px",
               cursor: "pointer",
-              transition: "transform 0.15s ease, box-shadow 0.15s ease",
+              transition: "all 0.15s ease",
               fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-1px)";
-              e.currentTarget.style.boxShadow = "0 6px 18px rgba(194, 143, 239, 0.45)";
+              e.currentTarget.style.backgroundColor = "#d97706";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 14px rgba(194, 143, 239, 0.35)";
+              e.currentTarget.style.backgroundColor = "#f59e0b";
             }}
           >
             Become a Seller
@@ -96,20 +94,20 @@ export default function Navbar({
                 gap: "6px",
                 padding: "6px 12px",
                 borderRadius: "10px",
-                border: "1px solid #f0e4fc",
-                backgroundColor: "#faf5ff",
+                border: "1.5px solid #fca59b",
+                backgroundColor: "#fef2f0",
                 cursor: "pointer",
                 position: "relative",
               }}
               title="Toggle Cart"
             >
-              <CartesianCartIcon size={17} color="#7a3e9d" />
+              <CartesianCartIcon size={17} color="#ea4c38" />
               {cartCount > 0 && (
                 <span
                   style={{
                     fontSize: "11px",
                     fontWeight: 700,
-                    backgroundColor: "#7a3e9d",
+                    backgroundColor: "#ea4c38",
                     color: "#ffffff",
                     borderRadius: "9999px",
                     padding: "1px 6px",
@@ -129,8 +127,8 @@ export default function Navbar({
               gap: "7px",
               padding: "4px 10px 4px 6px",
               borderRadius: "9999px",
-              backgroundColor: "#f8f8fa",
-              border: "1px solid #eaeaea",
+              backgroundColor: "#f8f9fa",
+              border: "1.5px solid #cbd5e1",
               cursor: "pointer",
             }}
           >
@@ -139,19 +137,19 @@ export default function Navbar({
                 width: "24px",
                 height: "24px",
                 borderRadius: "50%",
-                backgroundColor: "#f5ebfc",
+                backgroundColor: "#fef2f0",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <UserIcon size={14} color="#7a3e9d" />
+              <UserIcon size={14} color="#ea4c38" />
             </div>
             <span
               style={{
                 fontSize: "12px",
                 fontWeight: 600,
-                color: "#1e1e1e",
+                color: "#1e293b",
               }}
             >
               John
@@ -164,7 +162,7 @@ export default function Navbar({
         style={{
           width: "100%",
           height: "1px",
-          backgroundColor: "#e5e7eb",
+          backgroundColor: "#e2e8f0",
         }}
       />
     </header>

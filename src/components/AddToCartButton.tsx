@@ -22,7 +22,7 @@ export default function AddToCartButton({ count = 2 }: { count?: number }) {
         <text
           x="12"
           y="25"
-          fill="#111827"
+          fill="#1e293b"
           fontSize="18"
           fontWeight="700"
           fontFamily="var(--font-josefin-sans), 'Josefin Sans', sans-serif"
@@ -33,7 +33,7 @@ export default function AddToCartButton({ count = 2 }: { count?: number }) {
 
         <path
           d="M 24 0 C 37 10, 37 28, 24 38 L 149 38 C 159.5 38, 168 29.5, 168 19 C 168 8.5, 159.5 0, 149 0 Z"
-          fill="#ffb86f"
+          fill="#ea4c38"
         />
 
         <text

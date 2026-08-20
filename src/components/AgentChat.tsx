@@ -7,6 +7,7 @@ import {
   FilterSlidersIcon,
   ChevronDownIcon,
   SendIcon,
+  AiAssistantIcon,
 } from "./Icons";
 import ChatPreferenceDropdown, {
   ChatSearchPreferences,
@@ -81,17 +82,9 @@ export default function AgentChat() {
               alignItems: "center",
               justifyContent: "center",
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.12)",
-              overflow: "hidden",
             }}
           >
-            <Image
-              src="/cartesian_symbol.png?v=2"
-              alt="Cartesian AI"
-              width={20}
-              height={20}
-              unoptimized
-              style={{ objectFit: "contain" }}
-            />
+            <AiAssistantIcon size={16} color="#ea4c38" strokeWidth={1.5} />
           </div>
           <span
             style={{
@@ -162,22 +155,34 @@ export default function AgentChat() {
         >
           <div
             style={{
-              width: "42px",
-              height: "42px",
+              position: "relative",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              marginBottom: "10px",
+              marginBottom: "12px",
             }}
           >
-            <Image
-              src="/cartesian_symbol.png?v=2"
-              alt="Cartesian"
-              width={38}
-              height={38}
-              unoptimized
-              style={{ objectFit: "contain" }}
+            <div
+              style={{
+                position: "absolute",
+                width: "44px",
+                height: "44px",
+                borderRadius: "50%",
+                backgroundColor: "rgba(245, 158, 11, 0.3)",
+                filter: "blur(12px)",
+                pointerEvents: "none",
+              }}
             />
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <AiAssistantIcon size={34} color="#ea4c38" strokeWidth={1.5} />
+            </div>
           </div>
 
           <h2
@@ -186,6 +191,7 @@ export default function AgentChat() {
               fontWeight: 700,
               color: "#1e293b",
               lineHeight: 1.25,
+              marginTop: "15px",
               marginBottom: "4px",
               fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
             }}
@@ -199,7 +205,7 @@ export default function AgentChat() {
               fontWeight: 400,
               color: "#64748b",
               paddingTop: "10px",
-              fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
             }}
           >
             What are you looking for today?
@@ -318,7 +324,7 @@ export default function AgentChat() {
                 backgroundColor: "transparent",
                 border: "none",
                 outline: "none",
-                fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                 lineHeight: 1.4,
               }}
             />
@@ -394,7 +400,7 @@ export default function AgentChat() {
             style={{
               fontSize: "11px",
               color: "#94a3b8",
-              fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
             }}
           >
             AI can make mistakes.

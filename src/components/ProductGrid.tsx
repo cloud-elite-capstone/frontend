@@ -20,9 +20,10 @@ export default function ProductGrid({
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-        gap: "22px 14px",
+        gap: "26px 14px",
         width: "100%",
         overflow: "visible",
+        paddingBottom: "40px",
       }}
     >
       {list.map((product) => (

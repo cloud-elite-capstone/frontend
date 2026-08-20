@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  MessageSquareIcon,
+  HomeIcon,
   MapIcon,
   HistoryClockIcon,
   SettingsIcon,
@@ -38,7 +38,7 @@ export default function Sidebar({
   };
 
   const topNav = [
-    { id: "chat", label: "Chat & Shop", icon: MessageSquareIcon },
+    { id: "chat", label: "Home", icon: HomeIcon },
     { id: "history", label: "History", icon: HistoryClockIcon },
     { id: "map", label: "Map & Nearby", icon: MapIcon },
     { id: "settings", label: "Settings", icon: SettingsIcon },

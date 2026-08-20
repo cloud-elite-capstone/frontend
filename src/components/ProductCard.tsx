@@ -49,14 +49,14 @@ export default function ProductCard({
         minWidth: 0,
         cursor: "pointer",
         position: "relative",
-        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
       }}
     >
       <div
         style={{
           position: "relative",
           width: "100%",
-          height: "160px",
+          height: "185px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -169,7 +169,7 @@ export default function ProductCard({
         <h3
           title={product.title}
           style={{
-            fontSize: "13.5px",
+            fontSize: "14px",
             fontWeight: 700,
             color: "#1e293b",
             letterSpacing: "-0.2px",
@@ -199,7 +199,7 @@ export default function ProductCard({
           <p
             title={product.subtitle}
             style={{
-              fontSize: "11.5px",
+              fontSize: "12px",
               fontWeight: 400,
               color: "#64748b",
               overflow: "hidden",
@@ -219,17 +219,17 @@ export default function ProductCard({
                 display: "flex",
                 alignItems: "center",
                 gap: "2px",
-                fontSize: "10.5px",
+                fontSize: "11px",
                 fontWeight: 700,
                 color: "#b45309",
                 flexShrink: 0,
                 backgroundColor: "#fefce8",
-                padding: "1px 5px",
+                padding: "1.5px 6px",
                 borderRadius: "6px",
                 border: "1px solid #fde68a",
               }}
             >
-              <StarIcon size={9} color="#f59e0b" />
+              <StarIcon size={10} color="#f59e0b" />
               <span>{product.rating.toFixed(1)}</span>
             </div>
           )}
@@ -240,7 +240,7 @@ export default function ProductCard({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginTop: "3px",
+            marginTop: "4px",
             paddingTop: "2px",
             gap: "4px",
             width: "100%",
@@ -248,7 +248,7 @@ export default function ProductCard({
         >
           <span
             style={{
-              fontSize: "15px",
+              fontSize: "16px",
               fontWeight: 800,
               color: "#1e293b",
               letterSpacing: "-0.3px",
@@ -264,9 +264,9 @@ export default function ProductCard({
             style={{
               backgroundColor: isAdded ? "#10b981" : "#ea4c38",
               color: "#ffffff",
-              fontSize: "11px",
+              fontSize: "11.5px",
               fontWeight: 700,
-              padding: "6px 11px",
+              padding: "6.5px 12px",
               borderRadius: "9999px",
               border: "none",
               cursor: "pointer",

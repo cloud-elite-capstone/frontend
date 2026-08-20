@@ -43,7 +43,7 @@ export default function CartSidebar({
         border: "1.5px solid #cbd5e1",
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.02)",
         overflow: "hidden",
-        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
       }}
     >
       <div

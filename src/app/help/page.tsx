@@ -18,7 +18,7 @@ export default function StandaloneHelpPage() {
         backgroundColor: "#f5f5f7",
         padding: "14px 16px 14px 8px",
         gap: "10px",
-        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
       }}
     >
       <Sidebar activeTab="help" />

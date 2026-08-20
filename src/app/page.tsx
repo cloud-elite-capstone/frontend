@@ -9,7 +9,7 @@ import ProductGrid from "@/components/ProductGrid";
 import { initialProducts } from "@/data/products";
 import CartSidebar, { CartItem } from "@/components/CartSidebar";
 import { ProductItem } from "@/components/ProductCard";
-import { SearchIcon } from "@/components/Icons";
+import { SearchIcon, XIcon } from "@/components/Icons";
 import SettingsView from "@/components/SettingsView";
 import HelpView from "@/components/HelpView";
 
@@ -79,6 +79,7 @@ const initialCartItems: CartItem[] = [
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [showCart, setShowCart] = useState(true);
   const [activeTab, setActiveTab] = useState<string>("chat");
@@ -157,7 +158,7 @@ export default function Home() {
         backgroundColor: "#f4f5f7",
         padding: "14px 16px 14px 8px",
         gap: "10px",
-        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
       }}
     >
       <Sidebar activeTab={activeTab} onSelectTab={setActiveTab} />
@@ -225,6 +226,7 @@ export default function Home() {
               </aside>
 
               <section
+                className="curated-scrollbar"
                 onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 4)}
                 style={{
                   flex: 1,
@@ -233,8 +235,8 @@ export default function Home() {
                   minHeight: 0,
                   height: "100%",
                   overflowY: "auto",
-                  padding: "14px 8px 14px 0",
-                  marginTop: "20px",
+                  padding: "14px 10px 80px 4px",
+                  boxSizing: "border-box",
                 }}
               >
                 <div
@@ -242,8 +244,8 @@ export default function Home() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    marginBottom: "16px",
-                    marginTop: 0,
+                    marginBottom: "28px",
+                    marginTop: "12px",
                     paddingTop: 0,
                     flexShrink: 0,
                     gap: "16px",
@@ -267,20 +269,31 @@ export default function Home() {
                       display: "flex",
                       alignItems: "center",
                       gap: "8px",
-                      backgroundColor: "#f8f9fa",
-                      border: "1.5px solid #cbd5e1",
+                      backgroundColor: "#ffffff",
+                      border: isSearchFocused
+                        ? "1.5px solid #ea4c38"
+                        : "1.5px solid #cbd5e1",
                       borderRadius: "10px",
-                      padding: "7px 14px",
-                      width: "100%",
-                      maxWidth: "240px",
+                      padding: "7px 12px",
+                      width: isSearchFocused ? "320px" : "210px",
+                      maxWidth: "100%",
+                      boxShadow: isSearchFocused
+                        ? "0 4px 14px rgba(234, 76, 56, 0.12), 0 0 0 2px rgba(234, 76, 56, 0.1)"
+                        : "0 1px 3px rgba(0, 0, 0, 0.04)",
+                      transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
                     }}
                   >
-                    <SearchIcon size={15} color="#94a3b8" />
+                    <SearchIcon
+                      size={15}
+                      color={isSearchFocused ? "#ea4c38" : "#94a3b8"}
+                    />
                     <input
                       type="text"
-                      placeholder="Search products..."
+                      placeholder={isSearchFocused ? "Search products..." : "Search products..."}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
+                      onFocus={() => setIsSearchFocused(true)}
+                      onBlur={() => setIsSearchFocused(false)}
                       style={{
                         background: "none",
                         border: "none",
@@ -288,9 +301,31 @@ export default function Home() {
                         fontSize: "12.5px",
                         color: "#1e293b",
                         width: "100%",
-                        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                       }}
                     />
+                    {searchQuery && (
+                      <button
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setSearchQuery("");
+                        }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: "2px",
+                          color: "#94a3b8",
+                          borderRadius: "50%",
+                        }}
+                        title="Clear search"
+                      >
+                        <XIcon size={13} color="#94a3b8" />
+                      </button>
+                    )}
                   </div>
                 </div>
 

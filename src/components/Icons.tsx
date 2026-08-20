@@ -83,6 +83,48 @@ export function AgentSparkleIcon({ className = "", size = 18, color = "#555555" 
   );
 }
 
+export function AiAssistantIcon({
+  className = "",
+  size = 20,
+  color = "#ea4c38",
+  strokeWidth = 1.6,
+}: {
+  className?: string;
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path
+        d="M12 2L14.3 9.3L21.6 11.6L14.3 13.9L12 21.2L9.7 13.9L2.4 11.6L9.7 9.3L12 2Z"
+        fill={color}
+        fillOpacity="0.1"
+      />
+      <path
+        d="M19 2L19.6 4.1L21.7 4.7L19.6 5.3L19 7.4L18.4 5.3L16.3 4.7L18.4 4.1L19 2Z"
+        fill={color}
+        fillOpacity="0.15"
+      />
+      <path
+        d="M5 16L5.6 18.1L7.7 18.7L5.6 19.3L5 21.4L4.4 19.3L2.3 18.7L4.4 18.1L5 16Z"
+        fill={color}
+        fillOpacity="0.15"
+      />
+    </svg>
+  );
+}
+
 export function SettingsIcon({ className = "", size = 18, color = "#555555" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>

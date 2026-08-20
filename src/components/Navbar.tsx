@@ -9,6 +9,8 @@ interface NavbarProps {
   isScrolled?: boolean;
   cartCount?: number;
   onToggleCart?: () => void;
+  onBecomeSeller?: () => void;
+  onSelectTab?: (tab: string) => void;
   userProfile?: UserProfile;
 }
 
@@ -16,6 +18,8 @@ export default function Navbar({
   isScrolled = false,
   cartCount = 0,
   onToggleCart,
+  onBecomeSeller,
+  onSelectTab,
   userProfile,
 }: NavbarProps) {
   const displayName = userProfile?.username
@@ -72,6 +76,13 @@ export default function Navbar({
           }}
         >
           <button
+            onClick={() => {
+              if (onBecomeSeller) {
+                onBecomeSeller();
+              } else if (onSelectTab) {
+                onSelectTab("seller");
+              }
+            }}
             style={{
               backgroundColor: "#f59e0b",
               color: "#ffffff",

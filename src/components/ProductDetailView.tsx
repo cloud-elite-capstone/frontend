@@ -181,70 +181,73 @@ export default function ProductDetailView({
             <div
               style={{
                 position: "absolute",
-                top: "12px",
-                left: "12px",
+                top: "14px",
+                left: "14px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "6px",
+                gap: "8px",
               }}
             >
               {isLocal ? (
                 <span
                   style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.95)",
-                    backdropFilter: "blur(6px)",
-                    color: "#ea4c38",
-                    fontSize: "11px",
+                    backgroundColor: "rgba(255, 251, 235, 0.96)",
+                    backdropFilter: "blur(8px)",
+                    color: "#b45309",
+                    fontSize: "12.5px",
                     fontWeight: 700,
-                    padding: "4px 10px",
-                    borderRadius: "6px",
-                    border: "1px solid #fed7d2",
+                    padding: "6px 12px",
+                    borderRadius: "8px",
+                    border: "1.5px solid #fde68a",
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "4px",
+                    gap: "6px",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.08)",
                     fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
                   }}
                 >
-                  <MapPin size={12} /> Verified Local Merchant
+                  <MapPin size={14} color="#d97706" /> Nearby Cartesian Merchant
                 </span>
               ) : (
                 <span
                   style={{
-                    backgroundColor: "rgba(255, 255, 255, 0.95)",
-                    backdropFilter: "blur(6px)",
+                    backgroundColor: "rgba(255, 255, 255, 0.96)",
+                    backdropFilter: "blur(8px)",
                     color: "#2c3e50",
-                    fontSize: "11px",
+                    fontSize: "12.5px",
                     fontWeight: 700,
-                    padding: "4px 10px",
-                    borderRadius: "6px",
-                    border: "1px solid #cbd5e1",
+                    padding: "6px 12px",
+                    borderRadius: "8px",
+                    border: "1.5px solid #cbd5e1",
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "4px",
+                    gap: "6px",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.08)",
                     fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
                   }}
                 >
-                  <ShieldCheck size={13} color="#10b981" /> Official Online Merchant
+                  <ShieldCheck size={15} color="#10b981" /> Official Online Merchant
                 </span>
               )}
 
               {product.isTopPick && (
                 <span
                   style={{
-                    backgroundColor: "#ea4c38",
+                    backgroundColor: "#f59e0b",
                     color: "#ffffff",
-                    fontSize: "10.5px",
+                    fontSize: "12px",
                     fontWeight: 700,
-                    padding: "3px 8px",
-                    borderRadius: "6px",
+                    padding: "5px 12px",
+                    borderRadius: "8px",
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "4px",
+                    gap: "6px",
                     width: "fit-content",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.10)",
                     fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
                   }}
                 >
-                  <Sparkles size={11} /> AI Top Recommendation
+                  <Sparkles size={13} fill="#ffffff" /> AI Top Recommendation
                 </span>
               )}
             </div>
@@ -252,24 +255,25 @@ export default function ProductDetailView({
             <div
               style={{
                 position: "absolute",
-                bottom: "12px",
-                right: "12px",
-                backgroundColor: "rgba(255, 255, 255, 0.95)",
-                backdropFilter: "blur(6px)",
-                padding: "3px 8px",
-                borderRadius: "6px",
-                border: "1px solid #e2e8f0",
+                bottom: "14px",
+                right: "14px",
+                backgroundColor: "rgba(255, 255, 255, 0.96)",
+                backdropFilter: "blur(8px)",
+                padding: "5px 11px",
+                borderRadius: "8px",
+                border: "1.5px solid #fde68a",
                 display: "flex",
                 alignItems: "center",
-                gap: "4px",
-                fontSize: "11.5px",
-                fontWeight: 700,
+                gap: "5px",
+                fontSize: "13px",
+                fontWeight: 800,
                 color: "#0f172a",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.08)",
               }}
             >
-              <Star size={12} fill="#f59e0b" color="#f59e0b" />
+              <Star size={15} fill="#f59e0b" color="#f59e0b" />
               <span>{product.rating || 4.8}</span>
-              <span style={{ color: "#64748b", fontWeight: 500, fontSize: "10.5px" }}>
+              <span style={{ color: "#64748b", fontWeight: 600, fontSize: "11.5px" }}>
                 ({product.ratingCount || 120})
               </span>
             </div>
@@ -883,21 +887,22 @@ export default function ProductDetailView({
                   <span
                     style={{
                       position: "absolute",
-                      top: "6px",
-                      right: "6px",
-                      backgroundColor: "rgba(255, 255, 255, 0.95)",
-                      border: "1px solid #fed7d2",
-                      borderRadius: "4px",
-                      padding: "2px 6px",
-                      fontSize: "9.5px",
+                      top: "8px",
+                      right: "8px",
+                      backgroundColor: "rgba(255, 251, 235, 0.96)",
+                      border: "1.5px solid #fde68a",
+                      borderRadius: "6px",
+                      padding: "3px 8px",
+                      fontSize: "11px",
                       fontWeight: 700,
-                      color: "#ea4c38",
+                      color: "#b45309",
                       display: "inline-flex",
                       alignItems: "center",
-                      gap: "3px",
+                      gap: "4px",
+                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.16)",
                     }}
                   >
-                    <MapPin size={9} /> Local Hub
+                    <MapPin size={11} color="#d97706" /> Local Hub
                   </span>
                 )}
               </div>

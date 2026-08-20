@@ -10,6 +10,7 @@ import {
   SettingsIcon,
   HelpIcon,
   LogOutIcon,
+  StoreIcon,
 } from "./Icons";
 
 interface SidebarProps {
@@ -41,6 +42,7 @@ export default function Sidebar({
     { id: "chat", label: "Home", icon: HomeIcon },
     { id: "history", label: "Conversation and Shopping History", icon: HistoryClockIcon },
     { id: "map", label: "Map & Nearby", icon: MapIcon },
+    { id: "seller", label: "Become a Seller", icon: StoreIcon },
     { id: "settings", label: "Settings", icon: SettingsIcon },
   ];
 

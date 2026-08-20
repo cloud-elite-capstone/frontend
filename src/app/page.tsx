@@ -14,6 +14,7 @@ import SettingsView from "@/components/SettingsView";
 import HelpView from "@/components/HelpView";
 import HistoryView from "@/components/HistoryView";
 import ProductDetailView from "@/components/ProductDetailView";
+import BecomeSellerView from "@/components/BecomeSellerView";
 import { initialConversations, ConversationThread } from "@/data/conversations";
 import { UserProfile, defaultUserProfile } from "@/data/userProfile";
 
@@ -105,6 +106,7 @@ export default function Home() {
   const isHistory = activeTab === "history";
   const isMap = activeTab === "map";
   const isHelp = activeTab === "help";
+  const isSeller = activeTab === "seller";
 
   const activeConversation = conversations.find((c) => c.id === activeConvoId) || null;
 
@@ -245,6 +247,10 @@ export default function Home() {
     0
   );
 
+  if (isSeller) {
+    return <BecomeSellerView onBack={() => setActiveTab("chat")} />;
+  }
+
   return (
     <div
       style={{
@@ -286,6 +292,10 @@ export default function Home() {
           isScrolled={isScrolled}
           cartCount={totalCartCount}
           onToggleCart={() => setShowCart(!showCart)}
+          onBecomeSeller={() => {
+            setActiveTab("seller");
+            setSelectedProduct(null);
+          }}
           userProfile={userProfile}
         />
 

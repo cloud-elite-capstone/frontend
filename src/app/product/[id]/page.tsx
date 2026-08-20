@@ -117,6 +117,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         <Navbar
           cartCount={totalCartCount}
           onToggleCart={() => setShowCart(!showCart)}
+          onBecomeSeller={() => router.push("/seller")}
           userProfile={userProfile}
         />
 

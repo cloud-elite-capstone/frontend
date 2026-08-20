@@ -125,7 +125,7 @@ export default function OnboardingPage() {
             alt="Cartesian Logo"
             width={170}
             height={50}
-            style={{ objectFit: "contain", height: "auto" }}
+            style={{ objectFit: "contain", maxWidth: "170px", maxHeight: "46px", width: "auto", height: "auto" }}
             priority
           />
         </div>

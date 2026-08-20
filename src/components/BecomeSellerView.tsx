@@ -109,13 +109,17 @@ export default function BecomeSellerView({ onBack }: BecomeSellerViewProps) {
               <Image
                 src="/cartesian_logo.png"
                 alt="Cartesian Logo"
-                width={210}
-                height={42}
+                width={340}
+                height={75}
                 priority
                 unoptimized
                 style={{
                   objectFit: "contain",
                   display: "block",
+                  maxHeight: "75px",
+                  maxWidth: "340px",
+                  width: "auto",
+                  height: "auto",
                 }}
               />
             </div>

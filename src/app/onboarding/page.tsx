@@ -88,7 +88,7 @@ export default function OnboardingPage() {
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("cartesian_user_profile", JSON.stringify(profileToSave));
-      } catch {}
+      } catch { }
     }
 
     router.push("/");
@@ -168,10 +168,10 @@ export default function OnboardingPage() {
                 currentStep === 1
                   ? "0%"
                   : currentStep === 2
-                  ? "33%"
-                  : currentStep === 3
-                  ? "66%"
-                  : "100%",
+                    ? "33%"
+                    : currentStep === 3
+                      ? "66%"
+                      : "100%",
             }}
           />
 
@@ -197,13 +197,13 @@ export default function OnboardingPage() {
                     backgroundColor: isActive
                       ? "#ea4c38"
                       : isCompleted
-                      ? "#2c3e50"
-                      : "#ffffff",
+                        ? "#2c3e50"
+                        : "#ffffff",
                     border: isActive
                       ? "2px solid #ea4c38"
                       : isCompleted
-                      ? "2px solid #2c3e50"
-                      : "2px solid #e2e8f0",
+                        ? "2px solid #2c3e50"
+                        : "2px solid #e2e8f0",
                     color: isActive || isCompleted ? "#ffffff" : "#94a3b8",
                     display: "flex",
                     alignItems: "center",
@@ -749,7 +749,7 @@ export default function OnboardingPage() {
                       fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                     }}
                   >
-                    Welcome to Cartesian, <strong style={{ color: "#0f172a" }}>@{username || "explorer"}</strong>. Your personal shopping copilot is ready to assist you.
+                    Welcome to Cartesian, <strong style={{ color: "#0f172a" }}>@{username || "explorer"}</strong>. Your personal shopping AI assistant is ready to assist you.
                   </p>
                 </div>
 

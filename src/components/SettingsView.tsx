@@ -3,21 +3,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { 
-  User, 
-  Bot, 
-  Bell, 
-  Shield, 
-  CreditCard, 
-  Check, 
-  Save, 
-  MapPin, 
-  Leaf, 
-  Zap, 
-  ChevronRight, 
-  Terminal, 
-  RotateCcw, 
-  Plus, 
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  User,
+  Bot,
+  Bell,
+  Shield,
+  CreditCard,
+  Check,
+  Save,
+  MapPin,
+  Leaf,
+  Zap,
+  ChevronRight,
+  Terminal,
+  RotateCcw,
+  Plus,
   LogOut,
   Camera
 } from "lucide-react";
@@ -25,7 +26,7 @@ import { UserProfile, defaultUserProfile } from "@/data/userProfile";
 
 type SettingsTab = "account" | "ai" | "notifications" | "security" | "billing";
 
-const DEFAULT_SYSTEM_INSTRUCTIONS = 
+const DEFAULT_SYSTEM_INSTRUCTIONS =
   "Always prioritize minimalist aesthetic tech accessories, prefer sustainable organic fabrics, and warn me if an item has less than 4.8 stars or ships internationally. Keep recommendations direct, structured, and bulleted.";
 
 interface SettingsViewProps {
@@ -97,7 +98,7 @@ export default function SettingsView({
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("cartesian_user_profile", JSON.stringify(updated));
-      } catch {}
+      } catch { }
     }
 
     if (onUpdateProfile) {
@@ -111,7 +112,7 @@ export default function SettingsView({
 
   const insertQuickPrompt = (snippet: string) => {
     if (systemInstructions.includes(snippet)) return;
-    setSystemInstructions((prev) => 
+    setSystemInstructions((prev) =>
       prev.trim() ? `${prev.trim()} ${snippet}` : snippet
     );
   };
@@ -126,12 +127,12 @@ export default function SettingsView({
 
   const initials = fullName
     ? fullName
-        .split(" ")
-        .filter(Boolean)
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
+      .split(" ")
+      .filter(Boolean)
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
     : "JR";
 
   return (
@@ -280,7 +281,16 @@ export default function SettingsView({
         </aside>
 
         <div style={{ flex: 1, padding: "24px 36px", overflowY: "auto", width: "100%" }}>
-          {activeSubTab === "account" && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSubTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              style={{ width: "100%" }}
+            >
+              {activeSubTab === "account" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "22px", width: "100%", maxWidth: "1000px" }}>
               <div
                 style={{
@@ -571,7 +581,7 @@ export default function SettingsView({
                         Instruction for Agent Profile Settings
                       </h3>
                       <p style={{ fontSize: "12px", color: "#64748b", margin: "3px 0 0 0", fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif" }}>
-                        System instructions and behavior directives given to the Cartesian AI Copilot.
+                        System instructions and behavior directives given to the Cartesian AI.
                       </p>
                     </div>
                   </div>
@@ -852,7 +862,9 @@ export default function SettingsView({
                 </div>
               </div>
             </div>
-          )}
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { ArrowLeft, Sparkles, CheckCircle2, ArrowRight, Mail } from "lucide-react";
 
 interface BecomeSellerViewProps {
@@ -91,7 +92,10 @@ export default function BecomeSellerView({ onBack }: BecomeSellerViewProps) {
           boxSizing: "border-box",
         }}
       >
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.28, ease: "easeOut" }}
           style={{
             display: "grid",
             gridTemplateColumns: "1.15fr 0.85fr",
@@ -292,7 +296,7 @@ export default function BecomeSellerView({ onBack }: BecomeSellerViewProps) {
               />
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </div>
   );

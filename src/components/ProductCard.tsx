@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { MapPinIcon, StarIcon } from "./Icons";
 
 export interface ProductSpecification {
@@ -41,12 +42,14 @@ export interface ProductItem {
 
 interface ProductCardProps {
   product: ProductItem;
+  index?: number;
   onAddToCart?: (product: ProductItem) => void;
   onSelectProduct?: (product: ProductItem) => void;
 }
 
 export default function ProductCard({
   product,
+  index,
   onAddToCart,
   onSelectProduct,
 }: ProductCardProps) {
@@ -63,7 +66,17 @@ export default function ProductCard({
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 44, scale: 0.91 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{
+        type: "spring",
+        stiffness: 240,
+        damping: 20,
+        mass: 0.75,
+        delay: index !== undefined ? (index % 4) * 0.08 : 0,
+      }}
       onClick={() => onSelectProduct?.(product)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -313,6 +326,6 @@ export default function ProductCard({
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

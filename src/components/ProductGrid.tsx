@@ -28,10 +28,11 @@ export default function ProductGrid({
         paddingBottom: "40px",
       }}
     >
-      {list.map((product) => (
+      {list.map((product, idx) => (
         <ProductCard
           key={product.id}
           product={product}
+          index={idx}
           onAddToCart={onAddToCart}
           onSelectProduct={onSelectProduct}
         />

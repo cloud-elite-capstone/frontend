@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Sparkles, 
-  Heart, 
-  MapPin, 
-  Star, 
-  Check, 
-  Headphones, 
-  Speaker, 
+import {
+  Sparkles,
+  Heart,
+  MapPin,
+  Star,
+  Check,
+  Headphones,
+  Speaker,
   Watch
 } from "lucide-react";
 
@@ -90,21 +90,21 @@ export function AgentShowcase() {
   return (
     <div className="flex flex-col justify-center h-full max-w-xl text-slate-800">
       <div className="mb-4">
-        <img 
-          src="/cartesian_logo.png?v=2" 
-          alt="Cartesian Logo" 
+        <img
+          src="/cartesian_logo.png?v=2"
+          alt="Cartesian Logo"
           className="h-14 sm:h-16 w-auto object-contain mb-3"
         />
 
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-[1.12] text-slate-900 mb-2">
           Shop on a Higher Plane, {" "}
           <span className="text-[#ea4c38]">
-            with the Only Logical Cart. 
+            with the Only Logical Cart.
           </span>
         </h1>
 
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg">
-          Meet your autonomous shopping copilot. Discover curated recommendations, optimal pricing, and instant seller routing.
+          Meet your autonomous shopping AI assistant. Discover curated recommendations, optimal pricing, and instant seller routing.
         </p>
       </div>
 
@@ -127,10 +127,9 @@ export function AgentShowcase() {
                     aria-label="Favorite product"
                     className="w-7 h-7 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center transition-colors cursor-pointer hover:bg-white"
                   >
-                    <Heart 
-                      className={`w-3.5 h-3.5 transition-colors ${
-                        isFavorited ? "fill-[#ea4c38] text-[#ea4c38]" : "text-[#ea4c38]"
-                      }`} 
+                    <Heart
+                      className={`w-3.5 h-3.5 transition-colors ${isFavorited ? "fill-[#ea4c38] text-[#ea4c38]" : "text-[#ea4c38]"
+                        }`}
                     />
                   </button>
 
@@ -190,7 +189,7 @@ export function AgentShowcase() {
 
                 <div className="space-y-2">
                   {product.aiHighlights.map((item, idx) => (
-                    <div 
+                    <div
                       key={idx}
                       className="p-2 rounded-xl bg-slate-50 border border-slate-100 text-left"
                     >
@@ -214,9 +213,8 @@ export function AgentShowcase() {
                       key={p.id}
                       onClick={() => setCurrentIndex(idx)}
                       aria-label={`View product ${idx + 1}`}
-                      className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                        idx === currentIndex ? "w-5 bg-[#ea4c38]" : "w-1.5 bg-slate-200"
-                      }`}
+                      className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentIndex ? "w-5 bg-[#ea4c38]" : "w-1.5 bg-slate-200"
+                        }`}
                     />
                   ))}
                 </div>

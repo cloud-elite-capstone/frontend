@@ -2,20 +2,16 @@
 
 import React, { useState } from "react";
 import {
-  HelpCircle,
   Search,
   Bot,
   Truck,
   CreditCard,
   ShieldCheck,
-  MessageSquare,
   Mail,
-  ExternalLink,
   ChevronDown,
   ChevronUp,
   Sparkles,
   LifeBuoy,
-  FileQuestion,
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
@@ -31,51 +27,58 @@ const FAQS: FAQItem[] = [
   {
     id: "f1",
     category: "agent",
-    question: "How does the Cartesian AI Copilot discover the best deals?",
+    question: "How does the Cartesian AI discover and curate products?",
     answer:
-      "Cartesian AI continuously indexes verified regional merchant inventories, price histories, and promotional stacks. It calculates price arbitrage and automatically applies store coupons and bundle incentives to guarantee optimal logic-driven pricing.",
+      "Cartesian indexes products from both local partner merchants and major external online retailers. The AI concierge matches items to your specific preferences, compares alternatives, and provides synthesized review telemetry so you always find the best product for your needs.",
   },
   {
     id: "f2",
-    category: "agent",
-    question: "How do I customize the AI's shopping directives and preferences?",
+    category: "shipping",
+    question: "Does Cartesian handle shipping and delivery for all products?",
     answer:
-      "You can configure custom system instructions under Settings → Agent Profile & Instructions. Here, you can guide the assistant's persona, establish strict budget constraints, toggle fairtrade filters, or demand concise bullet comparisons.",
+      "Cartesian directly coordinates local delivery and dispatch exclusively for verified local partner merchants within your area. For external online stores (such as Shopee, Lazada, or official brand websites), Cartesian provides the curated recommendation and direct link—you will complete your checkout and delivery arrangements on the external merchant's platform.",
   },
   {
     id: "f3",
     category: "shipping",
-    question: "What is the Nearby Hub delivery radius and same-day delivery?",
+    question: "How do I purchase products from external online merchants?",
     answer:
-      "When viewing items with the 'Nearby' badge or using the Map & Nearby view, Cartesian filters local fulfillment depots located within a 5 km radius. Orders placed before 4:00 PM are dispatched via localized dispatch couriers for same-day delivery.",
+      "When viewing an item from an external merchant, simply click 'Visit Store Site' or 'Visit Store'. You will be redirected to the official external storefront where you can finalize your purchase, apply store-specific vouchers, and set your delivery address.",
   },
   {
     id: "f4",
     category: "shipping",
-    question: "How can I track my courier in real-time?",
+    question: "What is the Nearby Hub delivery radius for local merchants?",
     answer:
-      "Once an order is confirmed, open the Map & Nearby tab or check your Notifications tray. You will receive live GPS telemetry updates as the courier leaves the regional depot.",
+      "Items with the 'Nearby Cartesian Merchant' badge are stocked locally at partner storefronts and fulfillment hubs. When ordered through Cartesian, local orders are dispatched directly to your address for same-day delivery.",
   },
   {
     id: "f5",
     category: "billing",
-    question: "What payment methods are supported on Cartesian?",
+    question: "What payment methods are supported for local orders on Cartesian?",
     answer:
-      "Cartesian supports direct 1-click GCash wallet linkage, Visa/Mastercard debit and credit cards, and cash on local hub pickup. All transactions are encrypted with zero-trust checkout authorization.",
+      "For items purchased directly through Cartesian from local merchants, we support GCash, major credit/debit cards (Visa/Mastercard), and cash on local hub pickup with secure end-to-end encryption.",
   },
   {
     id: "f6",
-    category: "security",
-    question: "How does Two-Factor Authentication (2FA) protect autonomous carts?",
+    category: "agent",
+    question: "How do I customize the AI's shopping directives and preferences?",
     answer:
-      "When 2FA is activated in Settings → Security & Privacy, high-value autonomous cart checkouts require biometric authorization or a one-time passcode before payment execution.",
+      "You can configure custom shopping directives under Settings → Preferences & Instructions to fine-tune the AI's recommendations, price sensitivities, and response detail.",
+  },
+  {
+    id: "f7",
+    category: "security",
+    question: "How does Cartesian protect your account and transaction data?",
+    answer:
+      "Cartesian uses industry-standard encryption for all localized checkout operations and user account settings. We never store or share your payment credentials with external websites.",
   },
 ];
 
 export default function HelpView() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [expandedFaq, setExpandedFaq] = useState<string | null>("f1");
+  const [expandedFaq, setExpandedFaq] = useState<string | null>("f2");
   const [ticketSubmitted, setTicketSubmitted] = useState(false);
   const [ticketSubject, setTicketSubject] = useState("");
   const [ticketMessage, setTicketMessage] = useState("");
@@ -130,25 +133,12 @@ export default function HelpView() {
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "2px" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.3px" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.3px", margin: 0 }}>
               <span style={{ color: "#ea4c38" }}>Cart</span><span style={{ color: "#2c3e50" }}>esian</span> Help & Support
             </h2>
-            <span
-              style={{
-                fontSize: "10px",
-                fontWeight: 700,
-                backgroundColor: "#fef2f0",
-                color: "#ea4c38",
-                padding: "2px 8px",
-                borderRadius: "12px",
-                border: "1.5px solid #fca59b",
-              }}
-            >
-              24/7 AI Desk
-            </span>
           </div>
-          <p style={{ fontSize: "12px", color: "#64748b" }}>
-            Find answers, learn how to configure your AI copilot, or submit an expedited support request.
+          <p style={{ fontSize: "12px", color: "#64748b", margin: 0 }}>
+            Find answers, learn how Cartesian works with local and external merchants, or submit a support inquiry.
           </p>
         </div>
 
@@ -185,7 +175,7 @@ export default function HelpView() {
 
       <div style={{ flex: 1, padding: "24px 32px", overflowY: "auto" }}>
         <div style={{ maxWidth: "1050px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "28px" }}>
-          
+
           <div
             style={{
               backgroundColor: "#fef2f0",
@@ -205,8 +195,8 @@ export default function HelpView() {
                   Need fast shopping advice or order assistance?
                 </span>
               </div>
-              <p style={{ fontSize: "12px", color: "#64748b", maxWidth: "600px", lineHeight: "1.5" }}>
-                The Cartesian AI Copilot can answer questions about order statuses, store warranty policies, and recommend items tailored to your custom system instructions.
+              <p style={{ fontSize: "12px", color: "#64748b", maxWidth: "600px", lineHeight: "1.5", margin: 0 }}>
+                The Cartesian AI answers questions about product comparisons, warranty coverage, and helps you differentiate between local hub dispatch and external store links.
               </p>
             </div>
 
@@ -226,10 +216,11 @@ export default function HelpView() {
                   border: "1px solid #fed7d2",
                   boxShadow: "0 2px 6px rgba(0,0,0,0.03)",
                   cursor: "pointer",
+                  textDecoration: "none",
                 }}
               >
                 <Mail size={14} />
-                <span>Contact Desk</span>
+                <span>Contact Support</span>
               </a>
             </div>
           </div>
@@ -241,25 +232,25 @@ export default function HelpView() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "14px" }}>
               {[
                 {
-                  cat: "agent",
-                  title: "AI Agent & Copilot",
-                  desc: "Learn about system instructions, deal arbitrations, and product memory.",
-                  icon: Bot,
-                  color: "#ea4c38",
-                  bg: "#fef2f0",
-                },
-                {
                   cat: "shipping",
-                  title: "Hubs & Delivery",
-                  desc: "Nearby depot routing, same-day delivery radius, and courier tracking.",
+                  title: "Local Hubs & External Sites",
+                  desc: "Understand local fulfillment vs external online merchant redirects.",
                   icon: Truck,
                   color: "#f59e0b",
                   bg: "#fefce8",
                 },
                 {
+                  cat: "agent",
+                  title: "AI Agent",
+                  desc: "Learn about AI recommendations, review synthesis, and product memory.",
+                  icon: Bot,
+                  color: "#ea4c38",
+                  bg: "#fef2f0",
+                },
+                {
                   cat: "billing",
-                  title: "Payments & Wallets",
-                  desc: "GCash 1-click linkages, card management, and coupon stacking rules.",
+                  title: "Payments & Cart",
+                  desc: "Local merchant checkout methods, GCash, cards, and hub pickups.",
                   icon: CreditCard,
                   color: "#2c3e50",
                   bg: "#edf0f2",
@@ -267,7 +258,7 @@ export default function HelpView() {
                 {
                   cat: "security",
                   title: "Security & Privacy",
-                  desc: "2FA biometric checkout authorizations and privacy protocols.",
+                  desc: "Encrypted data handling, secure account settings, and privacy protocols.",
                   icon: ShieldCheck,
                   color: "#10b981",
                   bg: "#ecfdf5",
@@ -308,7 +299,7 @@ export default function HelpView() {
                     <div style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", marginBottom: "4px" }}>
                       {card.title}
                     </div>
-                    <p style={{ fontSize: "11px", color: "#64748b", lineHeight: "1.4" }}>
+                    <p style={{ fontSize: "11px", color: "#64748b", lineHeight: "1.4", margin: 0 }}>
                       {card.desc}
                     </p>
                   </div>
@@ -385,7 +376,7 @@ export default function HelpView() {
                         <div
                           style={{
                             padding: "0 18px 14px 18px",
-                            fontSize: "12px",
+                            fontSize: "12.5px",
                             color: "#475569",
                             lineHeight: "1.6",
                             borderTop: "1px solid #cbd5e1",
@@ -431,10 +422,10 @@ export default function HelpView() {
               </div>
               <div>
                 <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#1e293b", margin: 0 }}>
-                  Submit an Expedited Support Ticket
+                  Submit a Support Inquiry
                 </h3>
                 <p style={{ fontSize: "11px", color: "#64748b", margin: 0 }}>
-                  Our specialized commerce team responds in under 2 hours.
+                  Our specialized commerce team will assist you with any local order or merchant questions.
                 </p>
               </div>
             </div>
@@ -455,7 +446,7 @@ export default function HelpView() {
                 }}
               >
                 <CheckCircle2 size={18} color="#10b981" />
-                <span>Your support ticket has been logged! Ticket #CR-94821 dispatched to support@cartesian.shop.</span>
+                <span>Your inquiry has been submitted! Our support team will respond to your email.</span>
               </div>
             ) : (
               <form onSubmit={handleTicketSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -466,7 +457,7 @@ export default function HelpView() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Question regarding same-day courier dispatch in BGC Taguig"
+                    placeholder="e.g. Question regarding local merchant delivery or external vendor links"
                     value={ticketSubject}
                     onChange={(e) => setTicketSubject(e.target.value)}
                     style={{
@@ -478,6 +469,7 @@ export default function HelpView() {
                       backgroundColor: "#ffffff",
                       outline: "none",
                       color: "#1e293b",
+                      boxSizing: "border-box",
                     }}
                   />
                 </div>
@@ -489,7 +481,7 @@ export default function HelpView() {
                   <textarea
                     rows={4}
                     required
-                    placeholder="Describe what you're experiencing or ask any question about your cart, delivery, or account..."
+                    placeholder="Describe what you're experiencing or ask any question about local delivery, external merchant redirects, or your account..."
                     value={ticketMessage}
                     onChange={(e) => setTicketMessage(e.target.value)}
                     style={{
@@ -503,6 +495,7 @@ export default function HelpView() {
                       resize: "vertical",
                       fontFamily: "inherit",
                       color: "#1e293b",
+                      boxSizing: "border-box",
                     }}
                   />
                 </div>
@@ -527,7 +520,7 @@ export default function HelpView() {
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#d93b27")}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#ea4c38")}
                   >
-                    <span>Submit Ticket</span>
+                    <span>Submit Inquiry</span>
                     <ArrowRight size={14} />
                   </button>
                 </div>

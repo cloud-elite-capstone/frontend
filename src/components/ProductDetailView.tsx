@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   ArrowLeft,
   Star,
@@ -840,9 +841,19 @@ export default function ProductDetailView({
             width: "100%",
           }}
         >
-          {relatedProducts.map((p) => (
-            <div
+          {relatedProducts.map((p, idx) => (
+            <motion.div
               key={p.id}
+              initial={{ opacity: 0, y: 38, scale: 0.92 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{
+                type: "spring",
+                stiffness: 240,
+                damping: 20,
+                mass: 0.75,
+                delay: idx * 0.07,
+              }}
               onClick={() => handleSelectOption(p)}
               style={{
                 backgroundColor: "#ffffff",
@@ -959,7 +970,7 @@ export default function ProductDetailView({
                   </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

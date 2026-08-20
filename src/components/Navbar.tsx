@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { CartesianCartIcon, UserIcon } from "./Icons";
 import { UserProfile } from "@/data/userProfile";
 
@@ -107,7 +108,9 @@ export default function Navbar({
           </button>
 
           {onToggleCart && (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.94 }}
+              whileHover={{ scale: 1.04 }}
               onClick={onToggleCart}
               style={{
                 display: "flex",
@@ -123,22 +126,29 @@ export default function Navbar({
               title="Toggle Cart"
             >
               <CartesianCartIcon size={17} color="#ea4c38" />
-              {cartCount > 0 && (
-                <span
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    backgroundColor: "#ea4c38",
-                    color: "#ffffff",
-                    borderRadius: "9999px",
-                    padding: "1px 6px",
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {cartCount}
-                </span>
-              )}
-            </button>
+              <AnimatePresence mode="wait">
+                {cartCount > 0 && (
+                  <motion.span
+                    key={cartCount}
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.5, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 450, damping: 16 }}
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      backgroundColor: "#ea4c38",
+                      color: "#ffffff",
+                      borderRadius: "9999px",
+                      padding: "1px 6px",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
           )}
 
           <div

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import ProductDetailView from "@/components/ProductDetailView";
@@ -151,26 +152,32 @@ export default function ProductPage({ params }: ProductPageProps) {
             />
           </div>
 
-          {showCart && (
-            <aside
-              style={{
-                width: "310px",
-                minWidth: "280px",
-                maxWidth: "340px",
-                flexShrink: 0,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <CartSidebar
-                items={cartItems}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemoveItem={handleRemoveItem}
-                onClose={() => setShowCart(false)}
-              />
-            </aside>
-          )}
+          <AnimatePresence>
+            {showCart && (
+              <motion.aside
+                initial={{ width: 0, opacity: 0, x: 20 }}
+                animate={{ width: "310px", opacity: 1, x: 0 }}
+                exit={{ width: 0, opacity: 0, x: 20 }}
+                transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                style={{
+                  minWidth: "280px",
+                  maxWidth: "340px",
+                  flexShrink: 0,
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  overflow: "hidden",
+                }}
+              >
+                <CartSidebar
+                  items={cartItems}
+                  onUpdateQuantity={handleUpdateQuantity}
+                  onRemoveItem={handleRemoveItem}
+                  onClose={() => setShowCart(false)}
+                />
+              </motion.aside>
+            )}
+          </AnimatePresence>
         </div>
       </main>
     </div>

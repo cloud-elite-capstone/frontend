@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   PlusIcon,
   FilterSlidersIcon,
@@ -223,8 +224,11 @@ export default function AgentChat({
             {messages.map((msg) => {
               const isUser = msg.sender === "user";
               return (
-                <div
+                <motion.div
                   key={msg.id}
+                  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -252,7 +256,7 @@ export default function AgentChat({
                   >
                     {msg.text}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
             <div ref={messagesEndRef} />

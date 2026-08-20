@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import AgentChat from "@/components/AgentChat";
@@ -311,29 +312,53 @@ export default function Home() {
           }}
         >
           {isSettings ? (
-            <div style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}>
+            <motion.div
+              key="settings"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}
+            >
               <SettingsView
                 userProfile={userProfile}
                 onUpdateProfile={setUserProfile}
               />
-            </div>
+            </motion.div>
           ) : isHistory ? (
-            <div style={{ flex: 1, height: "100%", overflow: "hidden" }}>
+            <motion.div
+              key="history"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{ flex: 1, height: "100%", overflow: "hidden" }}
+            >
               <HistoryView
                 conversations={conversations}
                 onUpdateConversations={setConversations}
                 onContinueConversation={handleContinueConversation}
                 onAddToCart={handleAddToCart}
               />
-            </div>
+            </motion.div>
           ) : isMap ? (
-            <div style={{ flex: 1, height: "100%", overflow: "hidden", padding: "14px 0" }}>
+            <motion.div
+              key="map"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{ flex: 1, height: "100%", overflow: "hidden", padding: "14px 0" }}
+            >
               <NearbyMap />
-            </div>
+            </motion.div>
           ) : isHelp ? (
-            <div style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}>
+            <motion.div
+              key="help"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}
+            >
               <HelpView />
-            </div>
+            </motion.div>
           ) : (
             <>
               <aside
@@ -482,27 +507,33 @@ export default function Home() {
                 )}
               </section>
 
-              {showCart && (
-                <aside
-                  style={{
-                    width: "310px",
-                    minWidth: "280px",
-                    maxWidth: "340px",
-                    flexShrink: 0,
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    padding: "14px 0 14px 0",
-                  }}
-                >
-                  <CartSidebar
-                    items={cartItems}
-                    onUpdateQuantity={handleUpdateQuantity}
-                    onRemoveItem={handleRemoveItem}
-                    onClose={() => setShowCart(false)}
-                  />
-                </aside>
-              )}
+              <AnimatePresence>
+                {showCart && (
+                  <motion.aside
+                    initial={{ width: 0, opacity: 0, x: 20 }}
+                    animate={{ width: "310px", opacity: 1, x: 0 }}
+                    exit={{ width: 0, opacity: 0, x: 20 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                    style={{
+                      minWidth: "280px",
+                      maxWidth: "340px",
+                      flexShrink: 0,
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      padding: "14px 0 14px 0",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <CartSidebar
+                      items={cartItems}
+                      onUpdateQuantity={handleUpdateQuantity}
+                      onRemoveItem={handleRemoveItem}
+                      onClose={() => setShowCart(false)}
+                    />
+                  </motion.aside>
+                )}
+              </AnimatePresence>
             </>
           )}
         </div>

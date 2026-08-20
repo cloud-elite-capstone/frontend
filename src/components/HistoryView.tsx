@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   Plus,
@@ -682,9 +683,17 @@ export default function HistoryView({
           boxShadow: "0 4px 20px rgba(15, 23, 42, 0.04)",
         }}
       >
-        {activeConvo ? (
-          <>
-            <div
+        <AnimatePresence mode="wait">
+          {activeConvo ? (
+            <motion.div
+              key={activeConvo.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              style={{ height: "100%", display: "flex", flexDirection: "column" }}
+            >
+              <div
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -955,9 +964,14 @@ export default function HistoryView({
                 </button>
               </div>
             )}
-          </>
+          </motion.div>
         ) : (
-          <div
+          <motion.div
+            key="empty-history"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.2 }}
             style={{
               flex: 1,
               display: "flex",
@@ -1027,8 +1041,9 @@ export default function HistoryView({
             >
               Start New Chat
             </button>
-          </div>
+          </motion.div>
         )}
+      </AnimatePresence>
       </div>
     </div>
   );

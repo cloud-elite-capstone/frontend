@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Mail, 
@@ -18,6 +19,7 @@ import {
 import { GlassCard } from "@/components/ui/GlassCard";
 
 export function LoginForm() {
+  const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -48,6 +50,9 @@ export function LoginForm() {
           ? `Account created! Welcome, ${name.split(" ")[0] || "Explorer"}.`
           : `Signed in successfully as ${email.trim()}.`
       );
+      setTimeout(() => {
+        router.push("/onboarding");
+      }, 700);
     }, 1000);
   };
 

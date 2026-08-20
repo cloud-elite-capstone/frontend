@@ -1,3 +1,7 @@
+substitutions:
+  _REPOSITORY: dev-repo
+  _SERVICE_NAME: react-frontend
+
 steps:
   - name: 'gcr.io/k8s-skaffold/pack'
     args:
@@ -8,6 +12,18 @@ steps:
       - '--network'
       - 'cloudbuild'
       - '--publish'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - '$LOCATION-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/frontend:latest'
+      - '--region'
+      - '$LOCATION'
+      - '--project'
+      - '$PROJECT_ID'
 
 options:
   logging: CLOUD_LOGGING_ONLY

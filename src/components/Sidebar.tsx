@@ -72,7 +72,6 @@ export default function Sidebar({
           paddingTop: "14px",
         }}
       >
-        {/* Enlarged 3D Cartesian Logo */}
         <div
           style={{
             height: "44px",
@@ -89,12 +88,13 @@ export default function Sidebar({
           title="Cartesian"
         >
           <Image
-            src="/cartesian_symbol.png"
+            src="/cartesian_symbol.png?v=2"
             alt="Cartesian Logo"
             width={34}
             height={34}
             priority
-            style={{ objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(122, 62, 157, 0.25))" }}
+            unoptimized
+            style={{ objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(234, 76, 56, 0.25))" }}
           />
         </div>
 
@@ -102,7 +102,7 @@ export default function Sidebar({
           style={{
             width: "24px",
             height: "1.5px",
-            backgroundColor: "#d1d5db",
+            backgroundColor: "#cbd5e1",
             borderRadius: "1px",
             marginTop: "12px",
             marginBottom: "16px",
@@ -132,15 +132,15 @@ export default function Sidebar({
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: "10px",
-                  backgroundColor: isActive ? "#e5e7eb" : "transparent",
-                  color: isActive ? "#1e1e1e" : "#6b7280",
+                  backgroundColor: isActive ? "#2c3e50" : "transparent",
+                  color: isActive ? "#ffffff" : "#64748b",
                   border: "none",
                   cursor: "pointer",
                   transition: "background-color 0.15s ease, color 0.15s ease",
                 }}
                 title={item.label}
                 onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.backgroundColor = "#f3f4f6";
+                  if (!isActive) e.currentTarget.style.backgroundColor = "#e2e8f0";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
@@ -148,7 +148,7 @@ export default function Sidebar({
               >
                 <Icon
                   size={19}
-                  color={isActive ? "#1e1e1e" : "#6b7280"}
+                  color={isActive ? "#ffffff" : "#64748b"}
                 />
               </button>
             );
@@ -180,8 +180,8 @@ export default function Sidebar({
                 alignItems: "center",
                 justifyContent: "center",
                 borderRadius: "10px",
-                backgroundColor: isActive ? "#e5e7eb" : "transparent",
-                color: item.id === "logout" ? "#ef4444" : isActive ? "#1e1e1e" : "#6b7280",
+                backgroundColor: isActive ? "#2c3e50" : "transparent",
+                color: item.id === "logout" ? "#ea4c38" : isActive ? "#ffffff" : "#64748b",
                 border: "none",
                 cursor: "pointer",
                 transition: "background-color 0.15s ease, color 0.15s ease",
@@ -189,9 +189,9 @@ export default function Sidebar({
               title={item.label}
               onMouseEnter={(e) => {
                 if (item.id === "logout") {
-                  e.currentTarget.style.backgroundColor = "#fee2e2";
+                  e.currentTarget.style.backgroundColor = "#fef2f0";
                 } else if (!isActive) {
-                  e.currentTarget.style.backgroundColor = "#f3f4f6";
+                  e.currentTarget.style.backgroundColor = "#e2e8f0";
                 }
               }}
               onMouseLeave={(e) => {
@@ -200,7 +200,7 @@ export default function Sidebar({
             >
               <Icon
                 size={19}
-                color={item.id === "logout" ? "#ef4444" : isActive ? "#1e1e1e" : "#6b7280"}
+                color={item.id === "logout" ? "#ea4c38" : isActive ? "#ffffff" : "#64748b"}
               />
             </button>
           );

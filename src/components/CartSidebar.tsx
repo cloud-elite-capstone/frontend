@@ -40,7 +40,7 @@ export default function CartSidebar({
         height: "100%",
         backgroundColor: "#ffffff",
         borderRadius: "16px",
-        border: "1px solid #f0f0f2",
+        border: "1.5px solid #cbd5e1",
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.02)",
         overflow: "hidden",
         fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
@@ -52,7 +52,7 @@ export default function CartSidebar({
           alignItems: "center",
           justifyContent: "space-between",
           padding: "16px 18px",
-          borderBottom: "1px solid #f0f0f2",
+          borderBottom: "1.5px solid #cbd5e1",
           flexShrink: 0,
         }}
       >
@@ -61,7 +61,7 @@ export default function CartSidebar({
             style={{
               fontSize: "18px",
               fontWeight: 700,
-              color: "#1e1e1e",
+              color: "#1e293b",
               letterSpacing: "-0.2px",
             }}
           >
@@ -71,10 +71,11 @@ export default function CartSidebar({
             style={{
               fontSize: "11px",
               fontWeight: 700,
-              backgroundColor: "#f5ebfc",
-              color: "#7a3e9d",
+              backgroundColor: "#fef2f0",
+              color: "#ea4c38",
               padding: "2px 7px",
               borderRadius: "9999px",
+              border: "1.5px solid #fca59b",
             }}
           >
             {items.reduce((total, i) => total + i.quantity, 0)}
@@ -94,14 +95,14 @@ export default function CartSidebar({
               width: "26px",
               height: "26px",
               borderRadius: "6px",
-              color: "#9ca3af",
+              color: "#94a3b8",
               transition: "background-color 0.15s ease",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f4f4f6")}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f4f5f7")}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
             title="Close Cart"
           >
-            <XIcon size={16} color="#6b7280" />
+            <XIcon size={16} color="#64748b" />
           </button>
         )}
       </div>
@@ -110,10 +111,9 @@ export default function CartSidebar({
         style={{
           flex: 1,
           overflowY: "auto",
-          padding: "14px 16px",
+          padding: "8px 16px",
           display: "flex",
           flexDirection: "column",
-          gap: "12px",
         }}
       >
         {items.length === 0 ? (
@@ -124,14 +124,14 @@ export default function CartSidebar({
               alignItems: "center",
               justifyContent: "center",
               height: "100%",
-              color: "#9ca3af",
+              color: "#94a3b8",
               gap: "8px",
               textAlign: "center",
               padding: "32px 16px",
             }}
           >
             <span style={{ fontSize: "14px", fontWeight: 500 }}>Your cart is empty</span>
-            <span style={{ fontSize: "12px", color: "#a1a1aa" }}>
+            <span style={{ fontSize: "12px", color: "#94a3b8" }}>
               Add items from recommendations
             </span>
           </div>
@@ -142,19 +142,18 @@ export default function CartSidebar({
               style={{
                 display: "flex",
                 gap: "12px",
-                padding: "10px",
-                borderRadius: "12px",
-                backgroundColor: "#fafafb",
-                border: "1px solid #f0f0f4",
+                padding: "12px 2px",
+                borderBottom: "1px solid #e2e8f0",
                 position: "relative",
+                backgroundColor: "transparent",
               }}
             >
               <div
                 style={{
-                  width: "56px",
-                  height: "56px",
+                  width: "50px",
+                  height: "50px",
                   borderRadius: "10px",
-                  backgroundColor: "#f0f0f2",
+                  backgroundColor: "#f4f5f7",
                   position: "relative",
                   overflow: "hidden",
                   flexShrink: 0,
@@ -165,7 +164,7 @@ export default function CartSidebar({
                     src={item.imageUrl}
                     alt={item.title}
                     fill
-                    sizes="56px"
+                    sizes="50px"
                     style={{ objectFit: "cover" }}
                   />
                 ) : (
@@ -173,7 +172,7 @@ export default function CartSidebar({
                     style={{
                       width: "100%",
                       height: "100%",
-                      backgroundColor: "#e5e7eb",
+                      backgroundColor: "#edf0f2",
                     }}
                   />
                 )}
@@ -193,14 +192,15 @@ export default function CartSidebar({
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "flex-start",
-                    paddingRight: "16px",
+                    paddingRight: "18px",
                   }}
                 >
                   <h4
+                    title={item.title}
                     style={{
                       fontSize: "13px",
                       fontWeight: 700,
-                      color: "#1e1e1e",
+                      color: "#1e293b",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
@@ -218,8 +218,8 @@ export default function CartSidebar({
                     marginTop: "2px",
                   }}
                 >
-                  <StarIcon size={10} color="#ffb86f" />
-                  <span style={{ fontSize: "11px", color: "#71717a" }}>
+                  <StarIcon size={10} color="#f59e0b" />
+                  <span style={{ fontSize: "11px", color: "#64748b" }}>
                     {item.rating ?? 4.6}
                   </span>
                 </div>
@@ -236,7 +236,7 @@ export default function CartSidebar({
                     style={{
                       fontSize: "13.5px",
                       fontWeight: 700,
-                      color: "#f97316",
+                      color: "#ea4c38",
                     }}
                   >
                     ₱{item.priceNum.toLocaleString()}
@@ -248,7 +248,7 @@ export default function CartSidebar({
                       alignItems: "center",
                       gap: "6px",
                       backgroundColor: "#ffffff",
-                      border: "1px solid #e5e7eb",
+                      border: "1.5px solid #cbd5e1",
                       borderRadius: "6px",
                       padding: "2px 6px",
                     }}
@@ -263,16 +263,16 @@ export default function CartSidebar({
                         alignItems: "center",
                         justifyContent: "center",
                         padding: 0,
-                        color: "#4b5563",
+                        color: "#475569",
                       }}
                     >
-                      <MinusIcon size={11} color="#4b5563" />
+                      <MinusIcon size={11} color="#475569" />
                     </button>
                     <span
                       style={{
                         fontSize: "11.5px",
                         fontWeight: 600,
-                        color: "#1f2937",
+                        color: "#1e293b",
                         minWidth: "12px",
                         textAlign: "center",
                       }}
@@ -289,10 +289,10 @@ export default function CartSidebar({
                         alignItems: "center",
                         justifyContent: "center",
                         padding: 0,
-                        color: "#4b5563",
+                        color: "#475569",
                       }}
                     >
-                      <PlusIcon size={11} color="#4b5563" />
+                      <PlusIcon size={11} color="#475569" />
                     </button>
                   </div>
                 </div>
@@ -302,12 +302,12 @@ export default function CartSidebar({
                 onClick={() => onRemoveItem(item.id)}
                 style={{
                   position: "absolute",
-                  top: "8px",
-                  right: "8px",
+                  top: "10px",
+                  right: "2px",
                   background: "none",
                   border: "none",
                   cursor: "pointer",
-                  color: "#9ca3af",
+                  color: "#94a3b8",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -315,7 +315,7 @@ export default function CartSidebar({
                 }}
                 title="Remove item"
               >
-                <XIcon size={13} color="#9ca3af" />
+                <XIcon size={13} color="#94a3b8" />
               </button>
             </div>
           ))
@@ -325,7 +325,7 @@ export default function CartSidebar({
       <div
         style={{
           padding: "14px 16px",
-          borderTop: "1px solid #f0f0f2",
+          borderTop: "1.5px solid #cbd5e1",
           backgroundColor: "#ffffff",
           display: "flex",
           flexDirection: "column",
@@ -341,14 +341,14 @@ export default function CartSidebar({
             marginBottom: "4px",
           }}
         >
-          <span style={{ fontSize: "13px", color: "#71717a", fontWeight: 500 }}>
+          <span style={{ fontSize: "13px", color: "#64748b", fontWeight: 500 }}>
             Subtotal
           </span>
           <span
             style={{
               fontSize: "16px",
               fontWeight: 800,
-              color: "#1e1e1e",
+              color: "#1e293b",
             }}
           >
             ₱{subtotal.toLocaleString()}
@@ -358,7 +358,7 @@ export default function CartSidebar({
         <button
           disabled={items.length === 0}
           style={{
-            background: "linear-gradient(135deg, #ffb86f 0%, #c28fef 100%)",
+            backgroundColor: "#ea4c38",
             color: "#ffffff",
             fontSize: "13px",
             fontWeight: 700,
@@ -367,16 +367,20 @@ export default function CartSidebar({
             border: "none",
             cursor: items.length === 0 ? "not-allowed" : "pointer",
             opacity: items.length === 0 ? 0.6 : 1,
-            boxShadow:
-              items.length > 0 ? "0 4px 14px rgba(194, 143, 239, 0.4)" : "none",
-            transition: "transform 0.15s ease, box-shadow 0.15s ease",
+            transition: "all 0.15s ease",
             fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
           }}
           onMouseEnter={(e) => {
-            if (items.length > 0) e.currentTarget.style.transform = "translateY(-1px)";
+            if (items.length > 0) {
+              e.currentTarget.style.backgroundColor = "#d93b27";
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }
           }}
           onMouseLeave={(e) => {
-            if (items.length > 0) e.currentTarget.style.transform = "translateY(0)";
+            if (items.length > 0) {
+              e.currentTarget.style.backgroundColor = "#ea4c38";
+              e.currentTarget.style.transform = "translateY(0)";
+            }
           }}
         >
           Checkout
@@ -385,18 +389,24 @@ export default function CartSidebar({
         <button
           style={{
             background: "#ffffff",
-            color: "#7a3e9d",
+            color: "#2c3e50",
             fontSize: "12.5px",
             fontWeight: 600,
             padding: "9px 16px",
             borderRadius: "10px",
-            border: "1px solid #e9d5ff",
+            border: "1px solid #cbd5e1",
             cursor: "pointer",
-            transition: "background-color 0.15s ease",
+            transition: "all 0.15s ease",
             fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#faf5ff")}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#ffffff")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#f8f9fa";
+            e.currentTarget.style.color = "#ea4c38";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "#ffffff";
+            e.currentTarget.style.color = "#2c3e50";
+          }}
         >
           Secondary Carts
         </button>

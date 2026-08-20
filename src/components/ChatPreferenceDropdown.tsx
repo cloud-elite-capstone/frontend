@@ -60,8 +60,8 @@ export default function ChatPreferenceDropdown({
         right: "8px",
         backgroundColor: "#ffffff",
         borderRadius: "16px",
-        border: "1.5px solid #eaeaea",
-        boxShadow: "0 16px 38px -6px rgba(122, 62, 157, 0.22), 0 0 0 1px rgba(122, 62, 157, 0.08)",
+        border: "1.5px solid #cbd5e1",
+        boxShadow: "0 16px 38px -6px rgba(44, 62, 80, 0.18), 0 0 0 1px rgba(44, 62, 80, 0.06)",
         padding: "16px 18px",
         zIndex: 50,
         display: "flex",
@@ -69,13 +69,12 @@ export default function ChatPreferenceDropdown({
         gap: "14px",
       }}
     >
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #f0f0f2", paddingBottom: "10px" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1.5px solid #cbd5e1", paddingBottom: "10px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <div style={{ width: "22px", height: "22px", borderRadius: "6px", backgroundColor: "#f5eefa", color: "#7a3e9d", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: "22px", height: "22px", borderRadius: "6px", backgroundColor: "#fef2f0", color: "#ea4c38", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <SlidersHorizontal size={13} />
           </div>
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "#1e1e1e", letterSpacing: "-0.2px" }}>
+          <span style={{ fontSize: "13px", fontWeight: 700, color: "#1e293b", letterSpacing: "-0.2px" }}>
             Search Preferences
           </span>
         </div>
@@ -88,7 +87,7 @@ export default function ChatPreferenceDropdown({
               alignItems: "center",
               gap: "4px",
               fontSize: "11px",
-              color: "#9ca3af",
+              color: "#94a3b8",
               cursor: "pointer",
               border: "none",
               background: "none",
@@ -107,10 +106,10 @@ export default function ChatPreferenceDropdown({
               width: "20px",
               height: "20px",
               borderRadius: "50%",
-              color: "#6b7280",
+              color: "#64748b",
               cursor: "pointer",
               border: "none",
-              backgroundColor: "#f3f4f6",
+              backgroundColor: "#f1f5f9",
             }}
           >
             <X size={12} />
@@ -118,10 +117,9 @@ export default function ChatPreferenceDropdown({
         </div>
       </div>
 
-      {/* 1. Budget: Min - Max Price Range */}
       <div>
-        <label style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700, color: "#374151", marginBottom: "6px" }}>
-          <Tag size={12} color="#7a3e9d" />
+        <label style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700, color: "#334155", marginBottom: "6px" }}>
+          <Tag size={12} color="#ea4c38" />
           <span>Budget / Price Range (₱)</span>
         </label>
         
@@ -136,16 +134,16 @@ export default function ChatPreferenceDropdown({
                 width: "100%",
                 padding: "7px 10px",
                 borderRadius: "8px",
-                border: "1px solid #e5e7eb",
+                border: "1px solid #e2e8f0",
                 fontSize: "12px",
-                color: "#1e1e1e",
-                backgroundColor: "#fafafc",
+                color: "#1e293b",
+                backgroundColor: "#f8f9fa",
                 outline: "none",
                 fontFamily: "inherit",
               }}
             />
           </div>
-          <span style={{ fontSize: "12px", color: "#9ca3af" }}>—</span>
+          <span style={{ fontSize: "12px", color: "#94a3b8" }}>—</span>
           <div style={{ flex: 1 }}>
             <input
               type="number"
@@ -156,10 +154,10 @@ export default function ChatPreferenceDropdown({
                 width: "100%",
                 padding: "7px 10px",
                 borderRadius: "8px",
-                border: "1px solid #e5e7eb",
+                border: "1px solid #e2e8f0",
                 fontSize: "12px",
-                color: "#1e1e1e",
-                backgroundColor: "#fafafc",
+                color: "#1e293b",
+                backgroundColor: "#f8f9fa",
                 outline: "none",
                 fontFamily: "inherit",
               }}
@@ -168,10 +166,9 @@ export default function ChatPreferenceDropdown({
         </div>
       </div>
 
-      {/* 2. Location (String input) */}
       <div>
-        <label style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700, color: "#374151", marginBottom: "6px" }}>
-          <MapPin size={12} color="#f97316" />
+        <label style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700, color: "#334155", marginBottom: "6px" }}>
+          <MapPin size={12} color="#f59e0b" />
           <span>Location</span>
         </label>
         <input
@@ -183,24 +180,23 @@ export default function ChatPreferenceDropdown({
             width: "100%",
             padding: "7px 10px",
             borderRadius: "8px",
-            border: "1px solid #e5e7eb",
+            border: "1px solid #e2e8f0",
             fontSize: "12px",
-            color: "#1e1e1e",
-            backgroundColor: "#fafafc",
+            color: "#1e293b",
+            backgroundColor: "#f8f9fa",
             outline: "none",
             fontFamily: "inherit",
           }}
         />
       </div>
 
-      {/* 3. Min-Max Rating (Slider) */}
       <div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
-          <label style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700, color: "#374151" }}>
-            <Star size={12} color="#f9b584" />
+          <label style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700, color: "#334155" }}>
+            <Star size={12} color="#f59e0b" />
             <span>Minimum Rating</span>
           </label>
-          <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#ea580c", display: "flex", alignItems: "center", gap: "2px" }}>
+          <span style={{ fontSize: "11.5px", fontWeight: 700, color: "#b45309", display: "flex", alignItems: "center", gap: "2px" }}>
             ★ {draftPrefs.minRating.toFixed(1)}+
           </span>
         </div>
@@ -215,11 +211,11 @@ export default function ChatPreferenceDropdown({
             onChange={(e) => setDraftPrefs({ ...draftPrefs, minRating: parseFloat(e.target.value) })}
             style={{
               width: "100%",
-              accentColor: "#f9b584",
+              accentColor: "#ea4c38",
               cursor: "pointer",
             }}
           />
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "9.5px", color: "#9ca3af" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "9.5px", color: "#94a3b8" }}>
             <span>★ 1.0</span>
             <span>★ 3.0</span>
             <span>★ 5.0</span>
@@ -227,17 +223,16 @@ export default function ChatPreferenceDropdown({
         </div>
       </div>
 
-      {/* Footer Submit */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "8px", borderTop: "1px solid #f0f0f2", paddingTop: "10px" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "8px", borderTop: "1.5px solid #cbd5e1", paddingTop: "10px" }}>
         <button
           type="button"
           onClick={onClose}
           style={{
             fontSize: "11.5px",
-            color: "#6b7280",
+            color: "#64748b",
             padding: "6px 12px",
             borderRadius: "8px",
-            border: "1px solid #e5e7eb",
+            border: "1.5px solid #cbd5e1",
             backgroundColor: "#ffffff",
             cursor: "pointer",
           }}
@@ -257,8 +252,7 @@ export default function ChatPreferenceDropdown({
             color: "#ffffff",
             padding: "6px 16px",
             borderRadius: "8px",
-            backgroundColor: "#7a3e9d",
-            boxShadow: "0 3px 10px rgba(122, 62, 157, 0.25)",
+            backgroundColor: "#ea4c38",
             border: "none",
             cursor: "pointer",
           }}

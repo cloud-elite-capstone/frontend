@@ -46,6 +46,7 @@ export default function ProductCard({
         display: "flex",
         flexDirection: "column",
         width: "100%",
+        minWidth: 0,
         cursor: "pointer",
         position: "relative",
         fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
@@ -55,11 +56,11 @@ export default function ProductCard({
         style={{
           position: "relative",
           width: "100%",
-          height: "200px",
+          height: "160px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: "12px",
+          marginBottom: "10px",
         }}
       >
         <div
@@ -67,10 +68,10 @@ export default function ProductCard({
             position: "relative",
             width: "100%",
             height: "100%",
-            backgroundColor: "#f4f4f6",
+            backgroundColor: "#f4f5f7",
             borderRadius: "14px",
             overflow: "hidden",
-            border: "1px solid #f0f0f4",
+            border: "none",
           }}
         >
           {product.imageUrl && (
@@ -78,7 +79,7 @@ export default function ProductCard({
               src={product.imageUrl}
               alt={product.title}
               fill
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes="(max-width: 768px) 100vw, 25vw"
               style={{
                 objectFit: "cover",
                 transition: "transform 0.35s ease",
@@ -90,12 +91,12 @@ export default function ProductCard({
           <div
             style={{
               position: "absolute",
-              top: "10px",
-              right: "10px",
+              top: "8px",
+              right: "8px",
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-end",
-              gap: "6px",
+              gap: "5px",
               zIndex: 10,
             }}
           >
@@ -104,20 +105,19 @@ export default function ProductCard({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "4px",
+                  gap: "3px",
                   backgroundColor: "#ffffff",
-                  border: "1.2px solid #fed7aa",
+                  border: "1.5px solid #fca59b",
                   borderRadius: "9999px",
-                  padding: "3px 8px 3px 6px",
-                  boxShadow: "0 2px 6px rgba(234, 88, 12, 0.08)",
+                  padding: "2px 7px 2px 5px",
                 }}
               >
-                <MapPinIcon size={11} color="#ea580c" />
+                <MapPinIcon size={10} color="#ea4c38" />
                 <span
                   style={{
-                    fontSize: "10.5px",
+                    fontSize: "10px",
                     fontWeight: 700,
-                    color: "#ea580c",
+                    color: "#ea4c38",
                     lineHeight: 1,
                   }}
                 >
@@ -131,20 +131,19 @@ export default function ProductCard({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "4px",
-                  backgroundColor: "#ffffff",
-                  border: "1.2px solid #fed7aa",
+                  gap: "3px",
+                  backgroundColor: "#fefce8",
+                  border: "1.5px solid #f59e0b",
                   borderRadius: "9999px",
-                  padding: "3px 8px 3px 6px",
-                  boxShadow: "0 2px 6px rgba(234, 88, 12, 0.08)",
+                  padding: "2px 7px 2px 5px",
                 }}
               >
-                <StarIcon size={11} color="#ea580c" />
+                <StarIcon size={10} color="#f59e0b" />
                 <span
                   style={{
-                    fontSize: "10.5px",
+                    fontSize: "10px",
                     fontWeight: 700,
-                    color: "#ea580c",
+                    color: "#b45309",
                     lineHeight: 1,
                   }}
                 >
@@ -160,56 +159,101 @@ export default function ProductCard({
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "3px",
+          gap: "2px",
           padding: "0 2px",
           userSelect: "text",
+          width: "100%",
+          minWidth: 0,
         }}
       >
         <h3
+          title={product.title}
           style={{
-            fontSize: "15px",
+            fontSize: "13.5px",
             fontWeight: 700,
-            color: "#1e1e1e",
+            color: "#1e293b",
             letterSpacing: "-0.2px",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
             lineHeight: 1.3,
+            width: "100%",
+            minWidth: 0,
+            display: "block",
           }}
         >
           {product.title}
         </h3>
-
-        <p
-          style={{
-            fontSize: "12px",
-            fontWeight: 400,
-            color: "#6b7280",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            lineHeight: 1.25,
-            marginBottom: "4px",
-          }}
-        >
-          {product.subtitle}
-        </p>
 
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginTop: "4px",
+            gap: "4px",
+            marginBottom: "3px",
+            width: "100%",
+            minWidth: 0,
+          }}
+        >
+          <p
+            title={product.subtitle}
+            style={{
+              fontSize: "11.5px",
+              fontWeight: 400,
+              color: "#64748b",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              lineHeight: 1.25,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
+            {product.subtitle}
+          </p>
+
+          {product.rating && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "2px",
+                fontSize: "10.5px",
+                fontWeight: 700,
+                color: "#b45309",
+                flexShrink: 0,
+                backgroundColor: "#fefce8",
+                padding: "1px 5px",
+                borderRadius: "6px",
+                border: "1px solid #fde68a",
+              }}
+            >
+              <StarIcon size={9} color="#f59e0b" />
+              <span>{product.rating.toFixed(1)}</span>
+            </div>
+          )}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "3px",
             paddingTop: "2px",
+            gap: "4px",
+            width: "100%",
           }}
         >
           <span
             style={{
-              fontSize: "18px",
+              fontSize: "15px",
               fontWeight: 800,
-              color: "#1e1e1e",
+              color: "#1e293b",
               letterSpacing: "-0.3px",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
             {product.price}
@@ -218,22 +262,27 @@ export default function ProductCard({
           <button
             onClick={handleAddToCart}
             style={{
-              background: isAdded
-                ? "#10b981"
-                : "linear-gradient(135deg, #ffb86f 0%, #c28fef 100%)",
+              backgroundColor: isAdded ? "#10b981" : "#ea4c38",
               color: "#ffffff",
-              fontSize: "12px",
+              fontSize: "11px",
               fontWeight: 700,
-              padding: "7px 16px",
+              padding: "6px 11px",
               borderRadius: "9999px",
               border: "none",
               cursor: "pointer",
-              boxShadow: "0 3px 10px rgba(194, 143, 239, 0.35)",
-              transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.15s ease",
+              transition: "all 0.15s ease",
               fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.04)";
+              if (!isAdded) e.currentTarget.style.backgroundColor = "#d93b27";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              if (!isAdded) e.currentTarget.style.backgroundColor = "#ea4c38";
+            }}
           >
             {isAdded ? "Added ✓" : "Add to Cart"}
           </button>

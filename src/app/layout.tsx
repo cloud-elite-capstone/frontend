@@ -19,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={josefinSans.variable}>
-      <body className={josefinSans.className}>{children}</body>
+    <html lang="en" className={josefinSans.variable} suppressHydrationWarning>
+      <body className={josefinSans.className} suppressHydrationWarning>{children}</body>
     </html>
   );
 }

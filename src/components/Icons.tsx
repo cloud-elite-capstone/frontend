@@ -1,6 +1,6 @@
 import React from "react";
 
-export function CartesianCartIcon({ className = "", size = 20, color = "#7a3e9d" }: { className?: string; size?: number; color?: string }) {
+export function CartesianCartIcon({ className = "", size = 20, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <circle cx="9" cy="21" r="1" fill={color} />
@@ -102,7 +102,7 @@ export function HelpIcon({ className = "", size = 18, color = "#555555" }: { cla
   );
 }
 
-export function CartesianSymbolIcon({ className = "", size = 20, color = "#c28fef" }: { className?: string; size?: number; color?: string }) {
+export function CartesianSymbolIcon({ className = "", size = 20, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <line x1="12" y1="2" x2="12" y2="22" />
@@ -189,7 +189,7 @@ export function MoreHorizontalIcon({ className = "", size = 18, color = "#555555
   );
 }
 
-export function FilterSlidersIcon({ className = "", size = 13, color = "#7a3e9d" }: { className?: string; size?: number; color?: string }) {
+export function FilterSlidersIcon({ className = "", size = 13, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <line x1="4" y1="21" x2="4" y2="14" />
@@ -205,7 +205,7 @@ export function FilterSlidersIcon({ className = "", size = 13, color = "#7a3e9d"
   );
 }
 
-export function ChevronDownIcon({ className = "", size = 11, color = "#7a3e9d" }: { className?: string; size?: number; color?: string }) {
+export function ChevronDownIcon({ className = "", size = 11, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <polyline points="6 9 12 15 18 9" />
@@ -213,7 +213,7 @@ export function ChevronDownIcon({ className = "", size = 11, color = "#7a3e9d" }
   );
 }
 
-export function SendIcon({ className = "", size = 16, color = "#c28fef" }: { className?: string; size?: number; color?: string }) {
+export function SendIcon({ className = "", size = 16, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="none" className={className}>
       <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
@@ -221,7 +221,7 @@ export function SendIcon({ className = "", size = 16, color = "#c28fef" }: { cla
   );
 }
 
-export function SunIcon({ className = "", size = 13, color = "#ffb86f" }: { className?: string; size?: number; color?: string }) {
+export function SunIcon({ className = "", size = 13, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <circle cx="12" cy="12" r="5" fill={color} />
@@ -245,7 +245,7 @@ export function MoonIcon({ className = "", size = 13, color = "#9ca3af" }: { cla
   );
 }
 
-export function MapPinIcon({ className = "", size = 11, color = "#e87661" }: { className?: string; size?: number; color?: string }) {
+export function MapPinIcon({ className = "", size = 11, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color} stroke="none" className={className}>
       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -253,7 +253,7 @@ export function MapPinIcon({ className = "", size = 11, color = "#e87661" }: { c
   );
 }
 
-export function StarIcon({ className = "", size = 11, color = "#ffb86f" }: { className?: string; size?: number; color?: string }) {
+export function StarIcon({ className = "", size = 11, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={color} stroke="none" className={className}>
       <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
@@ -261,7 +261,7 @@ export function StarIcon({ className = "", size = 11, color = "#ffb86f" }: { cla
   );
 }
 
-export function HeartIcon({ className = "", size = 16, isFilled = false, color = "#e87661" }: { className?: string; size?: number; isFilled?: boolean; color?: string }) {
+export function HeartIcon({ className = "", size = 16, isFilled = false, color = "#ea4c38" }: { className?: string; size?: number; isFilled?: boolean; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={isFilled ? color : "none"} stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />

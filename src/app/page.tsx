@@ -23,7 +23,7 @@ const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
         alignItems: "center",
         justifyContent: "center",
         height: "100%",
-        color: "#7a3e9d",
+        color: "#ea4c38",
         fontSize: "13px",
         fontWeight: 600,
         backgroundColor: "#ffffff",
@@ -35,8 +35,8 @@ const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
           width: "28px",
           height: "28px",
           borderRadius: "50%",
-          border: "2.5px solid #ca98f1",
-          borderTopColor: "#7a3e9d",
+          border: "2.5px solid #fed7d2",
+          borderTopColor: "#ea4c38",
           animation: "spin 0.8s linear infinite",
           marginBottom: "8px",
         }}
@@ -154,7 +154,7 @@ export default function Home() {
         height: "100vh",
         maxHeight: "100vh",
         overflow: "hidden",
-        backgroundColor: "#f5f5f7",
+        backgroundColor: "#f4f5f7",
         padding: "14px 16px 14px 8px",
         gap: "10px",
         fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
@@ -170,8 +170,8 @@ export default function Home() {
           overflow: "hidden",
           backgroundColor: "#ffffff",
           borderRadius: "16px",
-          border: "1px solid #f0f0f2",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.03)",
+          border: "1.5px solid #cbd5e1",
+          boxShadow: "0 4px 20px rgba(44, 62, 80, 0.04)",
           padding: 0,
           display: "flex",
           flexDirection: "column",
@@ -192,19 +192,19 @@ export default function Home() {
             alignItems: "stretch",
             minHeight: 0,
             overflow: "hidden",
-            padding: "14px 18px 16px 18px",
+            padding: "0 18px 0 18px",
           }}
         >
           {isSettings ? (
-            <div style={{ flex: 1, height: "100%", overflowY: "auto" }}>
+            <div style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}>
               <SettingsView />
             </div>
           ) : isMap ? (
-            <div style={{ flex: 1, height: "100%", overflow: "hidden" }}>
+            <div style={{ flex: 1, height: "100%", overflow: "hidden", padding: "14px 0" }}>
               <NearbyMap />
             </div>
           ) : isHelp ? (
-            <div style={{ flex: 1, height: "100%", overflowY: "auto" }}>
+            <div style={{ flex: 1, height: "100%", overflowY: "auto", padding: "14px 0" }}>
               <HelpView />
             </div>
           ) : (
@@ -218,6 +218,7 @@ export default function Home() {
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
+                  padding: "14px 0 14px 0",
                 }}
               >
                 <AgentChat />
@@ -232,8 +233,8 @@ export default function Home() {
                   minHeight: 0,
                   height: "100%",
                   overflowY: "auto",
-                  paddingRight: "8px",
-                  paddingBottom: "24px",
+                  padding: "14px 8px 14px 0",
+                  marginTop: "20px",
                 }}
               >
                 <div
@@ -241,8 +242,9 @@ export default function Home() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    marginBottom: "24px",
-                    paddingTop: "6px",
+                    marginBottom: "16px",
+                    marginTop: 0,
+                    paddingTop: 0,
                     flexShrink: 0,
                     gap: "16px",
                   }}
@@ -251,12 +253,13 @@ export default function Home() {
                     style={{
                       fontSize: "22px",
                       fontWeight: 700,
-                      color: "#1e1e1e",
+                      color: "#1e293b",
                       letterSpacing: "-0.3px",
                       whiteSpace: "nowrap",
+                      margin: 0,
                     }}
                   >
-                    Shop Collaborative
+                    Curated Recommendations
                   </h2>
 
                   <div
@@ -264,15 +267,15 @@ export default function Home() {
                       display: "flex",
                       alignItems: "center",
                       gap: "8px",
-                      backgroundColor: "#f8f8fa",
-                      border: "1px solid #e5e7eb",
+                      backgroundColor: "#f8f9fa",
+                      border: "1.5px solid #cbd5e1",
                       borderRadius: "10px",
                       padding: "7px 14px",
                       width: "100%",
                       maxWidth: "240px",
                     }}
                   >
-                    <SearchIcon size={15} color="#9ca3af" />
+                    <SearchIcon size={15} color="#94a3b8" />
                     <input
                       type="text"
                       placeholder="Search products..."
@@ -283,7 +286,7 @@ export default function Home() {
                         border: "none",
                         outline: "none",
                         fontSize: "12.5px",
-                        color: "#1e1e1e",
+                        color: "#1e293b",
                         width: "100%",
                         fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
                       }}
@@ -307,6 +310,7 @@ export default function Home() {
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
+                    padding: "14px 0 14px 0",
                   }}
                 >
                   <CartSidebar

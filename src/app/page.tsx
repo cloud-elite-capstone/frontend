@@ -18,6 +18,9 @@ import ProductDetailView from "@/components/ProductDetailView";
 import BecomeSellerView from "@/components/BecomeSellerView";
 import { initialConversations, ConversationThread } from "@/data/conversations";
 import { UserProfile, defaultUserProfile } from "@/data/userProfile";
+import { summerOutfitCatalog, OutfitLook } from "@/data/outfits";
+import FolderCatalogTabs from "@/components/FolderCatalogTabs";
+import RecommendedOutfit from "@/components/RecommendedOutfit";
 
 const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
   ssr: false,
@@ -53,6 +56,33 @@ const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
 });
 
 const initialConversationCarts: Record<string, CartItem[]> = {
+  "convo-summer": [
+    {
+      id: "outfit-1-1",
+      title: "Breeze Camp-Collar Linen Shirt",
+      price: "₱1,850",
+      priceNum: 1850,
+      imageUrl: "/test-images/image1.png",
+      rating: 4.9,
+      quantity: 1,
+      vendorType: "local",
+      vendorName: "Cartesian Artisan Apparel",
+      vendorLocation: "Level 1, Bonifacio High Street, BGC, Taguig",
+    },
+    {
+      id: "outfit-1-3",
+      title: "Polarized Riviera Sunglasses",
+      price: "₱1,000",
+      priceNum: 1000,
+      imageUrl: "/test-images/image3.png",
+      rating: 4.9,
+      quantity: 1,
+      vendorType: "external",
+      vendorName: "Solara Eyewear Official",
+      vendorLocation: "Shopee Mall Flagship",
+      externalUrl: "https://shopee.ph/search?keyword=polarized+summer+sunglasses",
+    },
+  ],
   "convo-1": [
     {
       id: "p1",
@@ -142,7 +172,8 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [conversations, setConversations] = useState<ConversationThread[]>(initialConversations);
-  const [activeConvoId, setActiveConvoId] = useState<string>("convo-1");
+  const [activeConvoId, setActiveConvoId] = useState<string>("convo-summer");
+  const [activeCatalogTabId, setActiveCatalogTabId] = useState<string>("look-1");
   const [cartsByConversation, setCartsByConversation] = useState<Record<string, CartItem[]>>(initialConversationCarts);
   const [showCart, setShowCart] = useState(true);
   const [activeTab, setActiveTab] = useState<string>("chat");
@@ -155,7 +186,7 @@ export default function Home() {
       if (saved) {
         setUserProfile(JSON.parse(saved));
       }
-    } catch {}
+    } catch { }
   }, []);
 
   const isSettings = activeTab === "settings";
@@ -167,8 +198,16 @@ export default function Home() {
   const activeConversation = conversations.find((c) => c.id === activeConvoId) || null;
   const cartItems = cartsByConversation[activeConvoId] || [];
 
+  const activeLooks = activeConversation?.catalogLooks || (activeConvoId === "convo-summer" ? summerOutfitCatalog : []);
+  const selectedLook = activeLooks.find((l) => l.id === activeCatalogTabId) || (activeLooks.length > 0 && activeCatalogTabId !== "all" ? activeLooks[0] : null);
+
   const handleContinueConversation = (convo: ConversationThread) => {
     setActiveConvoId(convo.id);
+    if (convo.catalogLooks && convo.catalogLooks.length > 0) {
+      setActiveCatalogTabId(convo.catalogLooks[0].id);
+    } else {
+      setActiveCatalogTabId("all");
+    }
     setActiveTab("chat");
   };
 
@@ -195,6 +234,7 @@ export default function Home() {
     };
     setConversations((prev) => [newThread, ...prev]);
     setActiveConvoId(newId);
+    setActiveCatalogTabId("all");
     setCartsByConversation((prev) => ({
       ...prev,
       [newId]: [],
@@ -211,6 +251,8 @@ export default function Home() {
       timestamp: "Just now",
     };
 
+    const isOutfitQuery = /(summer|outfit|look|wear|resort|beach|catalog|vacation|pair|style)/i.test(text);
+
     setConversations((prev) =>
       prev.map((c) => {
         if (c.id === activeConvoId) {
@@ -218,6 +260,7 @@ export default function Home() {
             ...c,
             lastMessage: text.trim(),
             timestamp: "Just now",
+            catalogLooks: isOutfitQuery ? summerOutfitCatalog : c.catalogLooks,
             messages: [...c.messages, userMsg],
           };
         }
@@ -225,12 +268,19 @@ export default function Home() {
       })
     );
 
+    if (isOutfitQuery) {
+      setActiveCatalogTabId("look-1");
+    }
+
     setTimeout(() => {
       const agentMsg = {
         id: `msg-${Date.now() + 1}`,
         sender: "agent" as const,
-        text: `I have curated the top recommendations for "${text.trim()}" and loaded them into the Curated Recommendations section on the right.\n\nTop Recommended Pick:\nThe top matching product stands out with high verified ratings (4.8★+), reliable build quality, and immediate availability from local fulfillment hubs.\n\nAlternative Options to Consider:\n• Budget Alternative: A cost-efficient pick providing the essential feature set at a lower price point.\n• Premium Alternative: Offers upgraded specifications, reinforced materials, and extended durability.`,
+        text: isOutfitQuery
+          ? `I've styled 2 complete summer outfit catalogs for your beach resort trip! You can explore each lookbook tab in the Curated Recommendations section on the right, or click below to view:`
+          : `I have curated the top recommendations for "${text.trim()}" and loaded them into the Curated Recommendations section on the right.\n\nTop Recommended Pick:\nThe top matching product stands out with high verified ratings (4.8★+), reliable build quality, and immediate availability from local fulfillment hubs.\n\nAlternative Options to Consider:\n• Budget Alternative: A cost-efficient pick providing the essential feature set at a lower price point.\n• Premium Alternative: Offers upgraded specifications, reinforced materials, and extended durability.`,
         timestamp: "Just now",
+        catalogLooks: isOutfitQuery ? summerOutfitCatalog : undefined,
       };
 
       setConversations((prev) =>
@@ -239,6 +289,7 @@ export default function Home() {
             return {
               ...c,
               lastMessage: agentMsg.text,
+              catalogLooks: isOutfitQuery ? summerOutfitCatalog : c.catalogLooks,
               messages: [...c.messages, agentMsg],
             };
           }
@@ -246,6 +297,44 @@ export default function Home() {
         })
       );
     }, 600);
+  };
+
+  const handleAddFullOutfitToCart = (items: ProductItem[]) => {
+    if (!items || items.length === 0) return;
+    setCartsByConversation((prev) => {
+      const currentList = prev[activeConvoId] || [];
+      let updatedList = [...currentList];
+
+      items.forEach((product) => {
+        const existing = updatedList.find((item) => item.id === product.id);
+        if (existing) {
+          updatedList = updatedList.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        } else {
+          updatedList.push({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            priceNum: product.priceNum,
+            imageUrl: product.imageUrl,
+            rating: product.rating,
+            quantity: 1,
+            vendorType: product.vendorType || "local",
+            vendorName: product.vendorName,
+            vendorLocation: product.vendorLocation,
+            externalUrl: product.externalUrl,
+          });
+        }
+      });
+
+      return {
+        ...prev,
+        [activeConvoId]: updatedList,
+      };
+    });
   };
 
   const handleAddToCart = (product: ProductItem) => {
@@ -459,6 +548,7 @@ export default function Home() {
                   onSendMessage={handleSendMessage}
                   onNewChat={handleNewChat}
                   onAddToCart={handleAddToCart}
+                  onSelectLookTab={(lookId) => setActiveCatalogTabId(lookId)}
                 />
               </aside>
 
@@ -494,7 +584,7 @@ export default function Home() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        marginBottom: "28px",
+                        marginBottom: activeLooks.length > 0 ? "16px" : "28px",
                         marginTop: "12px",
                         paddingTop: 0,
                         flexShrink: 0,
@@ -578,6 +668,55 @@ export default function Home() {
                         )}
                       </div>
                     </div>
+
+                    {activeLooks.length > 0 && (
+                      <div style={{ marginBottom: "14px" }}>
+                        <FolderCatalogTabs
+                          looks={activeLooks}
+                          activeTabId={activeCatalogTabId}
+                          onSelectTab={(tabId) => setActiveCatalogTabId(tabId)}
+                        />
+                      </div>
+                    )}
+
+                    {activeLooks.length > 0 && activeCatalogTabId !== "all" && selectedLook && (
+                      <RecommendedOutfit
+                        look={selectedLook}
+                        onSelectProduct={handleSelectProduct}
+                        onAddToCart={handleAddToCart}
+                        onAddFullOutfitToCart={handleAddFullOutfitToCart}
+                      />
+                    )}
+
+                    {activeLooks.length > 0 && activeCatalogTabId !== "all" && selectedLook && (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginTop: "24px",
+                          marginBottom: "20px",
+                          paddingTop: "12px",
+                          paddingBottom: "8px",
+                          borderBottom: "1.5px solid #e2e8f0",
+                        }}
+                      >
+                        <h3
+                          style={{
+                            fontSize: "16px",
+                            fontWeight: 700,
+                            color: "#1e293b",
+                            margin: 0,
+                            letterSpacing: "-0.2px",
+                          }}
+                        >
+                          Other Recommendations
+                        </h3>
+                        <span style={{ fontSize: "12px", color: "#64748b", fontWeight: 600 }}>
+                          {filteredProducts.length} items available
+                        </span>
+                      </div>
+                    )}
 
                     <ProductGrid
                       products={filteredProducts}

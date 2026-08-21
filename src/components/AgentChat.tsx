@@ -23,6 +23,7 @@ interface AgentChatProps {
   onSendMessage?: (text: string) => void;
   onNewChat?: () => void;
   onAddToCart?: (product: ProductItem) => void;
+  onSelectLookTab?: (lookId: string) => void;
 }
 
 export default function AgentChat({
@@ -30,6 +31,7 @@ export default function AgentChat({
   onSendMessage,
   onNewChat,
   onAddToCart,
+  onSelectLookTab,
 }: AgentChatProps) {
   const [inputValue, setInputValue] = useState("");
   const [showPreferenceModal, setShowPreferenceModal] = useState(false);
@@ -100,7 +102,7 @@ export default function AgentChat({
     >
       <div
         style={{
-          padding: "16px 14px 10px 14px",
+          padding: "16px 14px 16px 14px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -109,11 +111,11 @@ export default function AgentChat({
           zIndex: 10,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0, flex: 1, paddingRight: "14px" }}>
           <div
             style={{
-              width: "28px",
-              height: "28px",
+              width: "30px",
+              height: "30px",
               borderRadius: "50%",
               backgroundColor: "#ffffff",
               display: "flex",
@@ -125,28 +127,32 @@ export default function AgentChat({
           >
             <AiAssistantIcon size={16} color="#ea4c38" strokeWidth={1.5} />
           </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span
-                style={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  letterSpacing: "0.2px",
-                  fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {activeConversation?.title || "AI Assistant"}
-              </span>
-            </div>
+          <div style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "3px" }}>
+            <h3
+              style={{
+                fontSize: "14px",
+                fontWeight: 700,
+                color: "#ffffff",
+                letterSpacing: "0.2px",
+                fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                margin: 0,
+                lineHeight: "1.2",
+              }}
+              title={activeConversation?.title || "AI Assistant"}
+            >
+              {activeConversation?.title || "AI Assistant"}
+            </h3>
             {activeConversation && (
               <span
                 style={{
-                  fontSize: "10px",
+                  fontSize: "10.5px",
                   color: "#94a3b8",
                   fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                  lineHeight: "1.2",
+                  paddingTop: "1px",
                 }}
               >
                 {activeConversation.timestamp}
@@ -155,7 +161,7 @@ export default function AgentChat({
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0, marginLeft: "4px" }}>
           <button
             onClick={() => {
               if (onNewChat) {
@@ -239,7 +245,7 @@ export default function AgentChat({
                 >
                   <div
                     style={{
-                      maxWidth: "90%",
+                      maxWidth: "92%",
                       padding: isUser ? "8px 12px" : "10px 14px",
                       borderRadius: isUser ? "14px 14px 2px 14px" : "14px 14px 14px 2px",
                       backgroundColor: isUser ? "#2c3e50" : "#f8f9fa",
@@ -254,7 +260,90 @@ export default function AgentChat({
                       fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
                     }}
                   >
-                    {msg.text}
+                    <div>{msg.text}</div>
+
+                    {msg.catalogLooks && msg.catalogLooks.length > 0 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "8px",
+                          marginTop: "10px",
+                          paddingTop: "10px",
+                          borderTop: "1px dashed #cbd5e1",
+                        }}
+                      >
+                        {msg.catalogLooks.map((look) => (
+                          <div
+                            key={look.id}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              borderRadius: "10px",
+                              border: "1px solid #cbd5e1",
+                              padding: "9px 10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              gap: "8px",
+                              boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
+                            }}
+                          >
+                            <div style={{ minWidth: 0, flex: 1 }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                                <span style={{ fontSize: "13px" }}>{look.emoji}</span>
+                                <span
+                                  style={{
+                                    fontSize: "12px",
+                                    fontWeight: 700,
+                                    color: "#1e293b",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  {look.title}
+                                </span>
+                              </div>
+                              <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "2px" }}>
+                                <span style={{ fontSize: "11px", color: "#64748b" }}>
+                                  {look.items.length} pieces
+                                </span>
+                                <span style={{ fontSize: "9px", color: "#cbd5e1" }}>•</span>
+                                <span style={{ fontSize: "11px", fontWeight: 700, color: "#ea4c38" }}>
+                                  ₱{look.totalPrice.toLocaleString()}
+                                </span>
+                              </div>
+                            </div>
+
+                            {onSelectLookTab && (
+                              <motion.button
+                                whileHover={{ scale: 1.04 }}
+                                whileTap={{ scale: 0.96 }}
+                                onClick={() => onSelectLookTab(look.id)}
+                                style={{
+                                  backgroundColor: "#fff1ee",
+                                  color: "#ea4c38",
+                                  border: "1px solid #fca59b",
+                                  borderRadius: "6px",
+                                  padding: "5px 9px",
+                                  fontSize: "11px",
+                                  fontWeight: 700,
+                                  cursor: "pointer",
+                                  whiteSpace: "nowrap",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "4px",
+                                  flexShrink: 0,
+                                }}
+                              >
+                                <span>View</span>
+                                <span>→</span>
+                              </motion.button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               );

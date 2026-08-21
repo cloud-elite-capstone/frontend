@@ -54,6 +54,10 @@ export default function ProductPage({ params }: ProductPageProps) {
           imageUrl: item.imageUrl || "/test-images/image1.jpg",
           rating: item.rating || 4.8,
           quantity: 1,
+          vendorType: item.vendorType || "local",
+          vendorName: item.vendorName,
+          vendorLocation: item.vendorLocation,
+          externalUrl: item.externalUrl,
         },
       ];
     });

@@ -52,45 +52,100 @@ const NearbyMap = dynamic(() => import("@/components/NearbyMap"), {
   ),
 });
 
-const initialCartItems: CartItem[] = [
-  {
-    id: "p1",
-    title: "Cartesian 120 Storage",
-    price: "₱7,800",
-    priceNum: 7800,
-    imageUrl: "/test-images/image1.jpg",
-    rating: 4.8,
-    quantity: 1,
-  },
-  {
-    id: "p2",
-    title: "Smart Watch Elite Series",
-    price: "₱4,500",
-    priceNum: 4500,
-    imageUrl: "/test-images/image2.png",
-    rating: 4.7,
-    quantity: 1,
-  },
-  {
-    id: "p4",
-    title: "Ultra Power Storage Hub",
-    price: "₱2,100",
-    priceNum: 2100,
-    imageUrl: "/test-images/image4.png",
-    rating: 4.6,
-    quantity: 1,
-  },
-];
+const initialConversationCarts: Record<string, CartItem[]> = {
+  "convo-1": [
+    {
+      id: "p1",
+      title: "Cartesian 120 Storage",
+      price: "₱7,800",
+      priceNum: 7800,
+      imageUrl: "/test-images/image1.jpg",
+      rating: 4.8,
+      quantity: 1,
+      vendorType: "local",
+      vendorName: "Cartesian BGC Tech Hub",
+      vendorLocation: "Level 2, Bonifacio High Street, BGC, Taguig City",
+    },
+    {
+      id: "p3",
+      title: "Active Pro Smartwatch",
+      price: "₱3,200",
+      priceNum: 3200,
+      imageUrl: "/test-images/image3.png",
+      rating: 4.9,
+      quantity: 1,
+      vendorType: "external",
+      vendorName: "GearFit Official Flagship Store",
+      vendorLocation: "Verified Online Store • Regional Catalog",
+      externalUrl: "https://shopee.ph/gearfit-active-pro-smartwatch",
+    },
+  ],
+  "convo-2": [
+    {
+      id: "p2",
+      title: "Smart Watch Elite Series",
+      price: "₱4,500",
+      priceNum: 4500,
+      imageUrl: "/test-images/image2.png",
+      rating: 4.7,
+      quantity: 1,
+      vendorType: "local",
+      vendorName: "Manila Smart Wearables Hub",
+      vendorLocation: "4th Floor, SM Aura Premier, Taguig City",
+    },
+    {
+      id: "p4",
+      title: "Ultra Power Storage Hub",
+      price: "₱2,100",
+      priceNum: 2100,
+      imageUrl: "/test-images/image4.png",
+      rating: 4.6,
+      quantity: 1,
+      vendorType: "external",
+      vendorName: "PowerLink Tech Online Store",
+      vendorLocation: "Official Online Partner Store",
+      externalUrl: "https://lazada.com.ph/powerlink-ultra-hub",
+    },
+  ],
+  "convo-3": [
+    {
+      id: "p5",
+      title: "Dual Turbo 65W GaN Hub",
+      price: "₱1,450",
+      priceNum: 1450,
+      imageUrl: "/test-images/image1.jpg",
+      rating: 4.9,
+      quantity: 2,
+      vendorType: "local",
+      vendorName: "Cartesian BGC Tech Hub",
+      vendorLocation: "Level 2, Bonifacio High Street, BGC, Taguig City",
+    },
+  ],
+  "convo-4": [
+    {
+      id: "p2",
+      title: "Smart Watch Elite Series",
+      price: "₱4,500",
+      priceNum: 4500,
+      imageUrl: "/test-images/image2.png",
+      rating: 4.7,
+      quantity: 1,
+      vendorType: "local",
+      vendorName: "Manila Smart Wearables Hub",
+      vendorLocation: "4th Floor, SM Aura Premier, Taguig City",
+    },
+  ],
+};
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
-  const [showCart, setShowCart] = useState(true);
-  const [activeTab, setActiveTab] = useState<string>("chat");
   const [conversations, setConversations] = useState<ConversationThread[]>(initialConversations);
   const [activeConvoId, setActiveConvoId] = useState<string>("convo-1");
+  const [cartsByConversation, setCartsByConversation] = useState<Record<string, CartItem[]>>(initialConversationCarts);
+  const [showCart, setShowCart] = useState(true);
+  const [activeTab, setActiveTab] = useState<string>("chat");
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);
 
@@ -110,6 +165,7 @@ export default function Home() {
   const isSeller = activeTab === "seller";
 
   const activeConversation = conversations.find((c) => c.id === activeConvoId) || null;
+  const cartItems = cartsByConversation[activeConvoId] || [];
 
   const handleContinueConversation = (convo: ConversationThread) => {
     setActiveConvoId(convo.id);
@@ -139,6 +195,10 @@ export default function Home() {
     };
     setConversations((prev) => [newThread, ...prev]);
     setActiveConvoId(newId);
+    setCartsByConversation((prev) => ({
+      ...prev,
+      [newId]: [],
+    }));
     setActiveTab("chat");
   };
 
@@ -190,34 +250,47 @@ export default function Home() {
 
   const handleAddToCart = (product: ProductItem) => {
     if (!product) return;
-    setCartItems((prev = []) => {
-      const currentList = prev || [];
+    setCartsByConversation((prev) => {
+      const currentList = prev[activeConvoId] || [];
       const existing = currentList.find((item) => item.id === product.id);
+      let updatedList: CartItem[];
+
       if (existing) {
-        return currentList.map((item) =>
+        updatedList = currentList.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
+      } else {
+        updatedList = [
+          ...currentList,
+          {
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            priceNum: product.priceNum,
+            imageUrl: product.imageUrl,
+            rating: product.rating,
+            quantity: 1,
+            vendorType: product.vendorType || "local",
+            vendorName: product.vendorName,
+            vendorLocation: product.vendorLocation,
+            externalUrl: product.externalUrl,
+          },
+        ];
       }
-      return [
-        ...currentList,
-        {
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          priceNum: product.priceNum,
-          imageUrl: product.imageUrl,
-          rating: product.rating,
-          quantity: 1,
-        },
-      ];
+
+      return {
+        ...prev,
+        [activeConvoId]: updatedList,
+      };
     });
   };
 
   const handleUpdateQuantity = (id: string, delta: number) => {
-    setCartItems((prev = []) =>
-      (prev || [])
+    setCartsByConversation((prev) => {
+      const currentList = prev[activeConvoId] || [];
+      const updatedList = currentList
         .map((item) => {
           if (item.id === id) {
             const newQty = item.quantity + delta;
@@ -225,12 +298,20 @@ export default function Home() {
           }
           return item;
         })
-        .filter((item): item is CartItem => item !== null)
-    );
+        .filter((item): item is CartItem => item !== null);
+
+      return {
+        ...prev,
+        [activeConvoId]: updatedList,
+      };
+    });
   };
 
   const handleRemoveItem = (id: string) => {
-    setCartItems((prev = []) => (prev || []).filter((item) => item.id !== id));
+    setCartsByConversation((prev) => ({
+      ...prev,
+      [activeConvoId]: (prev[activeConvoId] || []).filter((item) => item.id !== id),
+    }));
   };
 
   const allProducts = initialProducts || [];
@@ -530,6 +611,13 @@ export default function Home() {
                       onUpdateQuantity={handleUpdateQuantity}
                       onRemoveItem={handleRemoveItem}
                       onClose={() => setShowCart(false)}
+                      conversations={conversations}
+                      activeConvoId={activeConvoId}
+                      onSelectConversation={(convoId) => {
+                        setActiveConvoId(convoId);
+                        setActiveTab("chat");
+                      }}
+                      cartsByConversation={cartsByConversation}
                     />
                   </motion.aside>
                 )}

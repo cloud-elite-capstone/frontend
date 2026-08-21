@@ -635,7 +635,7 @@ export default function SettingsView({
                   </span>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                     {[
-                      "Prioritize BGC Metro Hub stock with same-day dropoff.",
+                      "Prioritize BGC Metro Hub stock with express local dropoff.",
                       "Favor carbon-neutral certified vendors and eco packaging.",
                       "Always compare at least 3 alternatives before finalizing picks.",
                     ].map((preset) => (

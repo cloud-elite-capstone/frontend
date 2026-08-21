@@ -39,7 +39,7 @@ const PRODUCTS: ShowcaseProduct[] = [
     icon: Headphones,
     aiHighlights: [
       { title: "Price Arbitrage", detail: "Best rate discovered across 8 verified merchants" },
-      { title: "Nearby Hub", detail: "In stock at local depot for same-day delivery" },
+      { title: "Nearby Hub", detail: "In stock at local depot for fast local dispatch" },
       { title: "Ethical Match", detail: "Verified eco-friendly & fairtrade supply chain" }
     ]
   },

@@ -39,7 +39,7 @@ export const initialProducts: ProductItem[] = [
       highlight: "Best overall storage solution for heavy video editing and localized encrypted backups.",
       pros: [
         "Sustained high-speed throughput without thermal throttling",
-        "Stocked locally at BGC Hub for same-day 35-min dispatch",
+        "Stocked locally at BGC Hub for fast 35-min neighborhood dispatch",
         "Built-in hardware encryption protects sensitive project files",
       ],
       cons: [

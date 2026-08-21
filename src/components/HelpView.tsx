@@ -50,7 +50,7 @@ const FAQS: FAQItem[] = [
     category: "shipping",
     question: "What is the Nearby Hub delivery radius for local merchants?",
     answer:
-      "Items with the 'Nearby Cartesian Merchant' badge are stocked locally at partner storefronts and fulfillment hubs. When ordered through Cartesian, local orders are dispatched directly to your address for same-day delivery.",
+      "Items with the 'Nearby Cartesian Merchant' badge are stocked locally at partner storefronts and fulfillment hubs. When ordered through Cartesian, local orders are dispatched directly to your address with fast local express fulfillment.",
   },
   {
     id: "f5",

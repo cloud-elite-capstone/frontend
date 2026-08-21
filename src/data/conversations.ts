@@ -64,7 +64,7 @@ export const initialConversations: ConversationThread[] = [
         text: `I have curated the top recommendations for you and loaded them into the Curated Recommendations section on the right.
 
 Top Recommended Pick:
-The Studio Monitor Headset Pro (₱6,200) is the highest-rated option (4.9★). Verified reviews consistently highlight its class-leading active noise cancellation, studio-grade neutral acoustic tuning, and 40-hour battery life. It is currently available with same-day delivery from the BGC Metro Hub.
+The Studio Monitor Headset Pro (₱6,200) is the highest-rated option (4.9★). Verified reviews consistently highlight its class-leading active noise cancellation, studio-grade neutral acoustic tuning, and 40-hour battery life. It is currently available with fast express dispatch from the BGC Metro Hub.
 
 Alternative Options to Consider:
 • Cartesian Pro Wireless Buds (₱5,400): Best choice if you prefer an ultra-compact in-ear format with instant multipoint Bluetooth sync.
@@ -74,13 +74,13 @@ Alternative Options to Consider:
       {
         id: "m1-3",
         sender: "user",
-        text: "Can I get same-day delivery on the Studio Monitor Headset?",
+        text: "Can I get fast delivery on the Studio Monitor Headset?",
         timestamp: "10:46 AM",
       },
       {
         id: "m1-4",
         sender: "agent",
-        text: "Yes! The BGC Metro Hub currently has 4 verified units in stock. Orders placed before 4:00 PM qualify for express localized dispatch within 35–45 minutes.",
+        text: "Yes! The BGC Metro Hub currently has 4 verified units in stock. Orders placed qualify for localized hub dispatch within 35–45 minutes.",
         timestamp: "10:46 AM",
       },
     ],

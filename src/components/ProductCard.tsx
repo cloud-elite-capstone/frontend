@@ -11,10 +11,10 @@ export interface ProductSpecification {
 }
 
 export interface AISynthesis {
-  matchScore: number;
+  matchScore?: number;
   highlight: string;
-  pros: string[];
-  cons: string[];
+  pros?: string[];
+  cons?: string[];
 }
 
 export interface ProductItem {

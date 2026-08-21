@@ -47,3 +47,4 @@ frontend.code-workspace
 
 # kubb
 src/gen
+tmp-docs

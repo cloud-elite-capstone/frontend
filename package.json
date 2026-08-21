@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "gen": "kubb generate",
-    "build": "kubb generate && next build",
+    "gen:code": "kubb generate",
+    "gen:docs": "node scripts/build-docs.mjs",
+    "gen:all": "npm run gen:code && npm run gen:docs",
+    "serve:docs": "pm2 delete docs-server &&pm2 start live-server --name docs-server -- src/gen",
+    "serve:stop": "pm2 delete docs-server",
+    "build": "npm run gen:code && next build",
     "start": "next start",
     "lint": "eslint"
   },
@@ -31,6 +35,7 @@
     "@kubb/plugin-redoc": "^5.0.0",
     "@kubb/plugin-ts": "^5.0.0",
     "@kubb/plugin-zod": "^5.0.0",
+    "@redocly/cli": "^2.47.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -38,6 +43,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.1",
     "kubb": "^5.0.0",
+    "live-server": "^1.2.2",
+    "pm2": "^7.0.3",
     "typescript": "^5"
   }
 }

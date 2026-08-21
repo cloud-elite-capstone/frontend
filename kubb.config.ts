@@ -3,7 +3,7 @@ import { pluginTs } from '@kubb/plugin-ts'
 import { pluginFetch } from '@kubb/plugin-fetch'
 import { pluginReactQuery } from '@kubb/plugin-react-query'
 import { pluginZod } from '@kubb/plugin-zod'
-import { pluginRedoc } from '@kubb/plugin-redoc'
+// import { pluginRedoc } from '@kubb/plugin-redoc'
 
 interface Service {
   name: string,
@@ -35,8 +35,7 @@ export default defineConfig(
         pluginTs(),
         pluginZod(),
         pluginFetch(),
-        pluginReactQuery(),
-        pluginRedoc(),
+        pluginReactQuery()
       ],
     }
   })

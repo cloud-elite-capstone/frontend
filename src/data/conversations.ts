@@ -1,8 +1,11 @@
+import { summerOutfitCatalog, OutfitLook } from "./outfits";
+
 export interface HistoryMessage {
   id: string;
   sender: "user" | "agent";
   text: string;
   timestamp: string;
+  catalogLooks?: OutfitLook[];
 }
 
 export interface ConversationThread {
@@ -13,9 +16,34 @@ export interface ConversationThread {
   group: "today" | "yesterday" | "previous7Days";
   productsExplored?: number;
   messages: HistoryMessage[];
+  catalogLooks?: OutfitLook[];
 }
 
 export const initialConversations: ConversationThread[] = [
+  {
+    id: "convo-summer",
+    title: "Summer Outfits & Vacation Lookbook",
+    lastMessage: "I've organized 2 distinct summer outfit catalogs in the recommendations.",
+    timestamp: "11:15 AM",
+    group: "today",
+    productsExplored: 6,
+    catalogLooks: summerOutfitCatalog,
+    messages: [
+      {
+        id: "ms-1",
+        sender: "user",
+        text: "Recommend me a pair of summer outfit options for a beach resort trip.",
+        timestamp: "11:12 AM",
+      },
+      {
+        id: "ms-2",
+        sender: "agent",
+        text: `I've styled 2 complete summer outfit catalogs for your beach resort trip! You can explore each lookbook tab in the Curated Recommendations section on the right, or click below to view:`,
+        timestamp: "11:14 AM",
+        catalogLooks: summerOutfitCatalog,
+      },
+    ],
+  },
   {
     id: "convo-1",
     title: "Wireless ANC Studio Headsets",

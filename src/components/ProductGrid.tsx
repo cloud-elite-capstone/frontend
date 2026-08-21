@@ -10,6 +10,7 @@ interface ProductGridProps {
   onSelectProduct?: (product: ProductItem) => void;
 }
 
+// responsive 4-column product grid rendering cards for filtered or curated catalog items
 export default function ProductGrid({
   products = initialProducts,
   onAddToCart,

@@ -167,6 +167,7 @@ const initialConversationCarts: Record<string, CartItem[]> = {
   ],
 };
 
+// main dashboard combining conversational shopping, curated catalogs, multi-look outfits, and persistent carts
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");

@@ -49,6 +49,7 @@ interface CartSidebarProps {
   cartsByConversation?: Record<string, CartItem[]>;
 }
 
+// slide-out shopping cart sidebar handling multi-merchant checkouts, per-convo carts, and instant payment flows
 export default function CartSidebar({
   items,
   onUpdateQuantity,

@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export default function AddToCartButton({ count = 2 }: { count?: number }) {
   return (
     <div

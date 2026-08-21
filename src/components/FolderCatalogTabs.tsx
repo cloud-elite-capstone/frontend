@@ -2,6 +2,7 @@
 
 import React from "react";
 import { OutfitLook } from "@/data/outfits";
+import { theme } from "@/styles/theme";
 
 interface FolderCatalogTabsProps {
   looks: OutfitLook[];
@@ -9,6 +10,7 @@ interface FolderCatalogTabsProps {
   onSelectTab: (tabId: string) => void;
 }
 
+// category tab bar that lets shoppers switch between 'all picks' and specific looks
 export default function FolderCatalogTabs({
   looks,
   activeTabId,
@@ -29,7 +31,7 @@ export default function FolderCatalogTabs({
         alignItems: "flex-end",
         gap: "4px",
         overflowX: "auto",
-        borderBottom: "1.5px solid #e2e8f0",
+        borderBottom: `1.5px solid ${theme.colors.neutral.borderSubtle}`,
         marginBottom: "18px",
         position: "relative",
         scrollbarWidth: "none",
@@ -46,7 +48,7 @@ export default function FolderCatalogTabs({
             style={{
               position: "relative",
               border: "none",
-              background: isActive ? "#fff1ee" : "transparent",
+              background: isActive ? theme.colors.orange.softBg : "transparent",
               borderRadius: "8px 8px 0 0",
               padding: "9px 16px 11px 16px",
               cursor: "pointer",
@@ -55,19 +57,19 @@ export default function FolderCatalogTabs({
               alignItems: "center",
               fontSize: "13px",
               fontWeight: isActive ? 700 : 600,
-              color: isActive ? "#ea4c38" : "#64748b",
+              color: isActive ? theme.colors.orange.primary : theme.colors.navy.muted,
               transition: "background-color 0.15s ease, color 0.15s ease",
               flexShrink: 0,
             }}
             onMouseEnter={(e) => {
               if (!isActive) {
-                e.currentTarget.style.color = "#1e293b";
-                e.currentTarget.style.backgroundColor = "#f8fafc";
+                e.currentTarget.style.color = theme.colors.navy.dark;
+                e.currentTarget.style.backgroundColor = theme.colors.neutral.bgHover;
               }
             }}
             onMouseLeave={(e) => {
               if (!isActive) {
-                e.currentTarget.style.color = "#64748b";
+                e.currentTarget.style.color = theme.colors.navy.muted;
                 e.currentTarget.style.backgroundColor = "transparent";
               }
             }}
@@ -82,7 +84,7 @@ export default function FolderCatalogTabs({
                   left: 0,
                   right: 0,
                   height: "3px",
-                  backgroundColor: "#ea4c38",
+                  backgroundColor: theme.colors.orange.primary,
                   borderRadius: "2px 2px 0 0",
                 }}
               />

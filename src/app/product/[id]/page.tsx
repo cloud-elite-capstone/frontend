@@ -15,6 +15,7 @@ interface ProductPageProps {
   params: Promise<{ id: string }>;
 }
 
+// dynamic product detail route loading product metadata and cart state by id parameter
 export default function ProductPage({ params }: ProductPageProps) {
   const router = useRouter();
   const resolvedParams = use(params);

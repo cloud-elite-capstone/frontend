@@ -34,6 +34,7 @@ interface SettingsViewProps {
   onUpdateProfile?: (profile: UserProfile) => void;
 }
 
+// user settings page covering profile information, ai customization prompts, notifications, and security preferences
 export default function SettingsView({
   userProfile = defaultUserProfile,
   onUpdateProfile,

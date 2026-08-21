@@ -30,6 +30,7 @@ interface HistoryViewProps {
   onAddToCart?: (product: ProductItem) => void;
 }
 
+// past chat sessions and shopping history view with search, rename, delete, and conversation resume
 export default function HistoryView({
   conversations = initialConversations,
   onUpdateConversations,

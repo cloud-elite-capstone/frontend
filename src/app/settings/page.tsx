@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import SettingsView from "@/components/SettingsView";
 import { UserProfile, defaultUserProfile } from "@/data/userProfile";
 
+// standalone account and assistant settings route with localStorage state persistence
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<string>("settings");
   const [userProfile, setUserProfile] = useState<UserProfile>(defaultUserProfile);

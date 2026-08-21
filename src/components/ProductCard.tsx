@@ -47,6 +47,7 @@ interface ProductCardProps {
   onSelectProduct?: (product: ProductItem) => void;
 }
 
+
 export default function ProductCard({
   product,
   index,

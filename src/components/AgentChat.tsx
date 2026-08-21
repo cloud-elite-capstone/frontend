@@ -26,6 +26,7 @@ interface AgentChatProps {
   onSelectLookTab?: (lookId: string) => void;
 }
 
+// ai conversation panel for chatting with the shopping assistant, setting search filters, and viewing recommended looks
 export default function AgentChat({
   activeConversation,
   onSendMessage,

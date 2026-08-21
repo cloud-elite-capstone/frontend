@@ -9,6 +9,7 @@ interface BecomeSellerViewProps {
   onBack?: () => void;
 }
 
+// local vendor onboarding landing page
 export default function BecomeSellerView({ onBack }: BecomeSellerViewProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);

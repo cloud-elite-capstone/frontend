@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { AgentShowcase } from "@/components/auth/AgentShowcase";
 import { LoginForm } from "@/components/auth/LoginForm";
 
+// login page rendering the animated ambient backdrop, agent showcase, and sign-in card
 export default function LoginPage() {
   return (
     <main className="relative h-screen max-h-screen w-full bg-[#f4f5f7] flex flex-col justify-between overflow-hidden bg-grain select-none">

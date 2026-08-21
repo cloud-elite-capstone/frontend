@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { ShoppingCart, ChevronRight } from "lucide-react";
 import { OutfitLook } from "@/data/outfits";
 import { ProductItem } from "./ProductCard";
+import { theme } from "@/styles/theme";
+import { bubbleUpCard, buttonInteractions } from "@/styles/animations";
 
 interface RecommendedOutfitProps {
   look: OutfitLook;
@@ -14,6 +16,7 @@ interface RecommendedOutfitProps {
   onAddFullOutfitToCart?: (items: ProductItem[]) => void;
 }
 
+// renders an ai-generated outfit look with styling insights and compact item cards
 export default function RecommendedOutfit({
   look,
   onSelectProduct,
@@ -45,7 +48,7 @@ export default function RecommendedOutfit({
             style={{
               fontSize: "19px",
               fontWeight: 800,
-              color: "#ea4c38",
+              color: theme.colors.orange.primary,
               margin: 0,
               lineHeight: 1.25,
             }}
@@ -56,7 +59,7 @@ export default function RecommendedOutfit({
           <p
             style={{
               fontSize: "12.5px",
-              color: "#64748b",
+              color: theme.colors.navy.muted,
               margin: "4px 0 0 0",
               lineHeight: 1.45,
             }}
@@ -73,24 +76,25 @@ export default function RecommendedOutfit({
           }}
         >
           <div style={{ textAlign: "right" }}>
-            <span style={{ fontSize: "11px", color: "#64748b", fontWeight: 600, display: "block" }}>
+            <span style={{ fontSize: "11px", color: theme.colors.navy.muted, fontWeight: 600, display: "block" }}>
               Total Outfit ({look.items.length} Items)
             </span>
-            <span style={{ fontSize: "18px", fontWeight: 800, color: "#ea4c38", lineHeight: 1.1 }}>
+            <span style={{ fontSize: "18px", fontWeight: 800, color: theme.colors.orange.primary, lineHeight: 1.1 }}>
               ₱{look.totalPrice.toLocaleString()}
             </span>
           </div>
 
+          {/* adds every piece in this look into the cart in one go */}
           {onAddFullOutfitToCart && (
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={buttonInteractions.whileHover}
+              whileTap={buttonInteractions.whileTap}
               onClick={() => onAddFullOutfitToCart(look.items)}
               style={{
-                backgroundColor: "#ea4c38",
-                color: "#ffffff",
+                backgroundColor: theme.colors.orange.primary,
+                color: theme.colors.neutral.white,
                 border: "none",
-                borderRadius: "8px",
+                borderRadius: theme.radius.md,
                 padding: "8px 14px",
                 fontSize: "12px",
                 fontWeight: 700,
@@ -98,15 +102,15 @@ export default function RecommendedOutfit({
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                boxShadow: "0 2px 8px rgba(234, 76, 56, 0.2)",
-                fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                transition: "all 0.15s ease",
+                boxShadow: `0 2px 8px ${theme.colors.orange.shadow}`,
+                fontFamily: theme.fonts.heading,
+                transition: "background-color 0.15s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#d93b27";
+                e.currentTarget.style.backgroundColor = theme.colors.orange.hover;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#ea4c38";
+                e.currentTarget.style.backgroundColor = theme.colors.orange.primary;
               }}
             >
               <ShoppingCart size={14} />
@@ -119,11 +123,11 @@ export default function RecommendedOutfit({
       <div
         style={{
           padding: "8px 12px",
-          backgroundColor: "#f8fafc",
-          borderRadius: "8px",
-          border: "1px solid #e2e8f0",
+          backgroundColor: theme.colors.neutral.bgHover,
+          borderRadius: theme.radius.md,
+          border: `1px solid ${theme.colors.neutral.borderSubtle}`,
           fontSize: "12px",
-          color: "#334155",
+          color: theme.colors.navy.dark,
           lineHeight: 1.45,
           display: "flex",
           alignItems: "center",
@@ -147,33 +151,29 @@ export default function RecommendedOutfit({
         {look.items.map((product, idx) => (
           <motion.div
             key={product.id}
-            initial={{ opacity: 0, y: 24, scale: 0.94 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            whileHover={{ y: -4, scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{
-              duration: 0.32,
-              ease: "easeInOut",
-              delay: idx * 0.05,
-            }}
+            initial={bubbleUpCard.initial}
+            animate={bubbleUpCard.animate}
+            whileHover={bubbleUpCard.whileHover}
+            whileTap={bubbleUpCard.whileTap}
+            transition={bubbleUpCard.transition(idx)}
             onClick={() => onSelectProduct && onSelectProduct(product)}
             style={{
               display: "flex",
               flexDirection: "column",
-              backgroundColor: "#ffffff",
-              borderRadius: "12px",
-              border: "1.5px solid #cbd5e1",
+              backgroundColor: theme.colors.neutral.surfaceBg,
+              borderRadius: theme.radius.lg,
+              border: `1.5px solid ${theme.colors.neutral.borderMedium}`,
               boxShadow: "0 1px 3px rgba(0, 0, 0, 0.03)",
               padding: "10px",
               cursor: "pointer",
               position: "relative",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#ea4c38";
-              e.currentTarget.style.boxShadow = "0 8px 20px rgba(234, 76, 56, 0.12)";
+              e.currentTarget.style.borderColor = theme.colors.orange.primary;
+              e.currentTarget.style.boxShadow = `0 8px 20px ${theme.colors.orange.glow}`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "#cbd5e1";
+              e.currentTarget.style.borderColor = theme.colors.neutral.borderMedium;
               e.currentTarget.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.03)";
             }}
           >
@@ -181,8 +181,8 @@ export default function RecommendedOutfit({
               style={{
                 width: "100%",
                 height: "120px",
-                borderRadius: "8px",
-                backgroundColor: "#f4f5f7",
+                borderRadius: theme.radius.md,
+                backgroundColor: theme.colors.neutral.canvasBg,
                 position: "relative",
                 overflow: "hidden",
                 marginBottom: "8px",
@@ -197,7 +197,7 @@ export default function RecommendedOutfit({
                   style={{ objectFit: "cover" }}
                 />
               ) : (
-                <div style={{ width: "100%", height: "100%", backgroundColor: "#e2e8f0" }} />
+                <div style={{ width: "100%", height: "100%", backgroundColor: theme.colors.neutral.borderSubtle }} />
               )}
             </div>
 
@@ -207,7 +207,7 @@ export default function RecommendedOutfit({
                 style={{
                   fontSize: "13px",
                   fontWeight: 700,
-                  color: "#0f172a",
+                  color: theme.colors.navy.deep,
                   margin: "0 0 2px 0",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -222,7 +222,7 @@ export default function RecommendedOutfit({
                 title={product.subtitle}
                 style={{
                   fontSize: "11.5px",
-                  color: "#64748b",
+                  color: theme.colors.navy.muted,
                   margin: "0 0 8px 0",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -242,7 +242,7 @@ export default function RecommendedOutfit({
                   paddingTop: "2px",
                 }}
               >
-                <span style={{ fontSize: "15px", fontWeight: 800, color: "#0f172a" }}>
+                <span style={{ fontSize: "15px", fontWeight: 800, color: theme.colors.navy.deep }}>
                   ₱{product.priceNum.toLocaleString()}
                 </span>
 
@@ -251,7 +251,7 @@ export default function RecommendedOutfit({
                     display: "flex",
                     alignItems: "center",
                     gap: "2px",
-                    color: "#ea4c38",
+                    color: theme.colors.orange.primary,
                     fontSize: "12px",
                     fontWeight: 700,
                   }}

@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { GlassCard } from "@/components/ui/GlassCard";
 
+// authentication form card supporting sign-in, account creation, password recovery, and guest access
 export function LoginForm() {
   const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);

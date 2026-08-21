@@ -15,6 +15,7 @@ interface NavbarProps {
   userProfile?: UserProfile;
 }
 
+
 export default function Navbar({
   isScrolled = false,
   cartCount = 0,
@@ -26,8 +27,8 @@ export default function Navbar({
   const displayName = userProfile?.username
     ? `@${userProfile.username}`
     : userProfile?.fullName
-    ? userProfile.fullName.split(" ")[0]
-    : "John";
+      ? userProfile.fullName.split(" ")[0]
+      : "John";
 
   return (
     <header

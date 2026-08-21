@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import HelpView from "@/components/HelpView";
 
+// standalone help and support route wrapping the help center inside the main layout
 export default function StandaloneHelpPage() {
   const [isScrolled, setIsScrolled] = useState(false);
 

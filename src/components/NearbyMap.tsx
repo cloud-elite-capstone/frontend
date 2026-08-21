@@ -88,6 +88,7 @@ const MERCHANTS: MerchantStore[] = [
   }
 ];
 
+// interactive leaflet map showing local neighborhood merchants with live delivery etas and stock
 export default function NearbyMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);

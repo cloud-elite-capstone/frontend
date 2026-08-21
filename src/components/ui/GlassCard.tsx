@@ -9,6 +9,7 @@ interface GlassCardProps extends HTMLMotionProps<"div"> {
   subtle?: boolean;
 }
 
+// reusable frosted glass panel container with soft blur and a glossy top edge
 export function GlassCard({
   children,
   className = "",

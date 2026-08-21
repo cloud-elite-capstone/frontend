@@ -22,6 +22,7 @@ const PRESET_AVATARS = [
   { id: "av5", bg: "#ecfdf5", emoji: "🚀" },
 ];
 
+// 3-step onboarding flow collecting username, gender preference, and profile avatar
 export default function OnboardingPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);

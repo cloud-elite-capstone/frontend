@@ -1,5 +1,6 @@
 import React from "react";
 
+// custom lightweight svg icon library for cartesian brand assets, ui controls, and navigation
 export function CartesianCartIcon({ className = "", size = 20, color = "#ea4c38" }: { className?: string; size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={className}>

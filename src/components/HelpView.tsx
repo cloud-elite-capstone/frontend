@@ -75,6 +75,7 @@ const FAQS: FAQItem[] = [
   },
 ];
 
+// help center view with search, categorized faqs, and support ticket submissions
 export default function HelpView() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");

@@ -27,6 +27,7 @@ interface ShowcaseProduct {
   }[];
 }
 
+// dummy items to demonstrate what the ai assistant does behind the scenes
 const PRODUCTS: ShowcaseProduct[] = [
   {
     id: "1",
@@ -72,10 +73,12 @@ const PRODUCTS: ShowcaseProduct[] = [
   }
 ];
 
+// interactive preview carousel on login and onboarding screens showing what cartesian's ai agents can do
 export function AgentShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFavorited, setIsFavorited] = useState(false);
 
+  // automatically cycles through the showcase cards every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % PRODUCTS.length);

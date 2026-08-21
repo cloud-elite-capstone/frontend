@@ -32,6 +32,7 @@ interface ChatPreferenceDropdownProps {
   onApply: (prefs: ChatSearchPreferences) => void;
 }
 
+// floating filter modal inside the chat panel for adjusting price ranges, merchant location, and minimum star ratings
 export default function ChatPreferenceDropdown({
   isOpen,
   onClose,

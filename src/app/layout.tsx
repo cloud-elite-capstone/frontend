@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   description: "Autonomous agentic AI shopping assistant",
 };
 
+// root app layout configuring global google fonts and hydration wrappers
 export default function RootLayout({
   children,
 }: Readonly<{

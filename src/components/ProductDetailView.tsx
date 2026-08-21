@@ -28,6 +28,7 @@ interface ProductDetailViewProps {
   allProducts?: ProductItem[];
 }
 
+// full-page product inspection view displaying ai synthesis, seller routing, and quantity add-to-cart
 export default function ProductDetailView({
   product,
   onBack,

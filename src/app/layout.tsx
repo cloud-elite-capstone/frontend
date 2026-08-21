@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Josefin_Sans, Open_Sans } from "next/font/google";
+import Providers from "./providers";
 import "./globals.css";
 
 const josefinSans = Josefin_Sans({
@@ -33,6 +34,7 @@ export default function RootLayout({
     >
       <body className={openSans.className} suppressHydrationWarning>
         {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

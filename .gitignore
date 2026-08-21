@@ -44,3 +44,6 @@ next-env.d.ts
 docs
 
 frontend.code-workspace
+
+# kubb
+src/gen

@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "gen:specs": "node scripts/fetch-specs.mjs",
     "gen:code": "kubb generate",
     "gen:docs": "node scripts/build-docs.mjs",
     "gen:all": "npm run gen:code && npm run gen:docs",
-    "serve:docs": "pm2 delete docs-server &&pm2 start live-server --name docs-server -- src/gen",
+    "serve:docs": "pm2 delete docs-server && pm2 start live-server --name docs-server -- src/gen",
     "serve:stop": "pm2 delete docs-server",
     "build": "npm run gen:code && next build",
     "start": "next start",

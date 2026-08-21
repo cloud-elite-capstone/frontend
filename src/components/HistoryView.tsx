@@ -14,37 +14,50 @@ import {
   MoreVertical,
   MessageSquare,
   ShoppingBag,
+  ShoppingCart,
   Star,
   MapPin,
   ArrowRight,
   Sparkles,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { AiAssistantIcon } from "./Icons";
 import { ProductItem } from "./ProductCard";
+import { initialProducts } from "@/data/products";
 import { ConversationThread, initialConversations } from "@/data/conversations";
+import { CartItem } from "./CartSidebar";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 interface HistoryViewProps {
   conversations?: ConversationThread[];
   onUpdateConversations?: (updated: ConversationThread[]) => void;
   onContinueConversation?: (convo: ConversationThread) => void;
   onAddToCart?: (product: ProductItem) => void;
+  onSelectProduct?: (product: ProductItem) => void;
+  cartsByConversation?: Record<string, CartItem[]>;
+  onOpenCart?: (convoId?: string) => void;
 }
 
-// past chat sessions and shopping history view with search, rename, delete, and conversation resume
 export default function HistoryView({
   conversations = initialConversations,
   onUpdateConversations,
   onContinueConversation,
   onAddToCart,
+  onSelectProduct,
+  cartsByConversation = {},
+  onOpenCart,
 }: HistoryViewProps) {
   const [localList, setLocalList] = useState<ConversationThread[]>(conversations);
   const [selectedConvoId, setSelectedConvoId] = useState<string | null>(
     localList.length > 0 ? localList[0].id : null
   );
+  const [convoToDelete, setConvoToDelete] = useState<ConversationThread | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+  const [showCartDetails, setShowCartDetails] = useState(true);
 
   const updateList = (newList: ConversationThread[]) => {
     setLocalList(newList);
@@ -262,7 +275,34 @@ export default function HistoryView({
                 </h4>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", flexShrink: 0 }}>
+                {(() => {
+                  const convoCart = (cartsByConversation && cartsByConversation[convo.id]) || [];
+                  const convoCartCount = convoCart.reduce((sum, item) => sum + item.quantity, 0);
+                  if (convoCartCount <= 0) return null;
+                  return (
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "3.5px",
+                        fontSize: "10.5px",
+                        fontWeight: 700,
+                        color: isSelected ? "#ea4c38" : "#c2410c",
+                        backgroundColor: isSelected ? "#fff1ee" : "#fef2f0",
+                        border: isSelected ? "1px solid #fecaca" : "1px solid #fed7aa",
+                        padding: "1.5px 5.5px",
+                        borderRadius: "5px",
+                        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                      }}
+                      title={`${convoCartCount} items in cart for this session`}
+                    >
+                      <ShoppingCart size={10.5} strokeWidth={2.4} />
+                      <span>{convoCartCount}</span>
+                    </span>
+                  );
+                })()}
+
                 <span
                   style={{
                     fontSize: "11px",
@@ -367,7 +407,11 @@ export default function HistoryView({
             </button>
 
             <button
-              onClick={(e) => handleDeleteConvo(convo.id, e)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setConvoToDelete(convo);
+                setActiveMenuId(null);
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -695,357 +739,661 @@ export default function HistoryView({
               style={{ height: "100%", display: "flex", flexDirection: "column" }}
             >
               <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "16px 24px",
-                borderBottom: "1.5px solid #e2e8f0",
-                backgroundColor: "#f8fafc",
-                flexShrink: 0,
-                gap: "16px",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
-                <div
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "50%",
-                    backgroundColor: "#ffffff",
-                    border: "1.5px solid #fecaca",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0 2px 8px rgba(234, 76, 56, 0.15)",
-                    flexShrink: 0,
-                  }}
-                >
-                  <AiAssistantIcon size={20} color="#ea4c38" strokeWidth={1.5} />
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <h3
-                    style={{
-                      fontSize: "17px",
-                      fontWeight: 700,
-                      color: "#0f172a",
-                      margin: 0,
-                      fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {activeConvo.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: "11.5px",
-                      color: "#475569",
-                      margin: "2px 0 0 0",
-                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                      fontWeight: 500,
-                    }}
-                  >
-                    Last active: {activeConvo.timestamp} • {activeConvo.messages.length} messages
-                  </p>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
-                <button
-                  onClick={() => handleStartRename(activeConvo)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    padding: "8px 13px",
-                    borderRadius: "8px",
-                    border: "1.5px solid #cbd5e1",
-                    backgroundColor: "#ffffff",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    color: "#334155",
-                    cursor: "pointer",
-                    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                    transition: "all 0.15s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#f1f5f9";
-                    e.currentTarget.style.borderColor = "#94a3b8";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#ffffff";
-                    e.currentTarget.style.borderColor = "#cbd5e1";
-                  }}
-                >
-                  <Edit2 size={13} />
-                  <span>Rename</span>
-                </button>
-
-                <button
-                  onClick={() => handleDeleteConvo(activeConvo.id)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    padding: "8px 13px",
-                    borderRadius: "8px",
-                    border: "1.5px solid #fecaca",
-                    backgroundColor: "#fef2f0",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    color: "#ea4c38",
-                    cursor: "pointer",
-                    fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                    transition: "all 0.15s ease",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#fee2e2")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fef2f0")}
-                >
-                  <Trash2 size={13} />
-                  <span>Delete</span>
-                </button>
-              </div>
-            </div>
-
-            <div
-              className="curated-scrollbar"
-              style={{
-                flex: 1,
-                overflowY: "auto",
-                padding: "24px 28px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                backgroundColor: "#ffffff",
-              }}
-            >
-              {activeConvo.messages.map((msg) => {
-                const isUser = msg.sender === "user";
-                return (
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "16px 24px",
+                  borderBottom: "1.5px solid #e2e8f0",
+                  backgroundColor: "#f8fafc",
+                  flexShrink: 0,
+                  gap: "16px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
                   <div
-                    key={msg.id}
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      borderRadius: "50%",
+                      backgroundColor: "#ffffff",
+                      border: "1.5px solid #fecaca",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "0 2px 8px rgba(234, 76, 56, 0.15)",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <AiAssistantIcon size={20} color="#ea4c38" strokeWidth={1.5} />
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <h3
+                      style={{
+                        fontSize: "17px",
+                        fontWeight: 700,
+                        color: "#0f172a",
+                        margin: 0,
+                        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {activeConvo.title}
+                    </h3>
+                    <p
+                      style={{
+                        fontSize: "11.5px",
+                        color: "#475569",
+                        margin: "2px 0 0 0",
+                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Last active: {activeConvo.timestamp} • {activeConvo.messages.length} messages
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
+                  {(() => {
+                    const activeConvoCart = (activeConvo && cartsByConversation && cartsByConversation[activeConvo.id]) || [];
+                    const activeCartCount = activeConvoCart.reduce((sum, item) => sum + item.quantity, 0);
+                    const activeCartTotal = activeConvoCart.reduce((sum, item) => sum + item.priceNum * item.quantity, 0);
+                    if (activeCartCount <= 0 || !onOpenCart) return null;
+                    return (
+                      <button
+                        onClick={() => onOpenCart(activeConvo.id)}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "6px",
+                          padding: "8px 13px",
+                          borderRadius: "8px",
+                          border: "1.5px solid #fecaca",
+                          backgroundColor: "#fff1ee",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          color: "#ea4c38",
+                          cursor: "pointer",
+                          fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                          transition: "all 0.15s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#fee2e2";
+                          e.currentTarget.style.borderColor = "#ea4c38";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "#fff1ee";
+                          e.currentTarget.style.borderColor = "#fecaca";
+                        }}
+                        title="Open cart for this session"
+                      >
+                        <ShoppingCart size={13} color="#ea4c38" />
+                        <span>{activeCartCount} in Cart (₱{activeCartTotal.toLocaleString()})</span>
+                      </button>
+                    );
+                  })()}
+
+                  <button
+                    onClick={() => handleStartRename(activeConvo)}
                     style={{
                       display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      padding: "8px 13px",
+                      borderRadius: "8px",
+                      border: "1.5px solid #cbd5e1",
+                      backgroundColor: "#ffffff",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: "#334155",
+                      cursor: "pointer",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      transition: "all 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#f1f5f9";
+                      e.currentTarget.style.borderColor = "#94a3b8";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#ffffff";
+                      e.currentTarget.style.borderColor = "#cbd5e1";
+                    }}
+                  >
+                    <Edit2 size={13} />
+                    <span>Rename</span>
+                  </button>
+
+                  <button
+                    onClick={() => setConvoToDelete(activeConvo)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      padding: "8px 13px",
+                      borderRadius: "8px",
+                      border: "1.5px solid #fecaca",
+                      backgroundColor: "#fef2f0",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      color: "#ea4c38",
+                      cursor: "pointer",
+                      fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                      transition: "all 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#fee2e2")}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fef2f0")}
+                  >
+                    <Trash2 size={13} />
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
+
+              {(() => {
+                const activeConvoCart = (activeConvo && cartsByConversation && cartsByConversation[activeConvo.id]) || [];
+                const activeCartCount = activeConvoCart.reduce((sum, item) => sum + item.quantity, 0);
+                const activeCartTotal = activeConvoCart.reduce((sum, item) => sum + item.priceNum * item.quantity, 0);
+                if (activeConvoCart.length === 0) return null;
+
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "#fcf8f6",
+                      borderBottom: "1.5px solid #fbd9d3",
+                      padding: "12px 24px",
+                      display: "flex",
                       flexDirection: "column",
-                      alignItems: isUser ? "flex-end" : "flex-start",
-                      gap: "6px",
-                      width: "100%",
+                      gap: "10px",
+                      flexShrink: 0,
                     }}
                   >
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "6px",
-                        fontSize: "11.5px",
-                        fontWeight: 600,
-                        color: isUser ? "#475569" : "#ea4c38",
-                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                        padding: "0 4px",
+                        justifyContent: "space-between",
+                        width: "100%",
                       }}
                     >
-                      {!isUser && <Sparkles size={13} />}
-                      <span>{isUser ? "You" : "Cartesian AI"}</span>
-                      <span style={{ color: "#94a3b8" }}>•</span>
-                      <span style={{ color: "#64748b", fontWeight: 400 }}>{msg.timestamp}</span>
+                      <div
+                        onClick={() => setShowCartDetails(!showCartDetails)}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "24px",
+                            height: "24px",
+                            borderRadius: "6px",
+                            backgroundColor: "#fff1ee",
+                            border: "1px solid #fecaca",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#ea4c38",
+                          }}
+                        >
+                          <ShoppingCart size={13} />
+                        </div>
+                        <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}>
+                          <span
+                            style={{
+                              fontSize: "13px",
+                              fontWeight: 700,
+                              color: "#0f172a",
+                              fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                            }}
+                          >
+                            Current Cart
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "11.5px",
+                              color: "#64748b",
+                              fontWeight: 600,
+                              fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                            }}
+                          >
+                            ({activeCartCount} {activeCartCount === 1 ? "item" : "items"} • ₱{activeCartTotal.toLocaleString()})
+                          </span>
+                        </div>
+                        {showCartDetails ? <ChevronUp size={13} color="#64748b" /> : <ChevronDown size={13} color="#64748b" />}
+                      </div>
+
+                      {onOpenCart && (
+                        <button
+                          onClick={() => onOpenCart(activeConvo.id)}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "5px",
+                            backgroundColor: "#ffffff",
+                            border: "1px solid #fecaca",
+                            color: "#ea4c38",
+                            fontSize: "11.5px",
+                            fontWeight: 700,
+                            padding: "4px 10px",
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                            transition: "all 0.15s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = "#ea4c38";
+                            e.currentTarget.style.color = "#ffffff";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = "#ffffff";
+                            e.currentTarget.style.color = "#ea4c38";
+                          }}
+                        >
+                          <span>Open Cart</span>
+                          <ArrowRight size={11} />
+                        </button>
+                      )}
                     </div>
 
-                    <div
-                      style={{
-                        maxWidth: "85%",
-                        padding: "14px 18px",
-                        borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
-                        backgroundColor: isUser ? "#2c3e50" : "#f8fafc",
-                        color: isUser ? "#ffffff" : "#0f172a",
-                        border: isUser ? "none" : "1.5px solid #e2e8f0",
-                        fontSize: "13.5px",
-                        lineHeight: 1.6,
-                        whiteSpace: "pre-wrap",
-                        boxShadow: isUser
-                          ? "0 4px 14px rgba(44, 62, 80, 0.18)"
-                          : "0 2px 8px rgba(0, 0, 0, 0.03)",
-                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                      }}
-                    >
-                      {msg.text}
-                    </div>
+                    {showCartDetails && (
+                      <div
+                        className="curated-scrollbar"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          overflowX: "auto",
+                          paddingBottom: "3px",
+                        }}
+                      >
+                        {activeConvoCart.map((item) => (
+                          <div
+                            key={item.id}
+                            onClick={() => {
+                              if (onSelectProduct) {
+                                const found = initialProducts.find((p) => p.id === item.id);
+                                onSelectProduct(
+                                  found || {
+                                    id: item.id,
+                                    title: item.title,
+                                    subtitle: item.vendorName || "Curated Collection",
+                                    price: item.price,
+                                    priceNum: item.priceNum,
+                                    imageUrl: item.imageUrl || "/test-images/image1.jpg",
+                                    rating: item.rating || 4.8,
+                                    vendorType: item.vendorType || "local",
+                                    vendorName: item.vendorName,
+                                    vendorLocation: item.vendorLocation,
+                                    externalUrl: item.externalUrl,
+                                  }
+                                );
+                              }
+                            }}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "9px",
+                              padding: "7px 11px",
+                              backgroundColor: "#ffffff",
+                              border: "1px solid #fed7d2",
+                              borderRadius: "10px",
+                              flexShrink: 0,
+                              boxShadow: "0 1px 4px rgba(234, 76, 56, 0.04)",
+                              minWidth: "180px",
+                              maxWidth: "230px",
+                              cursor: onSelectProduct ? "pointer" : "default",
+                              transition: "all 0.15s ease",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (onSelectProduct) {
+                                e.currentTarget.style.borderColor = "#ea4c38";
+                                e.currentTarget.style.backgroundColor = "#fff8f7";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (onSelectProduct) {
+                                e.currentTarget.style.borderColor = "#fed7d2";
+                                e.currentTarget.style.backgroundColor = "#ffffff";
+                              }
+                            }}
+                          >
+                            <div
+                              style={{
+                                position: "relative",
+                                width: "36px",
+                                height: "36px",
+                                borderRadius: "6px",
+                                overflow: "hidden",
+                                backgroundColor: "#f1f5f9",
+                                flexShrink: 0,
+                              }}
+                            >
+                              <Image
+                                src={item.imageUrl || "/test-images/image1.jpg"}
+                                alt={item.title}
+                                fill
+                                sizes="36px"
+                                style={{ objectFit: "cover" }}
+                              />
+                            </div>
+                            <div style={{ minWidth: 0, flex: 1 }}>
+                              <div
+                                style={{
+                                  fontSize: "12px",
+                                  fontWeight: 600,
+                                  color: "#0f172a",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                  fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                                }}
+                                title={item.title}
+                              >
+                                {item.title}
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                  marginTop: "2px",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    fontSize: "12px",
+                                    fontWeight: 700,
+                                    color: "#ea4c38",
+                                    fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                                  }}
+                                >
+                                  {item.price}
+                                </span>
+                                <span
+                                  style={{
+                                    fontSize: "10.5px",
+                                    fontWeight: 700,
+                                    backgroundColor: "#f1f5f9",
+                                    color: "#475569",
+                                    padding: "1px 5px",
+                                    borderRadius: "4px",
+                                  }}
+                                >
+                                  ×{item.quantity}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
-              })}
-            </div>
+              })()}
 
-            {onContinueConversation && (
               <div
+                className="curated-scrollbar"
                 style={{
-                  padding: "14px 24px",
-                  borderTop: "1.5px solid #cbd5e1",
-                  backgroundColor: "#fff7ed",
+                  flex: 1,
+                  overflowY: "auto",
+                  padding: "24px 28px",
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "16px",
-                  borderBottomLeftRadius: "16px",
-                  borderBottomRightRadius: "16px",
+                  flexDirection: "column",
+                  gap: "20px",
+                  backgroundColor: "#ffffff",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <div
-                    style={{
-                      width: "28px",
-                      height: "28px",
-                      borderRadius: "6px",
-                      backgroundColor: "#ffedd5",
-                      border: "1px solid #fed7aa",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#ea4c38",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Sparkles size={15} />
-                  </div>
-                  <div>
-                    <span
+                {activeConvo.messages.map((msg) => {
+                  const isUser = msg.sender === "user";
+                  return (
+                    <div
+                      key={msg.id}
                       style={{
-                        fontSize: "12.5px",
-                        color: "#9a3412",
-                        fontWeight: 700,
-                        display: "block",
-                        fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: isUser ? "flex-end" : "flex-start",
+                        gap: "6px",
+                        width: "100%",
                       }}
                     >
-                      Ready to resume this session?
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "11.5px",
-                        color: "#c2410c",
-                        fontWeight: 500,
-                        fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                      }}
-                    >
-                      Load this exact conversation into the Cartesian AI Agent and continue shopping.
-                    </span>
-                  </div>
-                </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "6px",
+                          fontSize: "11.5px",
+                          fontWeight: 600,
+                          color: isUser ? "#475569" : "#ea4c38",
+                          fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                          padding: "0 4px",
+                        }}
+                      >
+                        {!isUser && <Sparkles size={13} />}
+                        <span>{isUser ? "You" : "Cartesian AI"}</span>
+                        <span style={{ color: "#94a3b8" }}>•</span>
+                        <span style={{ color: "#64748b", fontWeight: 400 }}>{msg.timestamp}</span>
+                      </div>
 
-                <button
-                  onClick={() => onContinueConversation(activeConvo)}
+                      <div
+                        style={{
+                          maxWidth: "85%",
+                          padding: "14px 18px",
+                          borderRadius: isUser ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                          backgroundColor: isUser ? "#2c3e50" : "#f8fafc",
+                          color: isUser ? "#ffffff" : "#0f172a",
+                          border: isUser ? "none" : "1.5px solid #e2e8f0",
+                          fontSize: "13.5px",
+                          lineHeight: 1.6,
+                          whiteSpace: "pre-wrap",
+                          boxShadow: isUser
+                            ? "0 4px 14px rgba(44, 62, 80, 0.18)"
+                            : "0 2px 8px rgba(0, 0, 0, 0.03)",
+                          fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                        }}
+                      >
+                        {msg.text}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {onContinueConversation && (
+                <div
                   style={{
+                    padding: "14px 24px",
+                    borderTop: "1.5px solid #cbd5e1",
+                    backgroundColor: "#fff7ed",
                     display: "flex",
                     alignItems: "center",
-                    gap: "7px",
-                    backgroundColor: "#2c3e50",
-                    color: "#ffffff",
-                    fontSize: "12.5px",
-                    fontWeight: 700,
-                    padding: "9px 18px",
-                    borderRadius: "10px",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "all 0.18s ease",
-                    fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                    flexShrink: 0,
-                    boxShadow: "0 2px 8px rgba(44, 62, 80, 0.20)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#ea4c38";
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#2c3e50";
-                    e.currentTarget.style.transform = "translateY(0)";
+                    justifyContent: "space-between",
+                    gap: "16px",
+                    borderBottomLeftRadius: "16px",
+                    borderBottomRightRadius: "16px",
                   }}
                 >
-                  <span>Continue in Home</span>
-                  <ArrowRight size={14} />
-                </button>
-              </div>
-            )}
-          </motion.div>
-        ) : (
-          <motion.div
-            key="empty-history"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.2 }}
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "14px",
-              color: "#64748b",
-              padding: "40px",
-              textAlign: "center",
-            }}
-          >
-            <div
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "6px",
+                        backgroundColor: "#ffedd5",
+                        border: "1px solid #fed7aa",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#ea4c38",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Sparkles size={15} />
+                    </div>
+                    <div>
+                      <span
+                        style={{
+                          fontSize: "12.5px",
+                          color: "#9a3412",
+                          fontWeight: 700,
+                          display: "block",
+                          fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                        }}
+                      >
+                        Ready to resume this session?
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "11.5px",
+                          color: "#c2410c",
+                          fontWeight: 500,
+                          fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                        }}
+                      >
+                        Load this exact conversation into the Cartesian AI Agent and continue shopping.
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => onContinueConversation(activeConvo)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "7px",
+                      backgroundColor: "#2c3e50",
+                      color: "#ffffff",
+                      fontSize: "12.5px",
+                      fontWeight: 700,
+                      padding: "9px 18px",
+                      borderRadius: "10px",
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all 0.18s ease",
+                      fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                      flexShrink: 0,
+                      boxShadow: "0 2px 8px rgba(44, 62, 80, 0.20)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "#ea4c38";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "#2c3e50";
+                      e.currentTarget.style.transform = "translateY(0)";
+                    }}
+                  >
+                    <span>Continue in Home</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty-history"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.2 }}
               style={{
-                width: "60px",
-                height: "60px",
-                borderRadius: "50%",
-                backgroundColor: "#f8fafc",
-                border: "2px solid #cbd5e1",
+                flex: 1,
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#475569",
-                boxShadow: "0 4px 14px rgba(0, 0, 0, 0.04)",
+                gap: "14px",
+                color: "#64748b",
+                padding: "40px",
+                textAlign: "center",
               }}
             >
-              <MessageSquare size={28} />
-            </div>
-            <h3
-              style={{
-                fontSize: "18px",
-                fontWeight: 700,
-                color: "#0f172a",
-                margin: 0,
-                fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-              }}
-            >
-              No conversation selected
-            </h3>
-            <p
-              style={{
-                fontSize: "13px",
-                maxWidth: "360px",
-                margin: 0,
-                color: "#475569",
-                fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
-                lineHeight: 1.5,
-              }}
-            >
-              Choose a past conversation from the left history sidebar to preview its dialogue and continue shopping.
-            </p>
-            <button
-              onClick={handleNewChat}
-              style={{
-                backgroundColor: "#ea4c38",
-                color: "#ffffff",
-                fontSize: "12.5px",
-                fontWeight: 700,
-                padding: "9px 20px",
-                borderRadius: "10px",
-                border: "none",
-                cursor: "pointer",
-                marginTop: "6px",
-                fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
-                boxShadow: "0 3px 10px rgba(234, 76, 56, 0.28)",
-              }}
-            >
-              Start New Chat
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <div
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  borderRadius: "50%",
+                  backgroundColor: "#f8fafc",
+                  border: "2px solid #cbd5e1",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#475569",
+                  boxShadow: "0 4px 14px rgba(0, 0, 0, 0.04)",
+                }}
+              >
+                <MessageSquare size={28} />
+              </div>
+              <h3
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  color: "#0f172a",
+                  margin: 0,
+                  fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                }}
+              >
+                No conversation selected
+              </h3>
+              <p
+                style={{
+                  fontSize: "13px",
+                  maxWidth: "360px",
+                  margin: 0,
+                  color: "#475569",
+                  fontFamily: "var(--font-open-sans), 'Open Sans', sans-serif",
+                  lineHeight: 1.5,
+                }}
+              >
+                Choose a past conversation from the left history sidebar to preview its dialogue and continue shopping.
+              </p>
+              <button
+                onClick={handleNewChat}
+                style={{
+                  backgroundColor: "#ea4c38",
+                  color: "#ffffff",
+                  fontSize: "12.5px",
+                  fontWeight: 700,
+                  padding: "9px 20px",
+                  borderRadius: "10px",
+                  border: "none",
+                  cursor: "pointer",
+                  marginTop: "6px",
+                  fontFamily: "var(--font-josefin-sans), 'Josefin Sans', sans-serif",
+                  boxShadow: "0 3px 10px rgba(234, 76, 56, 0.28)",
+                }}
+              >
+                Start New Chat
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      <ConfirmDialog
+        isOpen={!!convoToDelete}
+        title="Delete Conversation?"
+        description={
+          convoToDelete
+            ? `Are you sure you want to delete "${convoToDelete.title}"? This conversation session and its dialogue history cannot be recovered.`
+            : ""
+        }
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        variant="danger"
+        onConfirm={() => {
+          if (convoToDelete) {
+            handleDeleteConvo(convoToDelete.id);
+            setConvoToDelete(null);
+          }
+        }}
+        onCancel={() => setConvoToDelete(null)}
+      />
     </div>
   );
 }

@@ -508,6 +508,13 @@ export default function Home() {
                 onUpdateConversations={setConversations}
                 onContinueConversation={handleContinueConversation}
                 onAddToCart={handleAddToCart}
+                onSelectProduct={handleSelectProduct}
+                cartsByConversation={cartsByConversation}
+                onOpenCart={(convoId) => {
+                  if (convoId) setActiveConvoId(convoId);
+                  setActiveTab("chat");
+                  setShowCart(true);
+                }}
               />
             </motion.div>
           ) : isMap ? (

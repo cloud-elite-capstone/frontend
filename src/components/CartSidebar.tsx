@@ -23,6 +23,7 @@ import {
   Lock,
 } from "lucide-react";
 import { ConversationThread } from "@/data/conversations";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 export interface CartItem {
   id: string;
@@ -63,6 +64,7 @@ export default function CartSidebar({
   const [selectedItemId, setSelectedItemId] = useState<string | null>(() => {
     return items.length > 0 ? items[0].id : null;
   });
+  const [itemToDelete, setItemToDelete] = useState<CartItem | null>(null);
   const [isHistoryDropdownOpen, setIsHistoryDropdownOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
@@ -100,7 +102,7 @@ export default function CartSidebar({
       const targetUrl =
         selectedItem.externalUrl ||
         `https://shopee.ph/search?keyword=${encodeURIComponent(selectedItem.title)}`;
-      
+
       setOnlineRedirectNotice(`Opening ${selectedItem.vendorName || "Online Merchant Store"}...`);
       setTimeout(() => {
         window.open(targetUrl, "_blank", "noopener,noreferrer");
@@ -187,7 +189,7 @@ export default function CartSidebar({
                 lineHeight: 1.2,
               }}
             >
-              Cart Session
+              Current Cart
             </h2>
           </div>
 
@@ -289,7 +291,7 @@ export default function CartSidebar({
             <div style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column", gap: "4px", justifyContent: "center", paddingTop: "2px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "6px", lineHeight: "1.5" }}>
                 <span style={{ fontSize: "11px", textTransform: "uppercase", fontWeight: 700, color: "#ea4c38", letterSpacing: "0.5px", display: "inline-block" }}>
-                  AI Convo Cart
+                  AI Chats
                 </span>
                 <span style={{ fontSize: "10px", color: "#cbd5e1" }}>•</span>
                 <span style={{ fontSize: "11.5px", color: "#64748b", fontWeight: 600, display: "inline-block" }}>
@@ -543,7 +545,7 @@ export default function CartSidebar({
                 <ShoppingBag size={24} />
               </div>
               <span style={{ fontSize: "14px", fontWeight: 700, color: "#334155" }}>
-                This session cart is empty
+                This cart is empty
               </span>
               <span style={{ fontSize: "12px", color: "#64748b", maxWidth: "220px", lineHeight: 1.4 }}>
                 Ask the AI agent in this conversation to find and add local or online merchant products.
@@ -744,7 +746,13 @@ export default function CartSidebar({
                         >
                           <motion.button
                             whileTap={{ scale: 0.82 }}
-                            onClick={() => onUpdateQuantity(item.id, -1)}
+                            onClick={() => {
+                              if (item.quantity <= 1) {
+                                setItemToDelete(item);
+                              } else {
+                                onUpdateQuantity(item.id, -1);
+                              }
+                            }}
                             style={{
                               background: "none",
                               border: "none",
@@ -798,8 +806,7 @@ export default function CartSidebar({
                       whileTap={{ scale: 0.85 }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        onRemoveItem(item.id);
-                        if (selectedItemId === item.id) setSelectedItemId(null);
+                        setItemToDelete(item);
                       }}
                       style={{
                         background: "none",
@@ -812,7 +819,7 @@ export default function CartSidebar({
                         padding: "4px",
                         borderRadius: "4px",
                       }}
-                      title="Remove from session cart"
+                      title="Remove from current cart"
                     >
                       <XIcon size={12} color="#94a3b8" />
                     </motion.button>
@@ -844,7 +851,7 @@ export default function CartSidebar({
         >
           <div>
             <span style={{ fontSize: "12px", color: "#64748b", fontWeight: 500 }}>
-              {selectedItem ? "Selected Item Total" : "Cart Subtotal"}
+              {selectedItem ? "Selected Item Total" : "Subtotal"}
             </span>
             {selectedItem && (
               <p style={{ margin: 0, fontSize: "11px", fontWeight: 600, color: "#334155" }}>
@@ -1231,7 +1238,7 @@ export default function CartSidebar({
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", color: "#059669" }}>
                         <span>Local Express Delivery</span>
-                        <span>FREE (AI Verified)</span>
+                        <span>FREE</span>
                       </div>
                       <div
                         style={{
@@ -1328,6 +1335,29 @@ export default function CartSidebar({
           </div>
         )}
       </AnimatePresence>
+
+      <ConfirmDialog
+        isOpen={!!itemToDelete}
+        title="Remove from Cart?"
+        description={
+          itemToDelete
+            ? `Are you sure you want to remove "${itemToDelete.title}" from your current cart?`
+            : ""
+        }
+        confirmLabel="Remove"
+        cancelLabel="Cancel"
+        variant="danger"
+        onConfirm={() => {
+          if (itemToDelete) {
+            onRemoveItem(itemToDelete.id);
+            if (selectedItemId === itemToDelete.id) {
+              setSelectedItemId(null);
+            }
+            setItemToDelete(null);
+          }
+        }}
+        onCancel={() => setItemToDelete(null)}
+      />
     </div>
   );
 }
